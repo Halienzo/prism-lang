@@ -1,0 +1,1874 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>棱镜 Prism | 留学语言 & 集训排课平台</title>
+<link rel="manifest" href="manifest.json">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="compass-data.js"></script>
+<script src="data-us.js"></script>
+<script src="data-uk.js"></script>
+<script src="data-other.js"></script>
+<script src="scheduler-data.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#f5f6fa;--card:#fff;--sidebar:#1a1f36;--sidebar-hover:#2d3456;
+--accent:#4f6ef7;--accent-light:#eef1ff;--danger:#e74c3c;--warning:#f39c12;
+--success:#27ae60;--text:#2c3e50;--text-light:#7f8c8d;--border:#e0e4ec;
+--radius:10px;--shadow:0 2px 12px rgba(0,0,0,.06);
+}
+body.dark{
+--bg:#1a1a2e;--card:#16213e;--sidebar:#0f0f23;--sidebar-hover:#1a1a3e;
+--text:#e0e0e0;--text-light:#a0a0b0;--border:#2a2a4a;--shadow:0 2px 12px rgba(0,0,0,.3);
+--accent-light:#1a1a3e;
+}
+html{font-size:15px;scroll-behavior:smooth}
+body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh}
+.sidebar{width:260px;background:var(--sidebar);color:#fff;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+.sidebar-header{padding:20px 16px 12px;border-bottom:1px solid rgba(255,255,255,.1)}
+.sidebar-header h1{font-size:1.1rem;font-weight:700}
+.sidebar-header p{font-size:.7rem;color:rgba(255,255,255,.45);margin-top:3px}
+.sidebar nav{flex:1;overflow-y:auto;padding:8px 0}
+.nav-item{display:flex;align-items:center;gap:8px;padding:9px 16px;cursor:pointer;font-size:.82rem;color:rgba(255,255,255,.65);transition:all .2s;border-left:3px solid transparent}
+.nav-item:hover{background:var(--sidebar-hover);color:#fff}
+.nav-item.active{background:var(--sidebar-hover);color:#fff;border-left-color:var(--accent)}
+.nav-section{padding:14px 16px 4px;font-size:.65rem;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.3)}
+.sidebar-footer{padding:12px 16px;border-top:1px solid rgba(255,255,255,.1);font-size:.68rem;color:rgba(255,255,255,.3)}
+.sidebar-footer .toggle-row{display:flex;gap:8px;margin-top:8px}
+.sidebar-footer .toggle-btn{padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.6);font-size:.68rem;cursor:pointer}
+.sidebar-footer .toggle-btn:hover,.sidebar-footer .toggle-btn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.main{margin-left:260px;flex:1;padding:20px 28px 50px;max-width:1200px}
+.page{display:none}.page.active{display:block}
+.page-title{font-size:1.5rem;font-weight:700;margin-bottom:4px}
+.page-subtitle{color:var(--text-light);font-size:.85rem;margin-bottom:20px}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:16px;border:1px solid var(--border)}
+.card-title{font-size:1rem;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.alert{padding:12px 16px;border-radius:8px;font-size:.84rem;margin-bottom:12px;line-height:1.6}
+.alert-danger{background:#fdecea;border-left:4px solid var(--danger);color:#721c24}
+.alert-warning{background:#fff8e1;border-left:4px solid var(--warning);color:#856404}
+.alert-info{background:var(--accent-light);border-left:4px solid var(--accent);color:#1a3a8a}
+.alert-success{background:#e8f5e9;border-left:4px solid var(--success);color:#1b5e20}
+body.dark .alert-danger{background:#2d1518;color:#f5a0a0}
+body.dark .alert-warning{background:#2d2815;color:#f5d080}
+body.dark .alert-info{background:#151a2d;color:#90b0f5}
+body.dark .alert-success{background:#152d18;color:#90f5a0}
+.alert strong{display:block;margin-bottom:3px}
+.table-wrap{overflow-x:auto;margin-top:8px}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+th{background:var(--bg);font-weight:600;text-align:left;padding:8px 10px;border-bottom:2px solid var(--border);position:sticky;top:0}
+td{padding:7px 10px;border-bottom:1px solid var(--border)}
+tr:hover td{background:var(--accent-light)}
+.badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.72rem;font-weight:600}
+.badge-green{background:#e8f5e9;color:var(--success)}
+.badge-yellow{background:#fff8e1;color:#b8860b}
+.badge-red{background:#fdecea;color:var(--danger)}
+.cefr-tag{display:inline-block;padding:0 4px;border-radius:3px;font-size:.6rem;font-weight:700;background:#e3f2fd;color:#1565c0;vertical-align:middle;margin-left:2px}
+body.dark .cefr-tag{background:#1a2744;color:#64b5f6}
+.auto-tag{display:inline-block;padding:0 3px;border-radius:3px;font-size:.55rem;background:var(--bg);color:var(--text-light);vertical-align:middle;margin-left:2px;border:1px solid var(--border)}
+.nt-badge{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border-radius:4px;font-size:.68rem;font-weight:600}
+.nt-published{background:#e8f5e9;color:#1b5e20}.nt-accepted{background:#e3f2fd;color:#1565c0}
+.nt-suspended{background:#fdecea;color:#c62828}.nt-old_only{background:#fff8e1;color:#e65100}
+.nt-pending{background:var(--bg);color:var(--text-light)}
+body.dark .nt-published{background:#152d18;color:#90f5a0}body.dark .nt-accepted{background:#151a2d;color:#90b0f5}
+body.dark .nt-suspended{background:#2d1518;color:#f5a0a0}body.dark .nt-old_only{background:#2d2815;color:#f5d080}
+.score-table .toefl6-row{background:rgba(79,110,247,.04)}
+.score-table .toefl6-row td{font-style:italic}
+.note-cn{color:var(--accent);font-size:.78em;font-weight:500}
+.section-conv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.section-conv-card{padding:14px;border:1px solid var(--border);border-radius:8px;background:var(--card)}
+.section-conv-card h4{font-size:.88rem;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.section-conv-card .conv-input{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.section-conv-card .conv-result{font-size:1.1rem;font-weight:700;color:var(--accent)}
+.dq-bar{height:14px;background:var(--bg);border-radius:7px;overflow:hidden;margin:4px 0}
+.dq-bar-fill{height:100%;border-radius:7px;transition:width .3s ease}
+.badge-na{background:var(--bg);color:var(--text-light)}
+body.dark .badge-green{background:#152d18;color:#90f5a0}
+body.dark .badge-yellow{background:#2d2815;color:#f5d080}
+body.dark .badge-red{background:#2d1518;color:#f5a0a0}
+.btn{padding:7px 16px;border:none;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#3b5ae0}
+.btn-sm{padding:4px 10px;font-size:.75rem}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-success{background:var(--success);color:#fff}
+.filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
+.filter-bar input,.filter-bar select{padding:7px 12px;border:1px solid var(--border);border-radius:8px;font-size:.82rem;background:var(--card);color:var(--text)}
+.filter-bar input{flex:1;min-width:180px}
+.filter-bar select{min-width:140px}
+.score-input-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:14px}
+.score-input-grid label{font-size:.78rem;font-weight:600;color:var(--text-light);display:block;margin-bottom:3px}
+.score-input-grid input,.score-input-grid select{width:100%;padding:8px;border:1px solid var(--border);border-radius:8px;font-size:.88rem;background:var(--card);color:var(--text)}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:20px}
+.stat-card{background:var(--card);border-radius:var(--radius);padding:16px;text-align:center;border:1px solid var(--border)}
+.stat-card .num{font-size:1.8rem;font-weight:800;color:var(--accent)}
+.stat-card .label{font-size:.72rem;color:var(--text-light);margin-top:3px}
+.export-bar{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.export-bar .export-label{font-size:.76rem;color:var(--text-light);font-weight:600;margin-right:2px}
+.btn-export{padding:5px 12px;border:1px solid var(--border);border-radius:8px;font-size:.74rem;font-weight:600;cursor:pointer;background:var(--card);color:var(--text);transition:all .2s;display:inline-flex;align-items:center;gap:4px}
+.btn-export:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+/* Program cards */
+.prog-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;transition:border-color .2s}
+.prog-card:hover{border-color:var(--accent)}
+.prog-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.prog-card-header h4{font-size:.95rem;margin-bottom:2px}
+.prog-card-header .uni-info{font-size:.78rem;color:var(--text-light)}
+.prog-card-header .fav-star{cursor:pointer;font-size:1.1rem;color:#ccc;transition:.2s}
+.prog-card-header .fav-star.on{color:#f1c40f}
+.score-table{width:100%;font-size:.8rem;margin:8px 0}
+.score-table th{padding:4px 6px;font-size:.72rem;text-transform:uppercase;color:var(--text-light);background:transparent;border-bottom:1px solid var(--border);font-weight:600}
+.score-table td{padding:4px 6px;text-align:center;border-bottom:1px solid var(--border)}
+.prog-card .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.prog-card .tag{display:inline-block;background:var(--accent-light);color:var(--accent);padding:2px 7px;border-radius:4px;font-size:.7rem;font-weight:600}
+.prog-card .tag-warn{background:#fff8e1;color:#b8860b}
+.prog-card .tag-danger{background:#fdecea;color:var(--danger)}
+.prog-detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.prog-detail.show{display:block}
+.prog-detail .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.82rem}
+.prog-detail .detail-grid dt{color:var(--text-light);font-weight:600}
+.prog-detail .detail-grid dd{margin:0 0 8px 0}
+.converter-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.converter-box{text-align:center}
+.converter-box label{display:block;font-size:.72rem;color:var(--text-light);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.converter-box .value{font-size:1.8rem;font-weight:800;color:var(--accent)}
+.converter-box .sub{font-size:.72rem;color:var(--text-light);margin-top:2px}
+.slider-group{margin-bottom:14px}
+.slider-group label{font-size:.82rem;font-weight:600;margin-bottom:4px;display:block}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:16px;overflow-x:auto}
+.tab-btn{padding:8px 18px;font-size:.82rem;font-weight:600;cursor:pointer;border:none;background:none;color:var(--text-light);border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-pane{display:none}.tab-pane.active{display:block}
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:2px;background:var(--border)}
+.timeline-item{position:relative;margin-bottom:16px}
+.timeline-item::before{content:'';position:absolute;left:-20px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--card)}
+.timeline-item.danger::before{background:var(--danger)}
+.timeline-item h4{font-size:.88rem;margin-bottom:3px}
+.timeline-item p{font-size:.8rem;color:var(--text-light);line-height:1.5}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-group{margin-bottom:12px}
+.form-group label{display:block;font-size:.78rem;font-weight:600;margin-bottom:3px;color:var(--text)}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-size:.82rem;background:var(--card);color:var(--text)}
+.calendar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.deadline-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;position:relative}
+.deadline-card.urgent{border-color:var(--danger);background:#fdecea}
+.deadline-card.soon{border-color:var(--warning);background:#fff8e1}
+body.dark .deadline-card.urgent{background:#2d1518}
+body.dark .deadline-card.soon{background:#2d2815}
+.deadline-card h4{font-size:.88rem;margin-bottom:4px}
+.deadline-card p{font-size:.78rem;color:var(--text-light)}
+.deadline-card .days-left{font-size:1.2rem;font-weight:800;color:var(--accent)}
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.compare-card{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:16px;position:relative}
+.compare-card h4{font-size:.95rem;margin-bottom:8px}
+.compare-card .remove-fav{position:absolute;top:8px;right:10px;cursor:pointer;color:var(--danger);font-size:.78rem}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--card);border-radius:12px;width:90%;max-width:700px;max-height:85vh;overflow-y:auto;padding:24px}
+.modal h2{font-size:1.1rem;margin-bottom:14px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+.pdf-loading{display:none;position:fixed;inset:0;background:rgba(255,255,255,.85);z-index:400;justify-content:center;align-items:center;flex-direction:column;gap:10px}
+.pdf-loading.show{display:flex}
+.pdf-loading .spinner{width:36px;height:36px;border:4px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;bottom:24px;right:24px;background:#333;color:#fff;padding:10px 20px;border-radius:10px;font-size:.85rem;z-index:300;opacity:0;transform:translateY(20px);transition:all .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.small{font-size:.78rem;color:var(--text-light)}
+.mt-2{margin-top:14px}.mb-1{margin-bottom:6px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.text-danger{color:var(--danger)}.text-success{color:var(--success)}.text-warning{color:var(--warning)}
+.menu-toggle{display:none;position:fixed;top:12px;left:12px;z-index:150;background:var(--sidebar);color:#fff;border:none;border-radius:8px;padding:7px 11px;font-size:1.1rem;cursor:pointer}
+.no-results{text-align:center;padding:40px;color:var(--text-light)}
+.no-results .icon{font-size:3rem;margin-bottom:8px}
+.load-more{text-align:center;padding:16px}
+.prog-count{font-size:.82rem;color:var(--text-light);margin-bottom:12px}
+/* ══════ Scheduler Styles ══════ */
+.course-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.course-card{padding:12px;border-radius:8px;border:1px solid var(--border);background:var(--bg)}
+.course-card h4{font-size:.88rem;margin-bottom:4px}
+.course-card .meta{font-size:.75rem;color:var(--text-light)}
+.skill-checks{display:flex;flex-wrap:wrap;gap:6px 12px}
+.skill-checks label{font-size:.82rem;display:flex;align-items:center;gap:4px}
+.workday-checks{display:flex;flex-wrap:wrap;gap:6px 14px}
+.workday-checks label{font-size:.82rem;display:flex;align-items:center;gap:3px}
+.timetable-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.timetable{width:100%;border-collapse:collapse;font-size:.72rem;min-width:600px;table-layout:fixed}
+.timetable th{padding:6px 4px;background:var(--bg);font-weight:600;text-align:center;border:1px solid var(--border);position:sticky;top:0;z-index:2}
+.timetable td{padding:0;border:1px solid var(--border);height:28px;position:relative;vertical-align:top}
+.timetable .time-col{width:52px;text-align:center;font-size:.68rem;color:var(--text-light);padding:3px 2px;background:var(--bg);position:sticky;left:0;z-index:1}
+.tt-block{position:absolute;left:1px;right:1px;border-radius:4px;padding:2px 3px;font-size:.65rem;line-height:1.2;color:#fff;overflow:hidden;cursor:pointer;z-index:3;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.tt-block:hover{opacity:.85;z-index:5}
+.tt-block .tt-course{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tt-block .tt-teacher{opacity:.85;font-size:.6rem}
+.tt-occ{background:var(--border);opacity:.4}
+.occupied-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.occ-teacher{padding:10px;border-radius:8px;border:1px solid var(--border)}
+.occ-teacher h4{font-size:.85rem;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.occ-teacher .occ-day{font-size:.72rem;color:var(--text-light);margin-bottom:2px}
+.occ-bar{display:flex;gap:1px;margin:2px 0 6px}
+.occ-slot{width:8px;height:14px;border-radius:2px;background:var(--success)}
+.occ-slot.busy{background:var(--text-light)}
+.occ-slot.intensive{background:var(--accent)}
+.teacher-load-bar{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:.78rem}
+.teacher-load-bar .bar{flex:1;height:12px;background:var(--bg);border-radius:6px;overflow:hidden}
+.teacher-load-bar .bar-fill{height:100%;border-radius:6px;transition:width .3s}
+.conflict-alert{padding:8px 12px;background:#fdecea;border-left:4px solid var(--danger);border-radius:4px;margin-bottom:6px;font-size:.78rem}
+body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
+.assign-course{transition:border-color .2s}
+.assign-course:hover{border-color:var(--accent)}
+.assign-row input[type="number"]{background:var(--card);color:var(--text)}
+.assign-row input[type="checkbox"]{width:16px;height:16px}
+
+/* ══════ Mobile Bottom Tab Bar ══════ */
+.mobile-tab-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);z-index:200;padding:4px 0 env(safe-area-inset-bottom);justify-content:space-around}
+.tab-item{display:flex;flex-direction:column;align-items:center;padding:6px 8px;cursor:pointer;color:var(--text-light);font-size:1.1rem;transition:color .2s;-webkit-tap-highlight-color:transparent}
+.tab-item small{font-size:.6rem;margin-top:1px}
+.tab-item.active{color:var(--accent)}
+
+/* ══════ Mobile Responsive ══════ */
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
+  .main{margin-left:0;padding:14px 10px 80px;max-width:100%}
+  .menu-toggle{display:block}
+  .mobile-tab-bar{display:flex}
+  .page-title{font-size:1.2rem}
+  .page-subtitle{font-size:.78rem}
+  .card{padding:14px 12px}
+  .card-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .compare-grid{grid-template-columns:1fr}
+  .score-input-grid{grid-template-columns:1fr 1fr}
+  .prog-detail .detail-grid{grid-template-columns:1fr}
+  .converter-grid{grid-template-columns:1fr 1fr}
+  .filter-bar{flex-direction:column}
+  .filter-bar select,.filter-bar input[type="text"]{width:100%}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .course-cards{grid-template-columns:1fr 1fr}
+  .occupied-grid{grid-template-columns:1fr}
+  .sidebar-footer{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+  /* Score table: horizontal scroll */
+  .score-table{font-size:.72rem}
+  .score-table th,.score-table td{padding:5px 6px}
+  /* Touch targets */
+  .btn{min-height:44px;min-width:44px}
+  .nav-item{padding:12px 16px}
+  .fav-star{font-size:1.4rem;padding:4px}
+  /* Timetable: smaller on mobile */
+  .timetable{min-width:500px;font-size:.65rem}
+  .tt-block{font-size:.58rem}
+}
+@media(max-width:480px){
+  .stats-row{grid-template-columns:1fr 1fr}
+  .score-input-grid{grid-template-columns:1fr}
+  .course-cards{grid-template-columns:1fr}
+  .converter-grid{grid-template-columns:1fr}
+  .card-grid{gap:10px}
+  .timetable .time-col{width:40px;font-size:.6rem}
+  body{font-size:14px}
+}
+@media print{
+  .sidebar,.menu-toggle,.mobile-tab-bar,.filter-bar,.btn,.export-bar,.btn-export{display:none!important}
+  .main{margin-left:0;padding:10px;max-width:100%}
+  .page{display:block!important;page-break-after:always}
+  .card{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+  body{background:#fff}
+  .timetable{min-width:auto}
+}
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
+<aside class="sidebar">
+<div class="sidebar-header"><h1>&#128314; 棱镜 Prism</h1><p>留学语言 & 集训排课平台</p></div>
+<nav>
+<div class="nav-section">总览</div>
+<div class="nav-item active" data-page="dashboard"><span>&#128202;</span> <span>仪表盘</span></div>
+<div class="nav-item" data-page="converter"><span>&#128260;</span> <span>分数换算器</span></div>
+<div class="nav-section">核心功能</div>
+<div class="nav-item" data-page="search"><span>&#128270;</span> <span>智能选校</span></div>
+<div class="nav-item" data-page="matcher"><span>&#127919;</span> <span>成绩匹配(单项)</span></div>
+<div class="nav-item" data-page="recommend"><span>&#129302;</span> <span>智能推荐</span></div>
+<div class="nav-section">各地区高校</div>
+<div class="nav-item" data-page="region-usa"><span>&#127482;&#127480;</span> <span>美国</span></div>
+<div class="nav-item" data-page="region-uk"><span>&#127468;&#127463;</span> <span>英国</span></div>
+<div class="nav-item" data-page="region-aus"><span>&#127462;&#127482;</span> <span>澳大利亚</span></div>
+<div class="nav-item" data-page="region-nz"><span>&#127475;&#127487;</span> <span>新西兰</span></div>
+<div class="nav-item" data-page="region-sea"><span>&#127758;</span> <span>东南亚</span></div>
+<div class="nav-section">集训排课</div>
+<div class="nav-item" data-page="sch-dash"><span>&#128203;</span> <span>排课仪表盘</span></div>
+<div class="nav-item" data-page="sch-teachers"><span>&#128104;&#8205;&#127979;</span> <span>老师管理</span></div>
+<div class="nav-item" data-page="sch-import"><span>&#128229;</span> <span>导入综合课表</span></div>
+<div class="nav-item" data-page="sch-toefl"><span>&#127383;</span> <span>托福集训排课</span></div>
+<div class="nav-item" data-page="sch-ielts"><span>&#127383;</span> <span>雅思集训排课</span></div>
+<div class="nav-item" data-page="sch-view"><span>&#128197;</span> <span>课表可视化</span></div>
+<div class="nav-item" data-page="sch-export"><span>&#128228;</span> <span>导出中心</span></div>
+<div class="nav-section">工具与策略</div>
+<div class="nav-item" data-page="traps"><span>&#9888;&#65039;</span> <span>政策雷区</span></div>
+<div class="nav-item" data-page="favorites"><span>&#11088;</span> <span>收藏与对比</span></div>
+<div class="nav-item" data-page="calendar"><span>&#128197;</span> <span>申请日历</span></div>
+<div class="nav-item" data-page="validity"><span>&#9201;</span> <span>有效期计算</span></div>
+<div class="nav-item" data-page="data"><span>&#128472;</span> <span>数据管理</span></div>
+<div class="nav-item" data-page="dq"><span>&#128200;</span> <span>数据质量</span></div>
+</nav>
+<div class="sidebar-footer">
+<span id="lastUpdate">棱镜 Prism v3.0</span>
+<div class="toggle-row">
+<button class="toggle-btn" id="darkToggle" onclick="toggleDark()">&#127769; Dark</button>
+<button class="toggle-btn" id="langToggle" onclick="toggleLang()">EN</button>
+</div>
+</div>
+</aside>
+
+<div class="main">
+
+<!-- DASHBOARD -->
+<div class="page active" id="page-dashboard">
+<h2 class="page-title">全景仪表盘</h2>
+<p class="page-subtitle">棱镜 Prism - 2026 留学语言 & 集训排课一站式平台</p>
+<div class="stats-row">
+<div class="stat-card"><div class="num" id="statUnis">0</div><div class="label">覆盖高校</div></div>
+<div class="stat-card"><div class="num" id="statProgs">0</div><div class="label">专业条目</div></div>
+<div class="stat-card"><div class="num">5</div><div class="label">国家/地区</div></div>
+<div class="stat-card"><div class="num">2028</div><div class="label">旧分制截止</div></div>
+</div>
+<div class="alert alert-danger"><strong>&#9888; 三大致命陷阱</strong>1. 澳大利亚签证<b>只接受"TOEFL iBT Australia"专版</b>（120分制）<br>2. 牛津、剑桥<b>已暂停接受新版托福</b>（2026年1月21日后成绩）<br>3. 英国签证(UKVI)<b>不认可任何版本的托福</b></div>
+<div class="card-grid">
+<div class="card"><div class="card-title">&#128197; 关键时间线</div><div class="timeline"><div class="timeline-item"><h4>2025年5月</h4><p>ETS宣布新版托福改革</p></div><div class="timeline-item danger"><h4>2026年1月21日</h4><p>新版托福上线, 1-6分制启用</p></div><div class="timeline-item"><h4>2026-2028 过渡期</h4><p>成绩报告同时显示双分制</p></div><div class="timeline-item danger"><h4>2028年1月后</h4><p>0-120分制永久移除</p></div></div></div>
+<div class="card"><div class="card-title">&#127758; 各地区核心建议</div><div class="alert alert-info"><strong>申请英国</strong>优先考IELTS Academic; pre-sessional需IELTS for UKVI</div><div class="alert alert-warning"><strong>申请澳大利亚</strong>签证只能用TOEFL iBT Australia (120分制)</div><div class="alert alert-success"><strong>申请美国/加拿大</strong>新版托福通过双重成绩报告被所有学校接受</div></div>
+</div>
+<div class="card"><div class="card-title">v3.0 棱镜 Prism 功能</div><p class="small">&#10003; 专业级语言要求 (IELTS/TOEFL 单项分) &nbsp; &#10003; GPA要求 &nbsp; &#10003; 智能选校三级筛选 &nbsp; &#10003; 单项分匹配 &nbsp; &#10003; UCL五级/牛津双级完整数据 &nbsp; &#10003; 188所大学1800+专业 &nbsp; &#10003; <b>集训智能排课系统</b> &nbsp; &#10003; <b>Excel综合课表导入</b> &nbsp; &#10003; <b>iCal日历同步</b></p></div>
+</div>
+
+<!-- CONVERTER -->
+<div class="page" id="page-converter">
+<h2 class="page-title">分数换算器</h2>
+<p class="page-subtitle">基于ETS官方RR-25-02联合研究报告</p>
+<div class="card"><div class="card-title">&#128260; 总分换算</div>
+<div class="slider-group"><label>选择新版托福总分: <b id="sliderVal">5.0</b></label><input type="range" id="scoreSlider" min="1" max="6" step="0.5" value="5" oninput="updateConverter()"></div>
+<div class="converter-grid"><div class="converter-box"><label>新版托福</label><div class="value" id="cvNew">5.0</div><div class="sub">1-6分制</div></div><div class="converter-box"><label>旧版iBT</label><div class="value" id="cvOld">95-106</div><div class="sub">0-120分制</div></div><div class="converter-box"><label>雅思</label><div class="value" id="cvIELTS">7.0</div><div class="sub">0-9分制</div></div><div class="converter-box"><label>CEFR</label><div class="value" id="cvCEFR">C1</div><div class="sub">欧洲标准</div></div></div></div>
+<div class="card"><div class="card-title">&#128209; 总分对照表</div><div class="table-wrap"><table><thead><tr><th>新托福(1-6)</th><th>旧版iBT(0-120)</th><th>雅思</th><th>CEFR</th></tr></thead><tbody id="convTableBody"></tbody></table></div></div>
+<div class="card"><div class="card-title">&#128221; 单项分换算 (旧0-30 ↔ 新1-6)</div>
+<p class="small" style="margin-bottom:12px">ETS官方逐分转换表 — 四个单项各自独立换算，每个section的转换比例不同</p>
+<div class="section-conv-grid">
+<div class="section-conv-card"><h4>&#128214; 阅读 Reading</h4><div class="conv-input"><label class="small">旧分(0-30):</label><input type="number" id="cvR" min="0" max="30" value="24" oninput="updateSectionConv('r')" style="width:55px;padding:4px"><span>→</span><span class="conv-result" id="cvRnew">5.0</span><span class="cefr-tag" id="cvRcefr">C1</span></div><div class="table-wrap"><table class="small"><thead><tr><th>旧</th><th>新</th><th>旧</th><th>新</th><th>旧</th><th>新</th></tr></thead><tbody id="cvRtable"></tbody></table></div></div>
+<div class="section-conv-card"><h4>&#127911; 听力 Listening</h4><div class="conv-input"><label class="small">旧分(0-30):</label><input type="number" id="cvL" min="0" max="30" value="24" oninput="updateSectionConv('l')" style="width:55px;padding:4px"><span>→</span><span class="conv-result" id="cvLnew">5.0</span><span class="cefr-tag" id="cvLcefr">C1</span></div><div class="table-wrap"><table class="small"><thead><tr><th>旧</th><th>新</th><th>旧</th><th>新</th><th>旧</th><th>新</th></tr></thead><tbody id="cvLtable"></tbody></table></div></div>
+<div class="section-conv-card"><h4>&#128483; 口语 Speaking</h4><div class="conv-input"><label class="small">旧分(0-30):</label><input type="number" id="cvS" min="0" max="30" value="24" oninput="updateSectionConv('s')" style="width:55px;padding:4px"><span>→</span><span class="conv-result" id="cvSnew">4.5</span><span class="cefr-tag" id="cvScefr">B2</span></div><div class="table-wrap"><table class="small"><thead><tr><th>旧</th><th>新</th><th>旧</th><th>新</th><th>旧</th><th>新</th></tr></thead><tbody id="cvStable"></tbody></table></div></div>
+<div class="section-conv-card"><h4>&#9997; 写作 Writing</h4><div class="conv-input"><label class="small">旧分(0-30):</label><input type="number" id="cvW" min="0" max="30" value="24" oninput="updateSectionConv('w')" style="width:55px;padding:4px"><span>→</span><span class="conv-result" id="cvWnew">5.0</span><span class="cefr-tag" id="cvWcefr">C1</span></div><div class="table-wrap"><table class="small"><thead><tr><th>旧</th><th>新</th><th>旧</th><th>新</th><th>旧</th><th>新</th></tr></thead><tbody id="cvWtable"></tbody></table></div></div>
+</div>
+</div>
+</div>
+
+<!-- SMART SEARCH (NEW CORE FEATURE) -->
+<div class="page" id="page-search">
+<h2 class="page-title">&#128270; 智能选校</h2>
+<p class="page-subtitle">国家 &rarr; 大学 &rarr; 专业 三级联动筛选, 支持单项分匹配</p>
+<div class="card">
+<div class="card-title">筛选条件</div>
+<div class="filter-bar">
+<select id="sRegion" onchange="updateUniSelect();runSearch()"><option value="all">全部地区</option><option value="usa">美国</option><option value="uk">英国</option><option value="aus">澳大利亚</option><option value="nz">新西兰</option><option value="sea">东南亚</option></select>
+<select id="sUni" onchange="runSearch()"><option value="">全部大学</option></select>
+<select id="sProg" onchange="runSearch()"><option value="">全部专业</option></select>
+<select id="sDegree" onchange="runSearch()"><option value="">全部学位</option><option value="bachelor">本科</option><option value="master">硕士</option><option value="phd">博士</option></select>
+<input type="text" id="sSearch" placeholder="搜索大学或专业..." oninput="runSearch()">
+</div>
+<div class="score-input-grid">
+<div><label>考试类型</label><select id="sExam" onchange="runSearch()"><option value="">不匹配</option><option value="ielts">IELTS</option><option value="toefl">TOEFL iBT (旧0-120)</option><option value="toefl6">TOEFL iBT (新1-6)</option></select></div>
+<div><label>总分</label><input type="number" id="sTotal" step="0.5" placeholder="-" onchange="runSearch()"></div>
+<div><label>阅读 R</label><input type="number" id="sR" step="0.5" placeholder="-" onchange="runSearch()"></div>
+<div><label>写作 W</label><input type="number" id="sW" step="0.5" placeholder="-" onchange="runSearch()"></div>
+<div><label>口语 S</label><input type="number" id="sS" step="0.5" placeholder="-" onchange="runSearch()"></div>
+<div><label>听力 L</label><input type="number" id="sL" step="0.5" placeholder="-" onchange="runSearch()"></div>
+<div><label>GPA</label><input type="number" id="sGPA" step="0.1" placeholder="-" onchange="runSearch()"></div>
+<div><label>排序</label><select id="sSort" onchange="runSearch()"><option value="rank">QS排名</option><option value="score_asc">要求从低到高</option><option value="score_desc">要求从高到低</option></select></div>
+</div>
+</div>
+<div class="prog-count" id="searchCount"></div>
+<div id="searchResults"></div>
+<div class="load-more" id="searchLoadMore" style="display:none"><button class="btn btn-outline" onclick="loadMoreResults()">加载更多</button></div>
+</div>
+
+<!-- MATCHER (UPGRADED) -->
+<div class="page" id="page-matcher">
+<h2 class="page-title">&#127919; 成绩匹配 (含单项分)</h2>
+<p class="page-subtitle">输入你的总分+各单项分, 匹配全部专业 - 绿色达标/黄色接近/红色不够</p>
+<div class="card">
+<div class="card-title">输入你的成绩</div>
+<div class="score-input-grid">
+<div><label>考试类型</label><select id="mExam" onchange="runMatcher()"><option value="ielts">IELTS</option><option value="toefl">TOEFL iBT (旧0-120)</option><option value="toefl6">TOEFL iBT (新1-6)</option></select></div>
+<div><label>总分</label><input type="number" id="mTotal" step="0.5" placeholder="如7.0" onchange="runMatcher()"></div>
+<div><label>阅读 R</label><input type="number" id="mR" step="0.5" placeholder="-" onchange="runMatcher()"></div>
+<div><label>写作 W</label><input type="number" id="mW" step="0.5" placeholder="-" onchange="runMatcher()"></div>
+<div><label>口语 S</label><input type="number" id="mS" step="0.5" placeholder="-" onchange="runMatcher()"></div>
+<div><label>听力 L</label><input type="number" id="mL" step="0.5" placeholder="-" onchange="runMatcher()"></div>
+<div><label>目标地区</label><select id="mRegion" onchange="runMatcher()"><option value="all">全部</option><option value="usa">美国</option><option value="uk">英国</option><option value="aus">澳大利亚</option><option value="nz">新西兰</option><option value="sea">东南亚</option></select></div>
+<div><label>显示</label><select id="mFilter" onchange="runMatcher()"><option value="all">全部</option><option value="green">达标</option><option value="yellow">接近</option><option value="red">不够</option></select></div>
+</div>
+<div id="matchSummary" class="small"></div>
+</div>
+<div id="matchResults"></div>
+</div>
+
+<!-- RECOMMEND -->
+<div class="page" id="page-recommend">
+<h2 class="page-title">&#129302; 智能推荐</h2>
+<p class="page-subtitle">根据分数+GPA自动分档: 冲刺/稳妥/保底</p>
+<div class="card">
+<div class="score-input-grid">
+<div><label>考试类型</label><select id="recExam"><option value="ielts">IELTS</option><option value="toefl">TOEFL iBT (旧0-120)</option><option value="toefl6">TOEFL iBT (新1-6)</option></select></div>
+<div><label>总分</label><input type="number" id="recTotal" step="0.5" placeholder="如7.0"></div>
+<div><label>目标地区</label><select id="recRegion"><option value="all">全部</option><option value="usa">美国</option><option value="uk">英国</option><option value="aus">澳大利亚</option><option value="nz">新西兰</option></select></div>
+<div><label>&nbsp;</label><button class="btn btn-primary" onclick="runRecommend()" style="width:100%">生成推荐</button></div>
+</div>
+</div>
+<div id="recResults"></div>
+</div>
+
+<!-- REGION PAGES -->
+<div class="page" id="page-region-usa">
+<h2 class="page-title">&#127482;&#127480; 美国高校</h2>
+<p class="page-subtitle">50所大学 - 点击展开查看各专业语言要求</p>
+<div class="alert alert-success">过渡期内所有美国高校均可通过双重成绩报告评估新版托福。成绩有效期 <b>2年</b>。</div>
+<div class="filter-bar"><input type="text" id="usaFilter" placeholder="搜索大学..." oninput="renderRegion('usa')"><select id="usaCat" onchange="renderRegion('usa')"><option value="">全部</option><option value="ivy">常青藤</option><option value="private">顶尖私立</option><option value="public">公立旗舰</option><option value="lac">文理学院</option></select></div>
+<div id="regionUSA"></div>
+</div>
+<div class="page" id="page-region-uk">
+<h2 class="page-title">&#127468;&#127463; 英国高校</h2>
+<p class="page-subtitle">50所大学 - UCL五级体系/牛津双级完整收录</p>
+<div class="alert alert-danger"><strong>&#9888; 英国签证警告</strong>托福从未被列入UKVI认可清单。学生可能拿到录取却无法获签。Pre-sessional需IELTS for UKVI。</div>
+<div class="filter-bar"><input type="text" id="ukFilter" placeholder="搜索大学..." oninput="renderRegion('uk')"><select id="ukCat" onchange="renderRegion('uk')"><option value="">全部</option><option value="russell">罗素集团</option><option value="other">其他</option></select></div>
+<div id="regionUK"></div>
+</div>
+<div class="page" id="page-region-aus">
+<h2 class="page-title">&#127462;&#127482; 澳大利亚高校</h2>
+<p class="page-subtitle">30所大学 - 签证必须使用TOEFL iBT Australia</p>
+<div class="alert alert-danger"><strong>&#9888; 致命陷阱</strong>内政部不接受新版全球托福。必须考"TOEFL iBT Australia" (120分制)。Home Edition永久不被接受。</div>
+<div class="filter-bar"><input type="text" id="ausFilter" placeholder="搜索大学..." oninput="renderRegion('aus')"><select id="ausCat" onchange="renderRegion('aus')"><option value="">全部</option><option value="go8">八大Go8</option><option value="other">其他</option></select></div>
+<div id="regionAUS"></div>
+</div>
+<div class="page" id="page-region-nz">
+<h2 class="page-title">&#127475;&#127487; 新西兰高校</h2>
+<p class="page-subtitle">全部8所大学</p>
+<div class="alert alert-info">INZ不为学生签证设定单独英语要求。截至2026年3月无大学公布新版分制要求。</div>
+<div id="regionNZ"></div>
+</div>
+<div class="page" id="page-region-sea">
+<h2 class="page-title">&#127758; 东南亚高校</h2>
+<p class="page-subtitle">新加坡/马来西亚/泰国/越南/印尼/菲律宾</p>
+<div class="alert alert-info">南洋理工NTU是东南亚唯一公布新版托福要求的大学 (总分5.0/口语5.0)。</div>
+<div class="filter-bar"><input type="text" id="seaFilter" placeholder="搜索大学..." oninput="renderRegion('sea')"><select id="seaCat" onchange="renderRegion('sea')"><option value="">全部</option><option value="sg">新加坡</option><option value="my">马来西亚</option><option value="th">泰国</option><option value="vn">越南</option><option value="id">印尼</option><option value="ph">菲律宾</option></select></div>
+<div id="regionSEA"></div>
+</div>
+
+<!-- TRAPS -->
+<div class="page" id="page-traps">
+<h2 class="page-title">&#9888;&#65039; 政策雷区</h2>
+<p class="page-subtitle">申请中最容易踩的致命陷阱</p>
+<div class="card"><div class="card-title text-danger">&#9888; 陷阱1: 澳大利亚签证TOEFL版本</div><p class="small">内政部不接受新版全球TOEFL。必须在注册时选择"Taking TOEFL for Australia", 考出TOEFL iBT Australia (120分制)。误选无法转换、无法退款。Home Edition永久不被接受。</p></div>
+<div class="card"><div class="card-title text-danger">&#9888; 陷阱2: 牛津剑桥暂停新版TOEFL</div><p class="small">2026年1月21日后的TOEFL成绩暂不被牛津、剑桥接受。帝国理工、UCL、华威已明确接受新版。</p></div>
+<div class="card"><div class="card-title text-danger">&#9888; 陷阱3: 英国签证UKVI不认托福</div><p class="small">托福从未被列入UKVI认可的SELT清单。可获得学术录取但无法用于签证。Pre-sessional需IELTS for UKVI。</p></div>
+<div class="card"><div class="card-title text-warning">&#9888; 陷阱4: 单项分不达标</div><p class="small">很多大学总分达标但单项分有硬性要求。例如UCL Level 3要求IELTS每项不低于7.0; USC要求TOEFL各科不低于20。总分够但单项差一分也会被拒。</p></div>
+<div class="card"><div class="card-title text-warning">&#9888; 陷阱5: MyBest/SuperScore政策</div><p class="small">多数顶尖大学(MIT, Princeton, UPenn等)不接受MyBest Scores。Cornell和Stanford是少数接受的。务必确认目标校政策。</p></div>
+<div class="card"><div class="card-title text-warning">&#9888; 陷阱6: 成绩有效期</div><p class="small">IELTS和TOEFL成绩通常有效期为2年。UCL要求成绩在入学前2年内考取(2026入学则需2024年9月1日后)。部分学校有更严格的时间窗口。</p></div>
+</div>
+
+<!-- FAVORITES -->
+<div class="page" id="page-favorites">
+<h2 class="page-title">&#11088; 收藏与对比</h2>
+<p class="page-subtitle">收藏感兴趣的大学+专业, 并排对比语言要求</p>
+<div id="favEmpty" class="no-results"><div class="icon">&#11088;</div><p>暂无收藏。在智能选校或地区页面点击星标收藏。</p></div>
+<div class="compare-grid" id="favGrid"></div>
+</div>
+
+<!-- CALENDAR -->
+<div class="page" id="page-calendar">
+<h2 class="page-title">&#128197; 申请截止日历</h2>
+<p class="page-subtitle">添加和追踪各校申请截止日期</p>
+<div class="card">
+<div class="form-row">
+<div class="form-group"><label>大学+专业</label><input type="text" id="dlSchool" placeholder="如: MIT CS MS"></div>
+<div class="form-group"><label>截止日期</label><input type="date" id="dlDate"></div>
+</div>
+<div class="form-row" style="margin-top:8px">
+<div class="form-group"><label>备注</label><input type="text" id="dlNote" placeholder="如: Round 1"></div>
+<div class="form-group"><label>&nbsp;</label><button class="btn btn-primary" onclick="addDeadline()" style="width:100%">添加</button></div>
+</div>
+</div>
+<div class="calendar-grid" id="calendarGrid"></div>
+</div>
+
+<!-- VALIDITY -->
+<div class="page" id="page-validity">
+<h2 class="page-title">&#9201; 有效期计算</h2>
+<p class="page-subtitle">计算你的语言成绩是否在有效期内</p>
+<div class="card">
+<div class="form-row">
+<div class="form-group"><label>考试日期</label><input type="date" id="vDate"></div>
+<div class="form-group"><label>目标入学日期</label><input type="date" id="vTarget"></div>
+</div>
+<div class="form-group"><button class="btn btn-primary" onclick="calcValidity()">计算</button></div>
+<div id="vResult"></div>
+</div>
+</div>
+
+<!-- DATA MANAGEMENT -->
+<div class="page" id="page-data">
+<h2 class="page-title">&#128472; 数据管理中心</h2>
+<p class="page-subtitle">远程刷新、导入/导出</p>
+<div class="card" style="border-left:4px solid var(--accent)">
+<div class="card-title">&#128225; 远程数据刷新</div>
+<p class="small" style="margin-bottom:10px">配置远程JSON地址 (GitHub Gist Raw URL), 点击刷新即可拉取最新数据。</p>
+<div class="form-row">
+<div class="form-group"><label>远程JSON地址</label><input type="text" id="remoteUrl" placeholder="https://gist.githubusercontent.com/..."></div>
+<div class="form-group"><label>&nbsp;</label><button class="btn btn-primary" onclick="fetchRemoteData()" style="width:100%">&#128260; 一键刷新</button></div>
+</div>
+<div class="small">上次刷新: <span id="lastRemoteSync">从未</span></div>
+</div>
+<div class="card-grid">
+<div class="card" style="text-align:center"><div class="card-title" style="justify-content:center">&#128228; 导出JSON</div><button class="btn btn-primary btn-sm" onclick="exportData()">导出全部数据</button></div>
+<div class="card" style="text-align:center"><div class="card-title" style="justify-content:center">&#128229; 导入JSON</div><input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)"><button class="btn btn-primary btn-sm" onclick="document.getElementById('importFile').click()">选择文件</button></div>
+<div class="card" style="text-align:center"><div class="card-title" style="justify-content:center">&#128260; 重置</div><button class="btn btn-danger btn-sm" onclick="resetData()">恢复默认</button></div>
+</div>
+</div>
+
+<!-- ══════════ DATA QUALITY ══════════ -->
+<div class="page" id="page-dq">
+<h2 class="page-title">&#128200; 数据质量仪表盘</h2>
+<p class="page-subtitle">监控各地区数据覆盖率, 定位缺失单项分和新版态度未更新的大学</p>
+<div class="stats-row">
+<div class="stat-card"><div class="num" id="dqTotal">0</div><div class="label">大学总数</div></div>
+<div class="stat-card"><div class="num" id="dqTSub">0</div><div class="label">有TOEFL单项</div></div>
+<div class="stat-card"><div class="num" id="dqISub">0</div><div class="label">有IELTS单项</div></div>
+<div class="stat-card"><div class="num" id="dqT6">0</div><div class="label">有官方新版1-6</div></div>
+</div>
+<div class="card">
+<div class="card-title">&#128202; 各地区TOEFL单项分覆盖率</div>
+<div id="dqRegionBars"></div>
+</div>
+<div class="card">
+<div class="card-title">&#128313; 新版TOEFL态度分布</div>
+<div id="dqNtStates"></div>
+</div>
+<div class="card">
+<div class="card-title">&#9888; 缺失TOEFL单项分的大学</div>
+<p class="small" style="margin-bottom:8px">以下大学的TOEFL语言等级中缺少R/W/S/L单项分数据, 建议优先补全</p>
+<div class="table-wrap"><table><thead><tr><th>地区</th><th>大学</th><th>QS排名</th><th>新版态度</th></tr></thead><tbody id="dqMissingBody"></tbody></table></div>
+</div>
+</div>
+
+<!-- ══════════ SCHEDULER: DASHBOARD ══════════ -->
+<div class="page" id="page-sch-dash">
+<h2 class="page-title">&#128203; 排课仪表盘</h2>
+<p class="page-subtitle">集训排课总览 - 老师/课程/时段一目了然</p>
+<div class="stats-row">
+<div class="stat-card"><div class="num" id="schStatTeachers">10</div><div class="label">老师</div></div>
+<div class="stat-card"><div class="num" id="schStatToefl">0</div><div class="label">托福集训课</div></div>
+<div class="stat-card"><div class="num" id="schStatIelts">0</div><div class="label">雅思集训课</div></div>
+<div class="stat-card"><div class="num" id="schStatConflicts">0</div><div class="label">冲突</div></div>
+</div>
+<div class="card-grid">
+<div class="card">
+<div class="card-title">&#128214; 托福集训概览</div>
+<div id="schToeflOverview" class="small">尚未排课。请先导入综合课表, 再前往"托福集训排课"页面。</div>
+</div>
+<div class="card">
+<div class="card-title">&#128214; 雅思集训概览</div>
+<div id="schIeltsOverview" class="small">尚未排课。请先导入综合课表, 再前往"雅思集训排课"页面。</div>
+</div>
+</div>
+<div class="card">
+<div class="card-title">&#128100; 老师工作量</div>
+<div id="schTeacherLoad"></div>
+</div>
+</div>
+
+<!-- ══════════ SCHEDULER: TEACHERS ══════════ -->
+<div class="page" id="page-sch-teachers">
+<h2 class="page-title">&#128104;&#8205;&#127979; 老师管理</h2>
+<p class="page-subtitle">添加、编辑老师信息与可教科目</p>
+<div class="card">
+<div class="card-title">添加/编辑老师</div>
+<div class="form-row">
+<div class="form-group"><label>姓名</label><input type="text" id="tName" placeholder="如: 张老师"></div>
+<div class="form-group"><label>每日最大课时</label><input type="number" id="tMaxDaily" value="4" min="1" max="8"></div>
+<div class="form-group"><label>标识色</label><input type="color" id="tColor" value="#4f6ef7"></div>
+</div>
+<div class="form-group" style="margin-top:8px">
+<label>可教科目 (多选)</label>
+<div class="skill-checks" id="tSkills"></div>
+</div>
+<div style="margin-top:10px;display:flex;gap:8px">
+<button class="btn btn-primary" onclick="saveTeacherForm()">保存</button>
+<button class="btn btn-outline" onclick="clearTeacherForm()">清空</button>
+</div>
+<input type="hidden" id="tEditId" value="">
+</div>
+<div class="card">
+<div class="card-title">老师列表 <span class="small" id="teacherCount"></span></div>
+<div class="table-wrap">
+<table id="teacherTable">
+<thead><tr><th>色</th><th>姓名</th><th>可教科目</th><th>日上限</th><th>操作</th></tr></thead>
+<tbody id="teacherTbody"></tbody>
+</table>
+</div>
+</div>
+</div>
+
+<!-- ══════════ SCHEDULER: IMPORT ══════════ -->
+<div class="page" id="page-sch-import">
+<h2 class="page-title">&#128229; 导入综合课表</h2>
+<p class="page-subtitle">上传学校综合课表Excel, 系统自动解析老师已占用时段</p>
+<div class="card" style="border-left:4px solid var(--accent)">
+<div class="card-title">&#128196; 上传Excel文件</div>
+<p class="small" style="margin-bottom:10px">支持 .xlsx / .xls 格式。系统自动检测三种常见课表格式:<br>A) 行=时段, 列=星期 &nbsp; B) 行=老师, 列=时段 &nbsp; C) 含"老师/星期/时间"列名</p>
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+<input type="file" id="schExcelFile" accept=".xlsx,.xls" style="flex:1;min-width:200px">
+<button class="btn btn-primary" onclick="handleImportExcel()">&#128202; 解析课表</button>
+<button class="btn btn-outline" onclick="clearOccupied()">清空已导入</button>
+</div>
+<div id="importResult" style="margin-top:12px"></div>
+</div>
+<div class="card">
+<div class="card-title">&#128200; 排课参数配置</div>
+<div class="form-row">
+<div class="form-group"><label>每天开始时间</label><input type="number" id="cfgStart" value="8" min="6" max="12" onchange="updateSchConfig()"></div>
+<div class="form-group"><label>每天结束时间</label><input type="number" id="cfgEnd" value="21" min="16" max="23" onchange="updateSchConfig()"></div>
+<div class="form-group"><label>课间休息(分钟)</label><input type="number" id="cfgBreak" value="15" min="0" max="30" onchange="updateSchConfig()"></div>
+<div class="form-group"><label>时间粒度(分钟)</label><select id="cfgSlot" onchange="updateSchConfig()"><option value="30">30分钟</option><option value="60">60分钟</option></select></div>
+</div>
+<div class="form-row">
+<div class="form-group"><label>学期开始</label><input type="date" id="cfgTermStart" onchange="updateSchConfig()"></div>
+<div class="form-group"><label>学期结束</label><input type="date" id="cfgTermEnd" onchange="updateSchConfig()"></div>
+</div>
+<div class="form-group" style="margin-top:8px">
+<label>工作日</label>
+<div class="workday-checks">
+<label><input type="checkbox" value="1" checked onchange="updateSchConfig()"> 周一</label>
+<label><input type="checkbox" value="2" checked onchange="updateSchConfig()"> 周二</label>
+<label><input type="checkbox" value="3" checked onchange="updateSchConfig()"> 周三</label>
+<label><input type="checkbox" value="4" checked onchange="updateSchConfig()"> 周四</label>
+<label><input type="checkbox" value="5" checked onchange="updateSchConfig()"> 周五</label>
+<label><input type="checkbox" value="6" checked onchange="updateSchConfig()"> 周六</label>
+<label><input type="checkbox" value="7" onchange="updateSchConfig()"> 周日</label>
+</div>
+</div>
+</div>
+<div class="card">
+<div class="card-title">&#128101; 老师已占用时段预览</div>
+<p class="small" style="margin-bottom:8px">下方显示从综合课表中解析出的各老师已占用时段 (灰色=被占用)</p>
+<div id="occupiedPreview" class="occupied-grid"></div>
+</div>
+</div>
+
+<!-- ══════════ SCHEDULER: TOEFL ══════════ -->
+<div class="page" id="page-sch-toefl">
+<h2 class="page-title">&#127383; 托福集训排课</h2>
+<p class="page-subtitle">为每门科目分配老师并输入课次 → 一键生成课表</p>
+<div class="card">
+<div class="card-title">&#9997; 分配老师与课次</div>
+<p class="small" style="margin-bottom:10px">为每门科目选择参与的老师, 并为每位老师单独输入每周课次数。不同老师的课次可以不同。</p>
+<div id="toeflAssignUI"></div>
+</div>
+<div style="margin:12px 0;display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-primary" onclick="doAutoToefl()">&#9889; 一键自动排课</button>
+<button class="btn btn-danger" onclick="if(confirm('清空托福排课?')){TOEFL_SCHEDULE=[];saveToeflSchedule();renderToeflSchedule();}">清空排课</button>
+</div>
+<div id="toeflConflicts"></div>
+<div class="card">
+<div class="card-title">排课结果 - 周视图</div>
+<div class="timetable-wrap" id="toeflTimetable"></div>
+</div>
+<div class="card">
+<div class="card-title">排课结果 - 列表</div>
+<div class="table-wrap"><table><thead><tr><th>星期</th><th>时间</th><th>课程</th><th>老师</th><th>时长</th><th>操作</th></tr></thead><tbody id="toeflListBody"></tbody></table></div>
+</div>
+</div>
+
+<!-- ══════════ SCHEDULER: IELTS ══════════ -->
+<div class="page" id="page-sch-ielts">
+<h2 class="page-title">&#127383; 雅思集训排课</h2>
+<p class="page-subtitle">为每门科目分配老师并输入课次 → 一键生成课表</p>
+<div class="card">
+<div class="card-title">&#9997; 分配老师与课次</div>
+<p class="small" style="margin-bottom:10px">为每门科目选择参与的老师, 并为每位老师单独输入每周课次数。不同老师的课次可以不同。</p>
+<div id="ieltsAssignUI"></div>
+</div>
+<div style="margin:12px 0;display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-primary" onclick="doAutoIelts()">&#9889; 一键自动排课</button>
+<button class="btn btn-danger" onclick="if(confirm('清空雅思排课?')){IELTS_SCHEDULE=[];saveIeltsSchedule();renderIeltsSchedule();}">清空排课</button>
+</div>
+<div id="ieltsConflicts"></div>
+<div class="card">
+<div class="card-title">排课结果 - 周视图</div>
+<div class="timetable-wrap" id="ieltsTimetable"></div>
+</div>
+<div class="card">
+<div class="card-title">排课结果 - 列表</div>
+<div class="table-wrap"><table><thead><tr><th>星期</th><th>时间</th><th>课程</th><th>老师</th><th>时长</th><th>操作</th></tr></thead><tbody id="ieltsListBody"></tbody></table></div>
+</div>
+</div>
+
+<!-- ══════════ SCHEDULER: TIMETABLE VIEW ══════════ -->
+<div class="page" id="page-sch-view">
+<h2 class="page-title">&#128197; 课表可视化</h2>
+<p class="page-subtitle">多维度查看: 老师视角 / 科目视角 / 全局总览</p>
+<div class="filter-bar">
+<select id="viewMode" onchange="renderSchView()">
+<option value="all">全局总览</option>
+<option value="teacher">按老师查看</option>
+<option value="course">按科目查看</option>
+</select>
+<select id="viewTeacher" onchange="renderSchView()" style="display:none"></select>
+<select id="viewCourse" onchange="renderSchView()" style="display:none"></select>
+<select id="viewExam" onchange="renderSchView()">
+<option value="both">托福+雅思</option>
+<option value="toefl">仅托福</option>
+<option value="ielts">仅雅思</option>
+</select>
+</div>
+<div class="card">
+<div class="timetable-wrap" id="viewTimetable"></div>
+</div>
+<div class="card" id="viewLegend"></div>
+<div class="card">
+<div class="card-title">&#128202; 统计</div>
+<div id="viewStats"></div>
+</div>
+</div>
+
+<!-- ══════════ SCHEDULER: EXPORT ══════════ -->
+<div class="page" id="page-sch-export">
+<h2 class="page-title">&#128228; 导出中心</h2>
+<p class="page-subtitle">导出课程表为 Excel / PDF / iCal日历文件</p>
+<div class="card-grid">
+<div class="card" style="text-align:center">
+<div class="card-title" style="justify-content:center">&#128197; 托福课表 → iCal</div>
+<p class="small">导入系统日历(Windows/Mac/手机)</p>
+<button class="btn btn-primary btn-sm" onclick="downloadICS(TOEFL_SCHEDULE,'toefl-schedule.ics','托福集训')">下载 .ics</button>
+</div>
+<div class="card" style="text-align:center">
+<div class="card-title" style="justify-content:center">&#128197; 雅思课表 → iCal</div>
+<p class="small">导入系统日历(Windows/Mac/手机)</p>
+<button class="btn btn-primary btn-sm" onclick="downloadICS(IELTS_SCHEDULE,'ielts-schedule.ics','雅思集训')">下载 .ics</button>
+</div>
+<div class="card" style="text-align:center">
+<div class="card-title" style="justify-content:center">&#128196; 托福课表 → Excel</div>
+<p class="small">标准xlsx格式, 方便打印和分发</p>
+<button class="btn btn-primary btn-sm" onclick="exportScheduleExcel(TOEFL_SCHEDULE,'toefl-schedule.xlsx')">下载 .xlsx</button>
+</div>
+<div class="card" style="text-align:center">
+<div class="card-title" style="justify-content:center">&#128196; 雅思课表 → Excel</div>
+<p class="small">标准xlsx格式, 方便打印和分发</p>
+<button class="btn btn-primary btn-sm" onclick="exportScheduleExcel(IELTS_SCHEDULE,'ielts-schedule.xlsx')">下载 .xlsx</button>
+</div>
+<div class="card" style="text-align:center">
+<div class="card-title" style="justify-content:center">&#128438; 课表 → PDF</div>
+<p class="small">打印友好排版</p>
+<button class="btn btn-primary btn-sm" onclick="exportSchPDF()">生成PDF</button>
+</div>
+<div class="card" style="text-align:center">
+<div class="card-title" style="justify-content:center">&#128247; 课表 → 图片</div>
+<p class="small">截图PNG, 方便微信/钉钉分享</p>
+<button class="btn btn-primary btn-sm" onclick="exportSchImage()">截图保存</button>
+</div>
+</div>
+</div>
+
+</div><!-- /main -->
+
+<!-- ══════════ MOBILE BOTTOM TAB BAR ══════════ -->
+<nav class="mobile-tab-bar" id="mobileTabBar">
+<div class="tab-item active" data-page="dashboard"><span>&#128202;</span><small>首页</small></div>
+<div class="tab-item" data-page="search"><span>&#128270;</span><small>选校</small></div>
+<div class="tab-item" data-page="sch-dash"><span>&#128203;</span><small>排课</small></div>
+<div class="tab-item" data-page="favorites"><span>&#11088;</span><small>收藏</small></div>
+<div class="tab-item" data-page="more" onclick="document.querySelector('.sidebar').classList.toggle('open')"><span>&#9776;</span><small>更多</small></div>
+</nav>
+
+<div class="pdf-loading" id="pdfLoading"><div class="spinner"></div><p>正在生成PDF...</p></div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════ GLOBALS ══════════
+var searchResultsData = [];
+var searchPage = 0;
+var PAGE_SIZE = 30;
+var favorites = JSON.parse(localStorage.getItem('compass_favs2')||'[]');
+var deadlines = JSON.parse(localStorage.getItem('compass_deadlines')||'[]');
+
+// ══════════ NAVIGATION ══════════
+document.querySelectorAll('.nav-item').forEach(function(el){
+  el.addEventListener('click',function(){
+    document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});
+    el.classList.add('active');
+    var pg = el.getAttribute('data-page');
+    document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
+    var target = document.getElementById('page-'+pg);
+    if(target) target.classList.add('active');
+    document.querySelector('.sidebar').classList.remove('open');
+    // Sync mobile tab active state
+    document.querySelectorAll('.tab-item').forEach(function(t){
+      var tp=t.getAttribute('data-page');
+      t.classList.toggle('active',tp===pg);
+    });
+    triggerPageRender(pg);
+  });
+});
+
+// ══════════ TABS ══════════
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var par=btn.parentElement;
+    par.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+    btn.classList.add('active');
+    var target=btn.getAttribute('data-tab');
+    var container=par.parentElement;
+    container.querySelectorAll('.tab-pane').forEach(function(p){p.classList.remove('active')});
+    var tp=container.querySelector('#'+target);
+    if(tp) tp.classList.add('active');
+  });
+});
+
+// ══════════ CONVERTER ══════════
+var convMap=[
+  {nw:6,old:"114-120",ielts:"8.5-9.0",cefr:"C2"},
+  {nw:5.5,old:"107-113",ielts:"7.5-8.0",cefr:"C1-C2"},
+  {nw:5,old:"95-106",ielts:"7.0",cefr:"C1"},
+  {nw:4.5,old:"83-94",ielts:"6.5",cefr:"B2-C1"},
+  {nw:4,old:"71-82",ielts:"6.0",cefr:"B2"},
+  {nw:3.5,old:"59-70",ielts:"5.5",cefr:"B1-B2"},
+  {nw:3,old:"48-58",ielts:"5.0",cefr:"B1"},
+  {nw:2.5,old:"37-47",ielts:"4.5",cefr:"A2-B1"},
+  {nw:2,old:"25-36",ielts:"4.0",cefr:"A2"},
+  {nw:1.5,old:"13-24",ielts:"3.5",cefr:"A1-A2"},
+  {nw:1,old:"0-12",ielts:"3.0",cefr:"A1"}
+];
+
+function updateConverter(){
+  var v=parseFloat(document.getElementById('scoreSlider').value);
+  document.getElementById('sliderVal').textContent=v.toFixed(1);
+  document.getElementById('cvNew').textContent=v.toFixed(1);
+  var m=convMap.find(function(r){return r.nw===v})||convMap[5];
+  document.getElementById('cvOld').textContent=m.old;
+  document.getElementById('cvIELTS').textContent=m.ielts;
+  document.getElementById('cvCEFR').textContent=m.cefr;
+}
+function buildConvTable(){
+  var tb=document.getElementById('convTableBody');
+  tb.innerHTML=convMap.map(function(r){
+    var c=getCEFR(r.nw);
+    return '<tr><td><b>'+r.nw+'</b> <span class="cefr-tag">'+c.cefr+'</span></td><td>'+r.old+'</td><td>'+r.ielts+'</td><td>'+r.cefr+'</td></tr>';
+  }).join('');
+  buildSectionConvTables();
+}
+function buildSectionConvTables(){
+  var sections={r:CONV_READING,l:CONV_LISTENING,s:CONV_SPEAKING,w:CONV_WRITING};
+  var ids={r:'cvRtable',l:'cvLtable',s:'cvStable',w:'cvWtable'};
+  Object.keys(sections).forEach(function(sec){
+    var arr=sections[sec];
+    var rows=[];
+    for(var i=30;i>=0;i-=3){
+      var cells='';
+      for(var j=0;j<3&&i-j>=0;j++){
+        var old=i-j;
+        cells+='<td>'+old+'</td><td><b>'+arr[old]+'</b></td>';
+      }
+      rows.push('<tr>'+cells+'</tr>');
+    }
+    document.getElementById(ids[sec]).innerHTML=rows.join('');
+  });
+  ['r','l','s','w'].forEach(function(s){updateSectionConv(s);});
+}
+function updateSectionConv(sec){
+  var idMap={r:'cvR',l:'cvL',s:'cvS',w:'cvW'};
+  var v=parseInt(document.getElementById(idMap[sec]).value);
+  if(isNaN(v)||v<0||v>30) return;
+  var nw=oldToNewSection(v,sec);
+  var c=getCEFR(nw);
+  document.getElementById(idMap[sec]+'new').textContent=nw;
+  document.getElementById(idMap[sec]+'cefr').textContent=c.cefr;
+}
+
+// ══════════ SMART SEARCH ══════════
+function updateUniSelect(){
+  var reg=document.getElementById('sRegion').value;
+  var sel=document.getElementById('sUni');
+  sel.innerHTML='<option value="">全部大学</option>';
+  var unis=reg==='all'?Object.keys(COMPASS_DATA).reduce(function(a,k){return a.concat(COMPASS_DATA[k])},[]):COMPASS_DATA[reg]||[];
+  unis.forEach(function(u){
+    var opt=document.createElement('option');
+    opt.value=u.id;opt.textContent=u.n;
+    sel.appendChild(opt);
+  });
+  // Also populate program categories
+  var psel=document.getElementById('sProg');
+  psel.innerHTML='<option value="">全部专业</option>';
+  Object.keys(PC).forEach(function(k){
+    var opt=document.createElement('option');
+    opt.value=k;opt.textContent=PC[k].n;
+    psel.appendChild(opt);
+  });
+}
+
+function runSearch(){
+  var opts={
+    region:document.getElementById('sRegion').value,
+    uniId:document.getElementById('sUni').value||null,
+    progCat:document.getElementById('sProg').value||null,
+    degree:document.getElementById('sDegree').value||null,
+    search:document.getElementById('sSearch').value||null,
+    sortBy:document.getElementById('sSort').value
+  };
+  var examType=document.getElementById('sExam').value;
+  if(examType){
+    var t=parseFloat(document.getElementById('sTotal').value)||null;
+    if(t){
+      opts.examType=examType;
+      opts.myScores={
+        t:t,
+        r:parseFloat(document.getElementById('sR').value)||null,
+        w:parseFloat(document.getElementById('sW').value)||null,
+        s:parseFloat(document.getElementById('sS').value)||null,
+        l:parseFloat(document.getElementById('sL').value)||null
+      };
+    }
+  }
+  searchResultsData=filterPrograms(opts);
+  searchPage=0;
+  renderSearchResults();
+}
+
+function renderSearchResults(){
+  var container=document.getElementById('searchResults');
+  var countEl=document.getElementById('searchCount');
+  var loadMore=document.getElementById('searchLoadMore');
+  var total=searchResultsData.length;
+  var end=Math.min((searchPage+1)*PAGE_SIZE,total);
+  var items=searchResultsData.slice(0,end);
+  countEl.textContent='找到 '+total+' 个匹配项目'+(end<total?' (显示前'+end+'个)':'');
+  var html='';
+  items.forEach(function(item,idx){
+    var lang=resolveLang(item.uni,item.prog);
+    var isFav=favorites.indexOf(item.uni.id+'_'+item.prog.c)>-1;
+    html+='<div class="prog-card" id="pc'+idx+'">';
+    html+='<div class="prog-card-header"><div><h4>'+item.uni.n+' - '+progName(item.prog)+'</h4>';
+    html+='<div class="uni-info">'+progFaculty(item.prog)+' | '+(item.uni.r?'QS #'+item.uni.r:'')+(item.uni.c?' | '+item.uni.c:'')+'</div></div>';
+    html+='<span class="fav-star'+(isFav?' on':'')+'" onclick="toggleFav(\''+item.uni.id+'\',\''+item.prog.c+'\',this)">&#9733;</span></div>';
+    // Score table
+    html+='<table class="score-table"><thead><tr><th>考试</th><th>总分</th><th>阅读R</th><th>写作W</th><th>口语S</th><th>听力L</th></tr></thead><tbody>';
+    if(lang.ielts){
+      html+='<tr><td><b>IELTS</b></td><td>'+fmtScore(lang.ielts.t)+'</td><td>'+fmtScore(lang.ielts.r)+'</td><td>'+fmtScore(lang.ielts.w)+'</td><td>'+fmtScore(lang.ielts.s)+'</td><td>'+fmtScore(lang.ielts.l)+'</td></tr>';
+    }
+    if(lang.toefl){
+      html+='<tr><td><b>TOEFL</b></td><td>'+fmtScore(lang.toefl.t)+'</td><td>'+fmtScore(lang.toefl.r)+'</td><td>'+fmtScore(lang.toefl.w)+'</td><td>'+fmtScore(lang.toefl.s)+'</td><td>'+fmtScore(lang.toefl.l)+'</td></tr>';
+    }
+    if(lang.toefl6){
+      html+='<tr class="toefl6-row"><td><b>TOEFL 1-6</b>'+(lang._t6auto?' <span class="auto-tag">auto</span>':'')+'</td><td>'+fmtScore(lang.toefl6.t)+' <span class="cefr-tag">'+getCEFR(lang.toefl6.t).cefr+'</span></td><td>'+fmtScore(lang.toefl6.r)+'</td><td>'+fmtScore(lang.toefl6.w)+'</td><td>'+fmtScore(lang.toefl6.s)+'</td><td>'+fmtScore(lang.toefl6.l)+'</td></tr>';
+    }
+    html+='</tbody></table>';
+    // Match badges
+    if(item.match&&item.match.status!=='na'){
+      html+='<div style="margin:6px 0">';
+      var d=item.match.detail;
+      var labels={t:'总分',r:'阅读',w:'写作',s:'口语',l:'听力'};
+      ['t','r','w','s','l'].forEach(function(f){
+        if(d[f]&&d[f]!=='na'){
+          html+='<span class="badge badge-'+d[f]+'">'+labels[f]+' '+(d[f]==='green'?'&#10003;':d[f]==='yellow'?'~':'&#10007;')+'</span> ';
+        }
+      });
+      html+='</div>';
+    }
+    // Meta tags
+    html+='<div class="meta">';
+    if(item.prog.g) html+='<span class="tag">GPA: '+item.prog.g+'</span>';
+    var pol=item.uni.pol||{};
+    var ntKey=resolveNtState(pol.nt);var ntObj=NT_STATES[ntKey];
+    html+='<span class="nt-badge nt-'+ntKey+'">'+ntObj.icon+' '+ntObj.n+'</span> ';
+    if(pol.mb) html+='<span class="tag">MyBest &#10003;</span>';
+    if(item.prog.note) html+='<span class="tag">'+noteCn(item.prog.note)+'</span>';
+    html+='</div>';
+    // Expand toggle
+    html+='<div style="margin-top:8px"><button class="btn btn-outline btn-sm" onclick="toggleDetail('+idx+')">详情</button></div>';
+    html+='<div class="prog-detail" id="pd'+idx+'"><div class="detail-grid">';
+    html+='<dt>大学英文名</dt><dd>'+item.uni.e+'</dd>';
+    html+='<dt>语言等级</dt><dd>'+item.prog.l+(item.uni.ll[item.prog.l]&&item.uni.ll[item.prog.l].label?' ('+item.uni.ll[item.prog.l].label+')':'')+'</dd>';
+    html+='<dt>GPA要求</dt><dd>'+(item.prog.g||'-')+'</dd>';
+    html+='<dt>新版TOEFL政策</dt><dd><span class="nt-badge nt-'+ntKey+'">'+ntObj.icon+' '+ntObj.n+'</span></dd>';
+    html+='<dt>MyBest Scores</dt><dd>'+(pol.mb?'接受':'不接受/未确认')+'</dd>';
+    html+='<dt>成绩有效期</dt><dd>'+(pol.v||'2年')+'</dd>';
+    if(pol.note) html+='<dt>政策备注</dt><dd>'+noteCn(pol.note)+'</dd>';
+    html+='</div></div>';
+    html+='</div>';
+  });
+  container.innerHTML=html||'<div class="no-results"><div class="icon">&#128270;</div><p>无匹配结果, 请调整筛选条件</p></div>';
+  loadMore.style.display=end<total?'block':'none';
+}
+
+function loadMoreResults(){searchPage++;renderSearchResults();}
+function toggleDetail(idx){
+  var el=document.getElementById('pd'+idx);
+  if(el) el.classList.toggle('show');
+}
+
+// ══════════ MATCHER ══════════
+function runMatcher(){
+  var examType=document.getElementById('mExam').value;
+  var total=parseFloat(document.getElementById('mTotal').value);
+  if(!total) {document.getElementById('matchResults').innerHTML='<div class="no-results">请输入总分</div>';return;}
+  var myScores={t:total,r:parseFloat(document.getElementById('mR').value)||null,w:parseFloat(document.getElementById('mW').value)||null,s:parseFloat(document.getElementById('mS').value)||null,l:parseFloat(document.getElementById('mL').value)||null};
+  var region=document.getElementById('mRegion').value;
+  var filterStatus=document.getElementById('mFilter').value;
+  var results=filterPrograms({region:region,examType:examType,myScores:myScores,sortBy:'rank'});
+  if(filterStatus!=='all'){results=results.filter(function(r){return r.match&&r.match.status===filterStatus});}
+  var counts={green:0,yellow:0,red:0};
+  results.forEach(function(r){if(r.match)counts[r.match.status]=(counts[r.match.status]||0)+1});
+  document.getElementById('matchSummary').innerHTML='达标: <b class="text-success">'+counts.green+'</b> | 接近: <b class="text-warning">'+counts.yellow+'</b> | 不够: <b class="text-danger">'+counts.red+'</b> | 共 '+results.length+' 个项目';
+  var html='';
+  results.slice(0,50).forEach(function(item,idx){
+    var lang=resolveLang(item.uni,item.prog);
+    var m=item.match||{status:'na',detail:{}};
+    html+='<div class="prog-card" style="border-left:4px solid '+(m.status==='green'?'var(--success)':m.status==='yellow'?'var(--warning)':'var(--danger)')+'">';
+    html+='<div class="prog-card-header"><div><h4>'+item.uni.n+' - '+progName(item.prog)+'</h4>';
+    html+='<div class="uni-info">'+(item.uni.r?'QS #'+item.uni.r+' | ':'')+item.uni.c+'</div></div></div>';
+    html+='<table class="score-table"><thead><tr><th></th><th>总分</th><th>R</th><th>W</th><th>S</th><th>L</th></tr></thead><tbody>';
+    var req=lang[examType]||{};
+    html+='<tr><td>要求</td><td>'+fmtScore(req.t)+'</td><td>'+fmtScore(req.r)+'</td><td>'+fmtScore(req.w)+'</td><td>'+fmtScore(req.s)+'</td><td>'+fmtScore(req.l)+'</td></tr>';
+    html+='<tr><td>你的</td><td>'+fmtScore(myScores.t)+'</td><td>'+fmtScore(myScores.r)+'</td><td>'+fmtScore(myScores.w)+'</td><td>'+fmtScore(myScores.s)+'</td><td>'+fmtScore(myScores.l)+'</td></tr>';
+    html+='<tr><td>匹配</td>';
+    ['t','r','w','s','l'].forEach(function(f){
+      var st=m.detail[f]||'na';
+      html+='<td><span class="badge badge-'+st+'">'+(st==='green'?'&#10003;':st==='yellow'?'~':st==='red'?'&#10007;':'-')+'</span></td>';
+    });
+    html+='</tr>';
+    if(examType==='toefl'&&lang.toefl6){
+      html+='<tr class="toefl6-row"><td>1-6制'+(lang._t6auto?' <span class="auto-tag">auto</span>':'')+'</td><td>'+fmtScore(lang.toefl6.t)+' <span class="cefr-tag">'+getCEFR(lang.toefl6.t).cefr+'</span></td><td>'+fmtScore(lang.toefl6.r)+'</td><td>'+fmtScore(lang.toefl6.w)+'</td><td>'+fmtScore(lang.toefl6.s)+'</td><td>'+fmtScore(lang.toefl6.l)+'</td></tr>';
+    }
+    html+='</tbody></table>';
+    var mPol=item.uni.pol||{};var mNtKey=resolveNtState(mPol.nt);var mNtObj=NT_STATES[mNtKey];
+    html+='<span class="nt-badge nt-'+mNtKey+'">'+mNtObj.icon+' '+mNtObj.n+'</span> ';
+    if(item.prog.g) html+='<span class="tag">GPA: '+item.prog.g+'</span>';
+    if(item.prog.note) html+='<span class="tag">'+noteCn(item.prog.note)+'</span>';
+    html+='</div>';
+  });
+  document.getElementById('matchResults').innerHTML=html||'<div class="no-results">无结果</div>';
+}
+
+// ══════════ RECOMMEND ══════════
+function runRecommend(){
+  var examType=document.getElementById('recExam').value;
+  var total=parseFloat(document.getElementById('recTotal').value);
+  if(!total){showToast('请输入总分');return;}
+  var region=document.getElementById('recRegion').value;
+  var results=filterPrograms({region:region,examType:examType,myScores:{t:total},sortBy:'rank'});
+  var reach=[],match=[],safe=[];
+  results.forEach(function(item){
+    if(!item.match)return;
+    if(item.match.status==='red') reach.push(item);
+    else if(item.match.status==='yellow') match.push(item);
+    else safe.push(item);
+  });
+  var html='<div class="card"><div class="card-title text-danger">&#128640; 冲刺 ('+reach.length+')</div>';
+  html+=reach.slice(0,15).map(function(i){return '<div class="small" style="padding:4px 0;border-bottom:1px solid var(--border)">'+i.uni.n+' - '+progName(i.prog)+' | '+examType.toUpperCase()+': '+fmtScore(resolveLang(i.uni,i.prog)[examType].t)+'</div>'}).join('');
+  html+='</div>';
+  html+='<div class="card"><div class="card-title text-warning">&#127919; 稳妥 ('+match.length+')</div>';
+  html+=match.slice(0,15).map(function(i){return '<div class="small" style="padding:4px 0;border-bottom:1px solid var(--border)">'+i.uni.n+' - '+progName(i.prog)+' | '+examType.toUpperCase()+': '+fmtScore(resolveLang(i.uni,i.prog)[examType].t)+'</div>'}).join('');
+  html+='</div>';
+  html+='<div class="card"><div class="card-title text-success">&#127969; 保底 ('+safe.length+')</div>';
+  html+=safe.slice(0,15).map(function(i){return '<div class="small" style="padding:4px 0;border-bottom:1px solid var(--border)">'+i.uni.n+' - '+progName(i.prog)+' | '+examType.toUpperCase()+': '+fmtScore(resolveLang(i.uni,i.prog)[examType].t)+'</div>'}).join('');
+  html+='</div>';
+  document.getElementById('recResults').innerHTML=html;
+}
+
+// ══════════ REGION PAGES ══════════
+function renderRegion(reg){
+  var containerId={usa:'regionUSA',uk:'regionUK',aus:'regionAUS',nz:'regionNZ',sea:'regionSEA'}[reg];
+  var container=document.getElementById(containerId);
+  if(!container)return;
+  var unis=COMPASS_DATA[reg]||[];
+  var search=(document.getElementById(reg+'Filter')||{}).value||'';
+  var cat=(document.getElementById(reg+'Cat')||{}).value||'';
+  var html='';
+  unis.forEach(function(uni){
+    if(search&&uni.n.toLowerCase().indexOf(search.toLowerCase())<0&&uni.e.toLowerCase().indexOf(search.toLowerCase())<0)return;
+    if(cat&&uni.cat!==cat)return;
+    var uid='ru_'+uni.id;
+    html+='<div class="card">';
+    html+='<div class="card-title" style="cursor:pointer" onclick="document.getElementById(\''+uid+'\').style.display=document.getElementById(\''+uid+'\').style.display===\'none\'?\'block\':\'none\'">';
+    html+=uni.n+' <span class="small">'+uni.e+' | '+(uni.r?'QS #'+uni.r:'-')+' | '+uni.c+'</span>';
+    html+='<span style="margin-left:auto;font-size:.8rem;color:var(--accent)">'+(uni.p?uni.p.length:0)+' programs &#9660;</span></div>';
+    // Lang levels summary
+    var llKeys=Object.keys(uni.ll||{});
+    html+='<div class="small mb-1">语言等级: '+llKeys.map(function(k){
+      var lv=uni.ll[k];
+      var t6=lv.toefl6||(!lv.toefl6&&lv.toefl?convertToeflOldToNew(lv.toefl):null);
+      return '<b>'+k+'</b> IELTS '+(lv.ielts?fmtScore(lv.ielts.t):'-')+' / TOEFL '+(lv.toefl?fmtScore(lv.toefl.t):'-')+(t6?' / <i>1-6: '+fmtScore(t6.t)+'</i>':'');
+    }).join(' | ')+'</div>';
+    // Policies
+    var pol=uni.pol||{};
+    var rNtKey=resolveNtState(pol.nt);var rNtObj=NT_STATES[rNtKey];
+    html+='<div class="small"><span class="nt-badge nt-'+rNtKey+'">'+rNtObj.icon+' '+rNtObj.n+'</span> | MyBest: '+(pol.mb?'接受':'不接受')+(pol.note?' | '+noteCn(pol.note):'')+'</div>';
+    // Programs table (collapsed)
+    html+='<div id="'+uid+'" style="display:none;margin-top:12px">';
+    html+='<table class="score-table"><thead><tr><th>专业</th><th>等级</th><th>IELTS</th><th>TOEFL</th><th>TOEFL 1-6</th><th>GPA</th><th>备注</th></tr></thead><tbody>';
+    (uni.p||[]).forEach(function(p){
+      var lang=resolveLang(uni,p);
+      html+='<tr><td><b>'+progName(p)+'</b></td><td>'+p.l+'</td>';
+      html+='<td>'+fmtIelts(lang.ielts)+'</td>';
+      html+='<td>'+fmtToefl(lang.toefl)+'</td>';
+      html+='<td>'+fmtToefl6(lang.toefl6,lang._t6auto)+'</td>';
+      html+='<td>'+(p.g||'-')+'</td>';
+      html+='<td class="small">'+(p.note?noteCn(p.note):'')+'</td></tr>';
+    });
+    html+='</tbody></table></div></div>';
+  });
+  container.innerHTML=html||'<div class="no-results">无数据</div>';
+}
+
+// ══════════ FAVORITES ══════════
+function toggleFav(uniId,progCat,el){
+  var key=uniId+'_'+progCat;
+  var idx=favorites.indexOf(key);
+  if(idx>-1){favorites.splice(idx,1);if(el)el.classList.remove('on');}
+  else{favorites.push(key);if(el)el.classList.add('on');}
+  localStorage.setItem('compass_favs2',JSON.stringify(favorites));
+  showToast(idx>-1?'已取消收藏':'已收藏');
+}
+
+function renderFavorites(){
+  var grid=document.getElementById('favGrid');
+  var empty=document.getElementById('favEmpty');
+  if(!favorites.length){empty.style.display='block';grid.innerHTML='';return;}
+  empty.style.display='none';
+  var html='';
+  favorites.forEach(function(key){
+    var parts=key.split('_');
+    var uniId=parts[0],progCat=parts.slice(1).join('_');
+    // Find uni and prog
+    var found=null;
+    Object.keys(COMPASS_DATA).some(function(reg){
+      return COMPASS_DATA[reg].some(function(uni){
+        if(uni.id===uniId){
+          (uni.p||[]).some(function(p){
+            if(p.c===progCat){found={uni:uni,prog:p,region:reg};return true;}
+          });
+          return !!found;
+        }
+      });
+    });
+    if(!found)return;
+    var lang=resolveLang(found.uni,found.prog);
+    html+='<div class="compare-card">';
+    html+='<span class="remove-fav" onclick="toggleFav(\''+uniId+'\',\''+progCat+'\');renderFavorites()">&#10005; 移除</span>';
+    html+='<h4>'+found.uni.n+'</h4>';
+    html+='<div class="small mb-1">'+progName(found.prog)+' | '+found.uni.c+'</div>';
+    html+='<table class="score-table"><thead><tr><th></th><th>总分</th><th>R</th><th>W</th><th>S</th><th>L</th></tr></thead><tbody>';
+    if(lang.ielts) html+='<tr><td>IELTS</td><td>'+fmtScore(lang.ielts.t)+'</td><td>'+fmtScore(lang.ielts.r)+'</td><td>'+fmtScore(lang.ielts.w)+'</td><td>'+fmtScore(lang.ielts.s)+'</td><td>'+fmtScore(lang.ielts.l)+'</td></tr>';
+    if(lang.toefl) html+='<tr><td>TOEFL</td><td>'+fmtScore(lang.toefl.t)+'</td><td>'+fmtScore(lang.toefl.r)+'</td><td>'+fmtScore(lang.toefl.w)+'</td><td>'+fmtScore(lang.toefl.s)+'</td><td>'+fmtScore(lang.toefl.l)+'</td></tr>';
+    if(lang.toefl6) html+='<tr class="toefl6-row"><td>1-6制'+(lang._t6auto?' <span class="auto-tag">auto</span>':'')+'</td><td>'+fmtScore(lang.toefl6.t)+' <span class="cefr-tag">'+getCEFR(lang.toefl6.t).cefr+'</span></td><td>'+fmtScore(lang.toefl6.r)+'</td><td>'+fmtScore(lang.toefl6.w)+'</td><td>'+fmtScore(lang.toefl6.s)+'</td><td>'+fmtScore(lang.toefl6.l)+'</td></tr>';
+    html+='</tbody></table>';
+    var fPol=found.uni.pol||{};var fNtKey=resolveNtState(fPol.nt);var fNtObj=NT_STATES[fNtKey];
+    html+='<div class="meta"><span class="nt-badge nt-'+fNtKey+'">'+fNtObj.icon+' '+fNtObj.n+'</span> <span class="tag">GPA: '+(found.prog.g||'-')+'</span>';
+    if(found.prog.note) html+='<span class="tag">'+noteCn(found.prog.note)+'</span>';
+    html+='</div></div>';
+  });
+  grid.innerHTML=html;
+}
+
+// ══════════ CALENDAR ══════════
+function addDeadline(){
+  var s=document.getElementById('dlSchool').value;
+  var d=document.getElementById('dlDate').value;
+  if(!s||!d){showToast('请填写完整');return;}
+  deadlines.push({school:s,date:d,note:document.getElementById('dlNote').value||''});
+  deadlines.sort(function(a,b){return a.date.localeCompare(b.date)});
+  localStorage.setItem('compass_deadlines',JSON.stringify(deadlines));
+  document.getElementById('dlSchool').value='';document.getElementById('dlNote').value='';
+  renderCalendar();showToast('已添加');
+}
+function renderCalendar(){
+  var g=document.getElementById('calendarGrid');
+  var now=new Date();
+  g.innerHTML=deadlines.map(function(dl,i){
+    var dt=new Date(dl.date);
+    var days=Math.ceil((dt-now)/(1000*60*60*24));
+    var cls=days<0?'urgent':days<30?'urgent':days<60?'soon':'';
+    return '<div class="deadline-card '+cls+'"><h4>'+dl.school+'</h4><p>'+dl.date+(dl.note?' | '+dl.note:'')+'</p><div class="days-left">'+(days<0?'已过期':days+'天')+'</div><span style="position:absolute;top:6px;right:10px;cursor:pointer;color:var(--danger);font-size:.7rem" onclick="deadlines.splice('+i+',1);localStorage.setItem(\'compass_deadlines\',JSON.stringify(deadlines));renderCalendar()">&#10005;</span></div>';
+  }).join('')||'<div class="no-results">暂无截止日期</div>';
+}
+
+// ══════════ VALIDITY ══════════
+function calcValidity(){
+  var d1=document.getElementById('vDate').value;
+  var d2=document.getElementById('vTarget').value;
+  if(!d1||!d2){showToast('请选择日期');return;}
+  var exam=new Date(d1),target=new Date(d2);
+  var diff=Math.ceil((target-exam)/(1000*60*60*24));
+  var months=Math.floor(diff/30.44);
+  var valid=diff<=730;
+  document.getElementById('vResult').innerHTML='<div class="alert '+(valid?'alert-success':'alert-danger')+'"><strong>'+(valid?'&#10003; 有效':'&#10007; 已过期')+'</strong>考试日到入学日: '+diff+'天 (约'+months+'个月)。标准有效期为2年(730天)。'+(valid?'在有效期内。':'已超过2年有效期。')+'</div>';
+}
+
+// ══════════ DATA MANAGEMENT ══════════
+function exportData(){
+  var json=JSON.stringify(COMPASS_DATA,null,2);
+  var blob=new Blob([json],{type:'application/json'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='compass-data-export.json';
+  a.click();showToast('导出成功');
+}
+function importData(e){
+  var file=e.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      var data=JSON.parse(ev.target.result);
+      if(data.usa)COMPASS_DATA.usa=data.usa;
+      if(data.uk)COMPASS_DATA.uk=data.uk;
+      if(data.aus)COMPASS_DATA.aus=data.aus;
+      if(data.nz)COMPASS_DATA.nz=data.nz;
+      if(data.sea)COMPASS_DATA.sea=data.sea;
+      localStorage.setItem('compass_custom_data',ev.target.result);
+      updateDashboard();showToast('导入成功');
+    }catch(err){showToast('导入失败: '+err.message);}
+  };
+  reader.readAsText(file);
+}
+function resetData(){
+  if(!confirm('确定要恢复默认数据?'))return;
+  localStorage.removeItem('compass_custom_data');
+  location.reload();
+}
+function fetchRemoteData(){
+  var url=document.getElementById('remoteUrl').value;
+  if(!url){showToast('请输入远程JSON地址');return;}
+  localStorage.setItem('compass_remote_url',url);
+  showToast('正在刷新...');
+  fetch(url,{cache:'no-store'}).then(function(r){return r.json()}).then(function(data){
+    if(data.usa)COMPASS_DATA.usa=data.usa;
+    if(data.uk)COMPASS_DATA.uk=data.uk;
+    if(data.aus)COMPASS_DATA.aus=data.aus;
+    if(data.nz)COMPASS_DATA.nz=data.nz;
+    if(data.sea)COMPASS_DATA.sea=data.sea;
+    localStorage.setItem('compass_custom_data',JSON.stringify(data));
+    var now=new Date().toLocaleString();
+    document.getElementById('lastRemoteSync').textContent=now;
+    localStorage.setItem('compass_last_sync',now);
+    updateDashboard();showToast('刷新成功!');
+  }).catch(function(err){showToast('刷新失败: '+err.message);});
+}
+
+// ══════════ DARK MODE & LANG ══════════
+function toggleDark(){
+  document.body.classList.toggle('dark');
+  var on=document.body.classList.contains('dark');
+  document.getElementById('darkToggle').classList.toggle('on',on);
+  localStorage.setItem('compass_dark',on?'1':'0');
+}
+function toggleLang(){showToast('Language toggle: coming in next update');}
+
+// ══════════ UTILITY ══════════
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show')},2500);
+}
+function updateDashboard(){
+  var totalUnis=0,totalProgs=0;
+  Object.keys(COMPASS_DATA).forEach(function(k){
+    var unis=COMPASS_DATA[k];
+    totalUnis+=unis.length;
+    unis.forEach(function(u){totalProgs+=(u.p||[]).length});
+  });
+  document.getElementById('statUnis').textContent=totalUnis;
+  document.getElementById('statProgs').textContent=totalProgs;
+}
+
+// ══════════ SCHEDULER UI ══════════
+var allCourseIds=INTENSIVE_COURSES.toefl.concat(INTENSIVE_COURSES.ielts).map(function(c){return c.id;});
+
+// --- Teacher Management ---
+function renderTeacherSkillChecks(){
+  var el=document.getElementById('tSkills');
+  if(!el) return;
+  el.innerHTML=allCourseIds.map(function(cid){
+    var c=getCourseObj(cid);
+    return '<label><input type="checkbox" value="'+cid+'"> '+c.name+'</label>';
+  }).join('');
+}
+function renderTeacherTable(){
+  var tbody=document.getElementById('teacherTbody');
+  if(!tbody) return;
+  document.getElementById('teacherCount').textContent='('+TEACHERS.length+'位)';
+  var colorCount={};
+  TEACHERS.forEach(function(t){var c=t.color.toLowerCase();colorCount[c]=(colorCount[c]||0)+1;});
+  tbody.innerHTML=TEACHERS.map(function(t){
+    var skills=t.skills.map(function(s){return getCourseObj(s).name;}).join(', ');
+    var dup=colorCount[t.color.toLowerCase()]>1;
+    return '<tr'+(dup?' style="background:#fdecea"':'')+'><td><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:'+t.color+';border:'+(dup?'2px solid var(--danger)':'none')+'"></span>'+(dup?' <span style="color:var(--danger);font-size:.65rem">重复</span>':'')+'</td>'
+      +'<td>'+t.name+'</td><td class="small">'+skills+'</td><td>'+t.maxDaily+'h</td>'
+      +'<td><button class="btn btn-outline btn-sm" onclick="editTeacher(\''+t.id+'\')">编辑</button> '
+      +'<button class="btn btn-sm" style="color:var(--danger)" onclick="deleteTeacher(\''+t.id+'\')">删除</button></td></tr>';
+  }).join('');
+}
+function saveTeacherForm(){
+  var name=document.getElementById('tName').value.trim();
+  if(!name){showToast('请输入姓名');return;}
+  var maxD=parseInt(document.getElementById('tMaxDaily').value)||4;
+  var color=document.getElementById('tColor').value;
+  var editId=document.getElementById('tEditId').value;
+  // 颜色重复检测
+  if(isColorUsed(color,editId||'__new__')){
+    showToast('该颜色已被其他老师使用, 请选择不同颜色');
+    // 自动建议下一个可用颜色
+    var suggest=nextAvailableColor(editId||'__new__');
+    document.getElementById('tColor').value=suggest;
+    return;
+  }
+  var skills=[];
+  document.querySelectorAll('#tSkills input:checked').forEach(function(cb){skills.push(cb.value);});
+  if(editId){
+    updateTeacher(editId,{name:name,maxDaily:maxD,color:color,skills:skills});
+    showToast('已更新');
+  }else{
+    addTeacher({id:nextTeacherId(),name:name,skills:skills,maxDaily:maxD,color:color});
+    showToast('已添加');
+  }
+  clearTeacherForm();
+  renderTeacherTable();
+}
+function clearTeacherForm(){
+  document.getElementById('tName').value='';
+  document.getElementById('tMaxDaily').value='4';
+  document.getElementById('tColor').value=nextAvailableColor('__new__');
+  document.getElementById('tEditId').value='';
+  document.querySelectorAll('#tSkills input').forEach(function(cb){cb.checked=false;});
+}
+function editTeacher(id){
+  var t=TEACHERS.find(function(t){return t.id===id;});
+  if(!t) return;
+  document.getElementById('tName').value=t.name;
+  document.getElementById('tMaxDaily').value=t.maxDaily;
+  document.getElementById('tColor').value=t.color;
+  document.getElementById('tEditId').value=t.id;
+  document.querySelectorAll('#tSkills input').forEach(function(cb){cb.checked=t.skills.indexOf(cb.value)>-1;});
+  showToast('正在编辑: '+t.name);
+}
+function deleteTeacher(id){
+  var t=TEACHERS.find(function(t){return t.id===id;});
+  if(!t) return;
+  if(!confirm('确定删除 '+t.name+' ?')) return;
+  removeTeacher(id);
+  renderTeacherTable();
+  showToast('已删除');
+}
+
+// --- Import Excel ---
+function handleImportExcel(){
+  var fileInput=document.getElementById('schExcelFile');
+  if(!fileInput.files.length){showToast('请选择Excel文件');return;}
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var wb=XLSX.read(e.target.result,{type:'array'});
+      var result=parseExcelSchedule(wb);
+      var el=document.getElementById('importResult');
+      if(result.error){
+        el.innerHTML='<div class="alert alert-danger">'+result.error+'</div>';
+      }else{
+        saveOccupied();
+        el.innerHTML='<div class="alert alert-success">'+result.msg+' (格式'+result.format+')</div>';
+        renderOccupiedPreview();
+      }
+    }catch(err){
+      document.getElementById('importResult').innerHTML='<div class="alert alert-danger">解析失败: '+err.message+'</div>';
+    }
+  };
+  reader.readAsArrayBuffer(fileInput.files[0]);
+}
+function clearOccupied(){
+  OCCUPIED={};TEACHERS.forEach(function(t){OCCUPIED[t.id]={};});
+  saveOccupied();
+  renderOccupiedPreview();
+  document.getElementById('importResult').innerHTML='<div class="alert alert-info">已清空</div>';
+}
+function renderOccupiedPreview(){
+  var el=document.getElementById('occupiedPreview');
+  if(!el) return;
+  var total=slotCount();
+  var html='';
+  TEACHERS.forEach(function(t){
+    html+='<div class="occ-teacher"><h4><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+t.color+'"></span> '+t.name+'</h4>';
+    SCH_CONFIG.workdays.forEach(function(day){
+      var occ=(OCCUPIED[t.id]&&OCCUPIED[t.id][day])||[];
+      html+='<div class="occ-day">'+SCH_CONFIG.dayLabels[day]+' (占用'+occ.length+'/'+total+'时段)</div>';
+      html+='<div class="occ-bar">';
+      for(var s=0;s<total;s++){
+        html+='<div class="occ-slot'+(occ.indexOf(s)>-1?' busy':'')+'" title="'+slotToTime(s)+'"></div>';
+      }
+      html+='</div>';
+    });
+    html+='</div>';
+  });
+  el.innerHTML=html||'<p class="small">暂无导入数据。老师列表为空或尚未导入课表。</p>';
+}
+
+// --- Schedule Config ---
+function updateSchConfig(){
+  SCH_CONFIG.startHour=parseInt(document.getElementById('cfgStart').value)||8;
+  SCH_CONFIG.endHour=parseInt(document.getElementById('cfgEnd').value)||21;
+  SCH_CONFIG.breakMin=parseInt(document.getElementById('cfgBreak').value)||15;
+  SCH_CONFIG.slotMin=parseInt(document.getElementById('cfgSlot').value)||30;
+  var sd=document.getElementById('cfgTermStart').value;
+  var ed=document.getElementById('cfgTermEnd').value;
+  if(sd) SCH_CONFIG.termStart=sd;
+  if(ed) SCH_CONFIG.termEnd=ed;
+  var days=[];
+  document.querySelectorAll('.workday-checks input:checked').forEach(function(cb){days.push(parseInt(cb.value));});
+  if(days.length) SCH_CONFIG.workdays=days;
+  saveSchConfig();
+}
+function restoreSchConfigUI(){
+  document.getElementById('cfgStart').value=SCH_CONFIG.startHour;
+  document.getElementById('cfgEnd').value=SCH_CONFIG.endHour;
+  document.getElementById('cfgBreak').value=SCH_CONFIG.breakMin;
+  document.getElementById('cfgSlot').value=SCH_CONFIG.slotMin;
+  document.getElementById('cfgTermStart').value=SCH_CONFIG.termStart;
+  document.getElementById('cfgTermEnd').value=SCH_CONFIG.termEnd;
+  document.querySelectorAll('.workday-checks input').forEach(function(cb){
+    cb.checked=SCH_CONFIG.workdays.indexOf(parseInt(cb.value))>-1;
+  });
+}
+
+// --- Timetable Rendering (shared) ---
+function renderTimetableGrid(containerId,scheduleArr,showOccupied){
+  var el=document.getElementById(containerId);
+  if(!el) return;
+  var days=SCH_CONFIG.workdays;
+  var total=slotCount();
+  var html='<table class="timetable"><thead><tr><th class="time-col">时间</th>';
+  days.forEach(function(d){html+='<th>'+SCH_CONFIG.dayLabels[d]+'</th>';});
+  html+='</tr></thead><tbody>';
+  for(var s=0;s<total;s++){
+    html+='<tr><td class="time-col">'+slotToTime(s)+'</td>';
+    days.forEach(function(d){
+      html+='<td data-day="'+d+'" data-slot="'+s+'"></td>';
+    });
+    html+='</tr>';
+  }
+  html+='</tbody></table>';
+  el.innerHTML=html;
+  // Place blocks
+  var table=el.querySelector('.timetable');
+  scheduleArr.forEach(function(entry){
+    if(entry.error) return;
+    var dayIdx=days.indexOf(entry.day);
+    if(dayIdx<0) return;
+    var row=table.rows[entry.startSlot+1]; // +1 for header
+    if(!row) return;
+    var cell=row.cells[dayIdx+1]; // +1 for time col
+    if(!cell) return;
+    var spanSlots=entry.endSlot-entry.startSlot+1;
+    var rowH=28; // match CSS td height
+    var block=document.createElement('div');
+    block.className='tt-block';
+    block.style.background=getTeacherColor(entry.teacherId);
+    block.style.height=(spanSlots*rowH-2)+'px';
+    block.style.top='0';
+    block.innerHTML='<div class="tt-course">'+getCourseObj(entry.courseId).icon+' '+getCourseName(entry.courseId)+'</div><div class="tt-teacher">'+getTeacherName(entry.teacherId)+'</div>';
+    block.title=getCourseName(entry.courseId)+' | '+getTeacherName(entry.teacherId)+'\n'+slotToTime(entry.startSlot)+'-'+slotToTime(entry.endSlot+1);
+    cell.appendChild(block);
+  });
+  // Show occupied (grey blocks) if requested
+  if(showOccupied){
+    TEACHERS.forEach(function(t){
+      days.forEach(function(d,dayIdx){
+        var occ=(OCCUPIED[t.id]&&OCCUPIED[t.id][d])||[];
+        occ.forEach(function(s){
+          var row=table.rows[s+1];
+          if(!row) return;
+          var cell=row.cells[dayIdx+1];
+          if(!cell) return;
+          var blk=document.createElement('div');
+          blk.className='tt-block tt-occ';
+          blk.style.height='26px';blk.title=t.name+' 综合课';
+          cell.appendChild(blk);
+        });
+      });
+    });
+  }
+}
+
+// --- Assignment UI (shared for TOEFL/IELTS) ---
+function renderAssignUI(containerId,examType){
+  var el=document.getElementById(containerId);
+  if(!el) return;
+  var courses=INTENSIVE_COURSES[examType];
+  var html='';
+  courses.forEach(function(course){
+    var eligible=getEligibleTeachers(course.id);
+    var existing=TEACHER_ASSIGNMENTS[course.id]||[];
+    html+='<div class="assign-course" style="margin-bottom:14px;padding:12px;border:1px solid var(--border);border-radius:8px">';
+    html+='<h4 style="font-size:.9rem;margin-bottom:8px">'+course.icon+' '+course.name+' <span class="small" style="color:var(--text-light)">(默认'+course.duration+'分钟/节)</span></h4>';
+    if(!eligible.length&&!TEACHERS.length){
+      html+='<p class="small" style="color:var(--danger)">暂无老师。请先前往"老师管理"添加。</p>';
+    }else{
+      // 每位可用老师一行: [勾选] 老师名 [课次输入] [时长输入]
+      var teachers=TEACHERS.length?TEACHERS:[];
+      html+='<div class="assign-rows">';
+      teachers.forEach(function(t){
+        var canTeach=t.skills.indexOf(course.id)>-1;
+        var existA=existing.find(function(a){return a.teacherId===t.id;});
+        var checked=existA?true:false;
+        var sessions=existA?existA.sessions:'';
+        var dur=existA&&existA.duration?existA.duration:'';
+        html+='<div class="assign-row" style="display:flex;align-items:center;gap:8px;padding:4px 0;flex-wrap:wrap">';
+        html+='<label style="display:flex;align-items:center;gap:4px;min-width:100px;font-size:.82rem">';
+        html+='<input type="checkbox" class="assign-cb" data-course="'+course.id+'" data-teacher="'+t.id+'"'+(checked?' checked':'')+(canTeach?'':' title="该老师未设置此科目技能, 仍可手动勾选"')+' onchange="syncAssignment(\''+course.id+'\')">';
+        html+='<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+t.color+'"></span> '+t.name;
+        if(!canTeach) html+=' <span style="font-size:.65rem;color:var(--warning)" title="未配置此技能">&#9888;</span>';
+        html+='</label>';
+        html+='<input type="number" class="assign-sessions" data-course="'+course.id+'" data-teacher="'+t.id+'" placeholder="课次" min="0" max="20" value="'+sessions+'" style="width:60px;padding:3px 5px;font-size:.82rem;border:1px solid var(--border);border-radius:4px" onchange="syncAssignment(\''+course.id+'\')">';
+        html+='<span class="small" style="color:var(--text-light)">节/周</span>';
+        html+='<input type="number" class="assign-dur" data-course="'+course.id+'" data-teacher="'+t.id+'" placeholder="'+course.duration+'" min="30" max="300" step="15" value="'+dur+'" style="width:65px;padding:3px 5px;font-size:.82rem;border:1px solid var(--border);border-radius:4px" onchange="syncAssignment(\''+course.id+'\')">';
+        html+='<span class="small" style="color:var(--text-light)">分钟</span>';
+        html+='</div>';
+      });
+      html+='</div>';
+    }
+    // 小计
+    var totalSessions=existing.reduce(function(s,a){return s+a.sessions;},0);
+    html+='<div class="small" style="margin-top:6px;color:var(--accent)">本科目合计: <b>'+totalSessions+'</b> 节/周</div>';
+    html+='</div>';
+  });
+  el.innerHTML=html;
+}
+function syncAssignment(courseId){
+  var cbs=document.querySelectorAll('.assign-cb[data-course="'+courseId+'"]');
+  var list=[];
+  cbs.forEach(function(cb){
+    var tid=cb.getAttribute('data-teacher');
+    var sessInput=document.querySelector('.assign-sessions[data-course="'+courseId+'"][data-teacher="'+tid+'"]');
+    var durInput=document.querySelector('.assign-dur[data-course="'+courseId+'"][data-teacher="'+tid+'"]');
+    if(cb.checked){
+      var sess=parseInt(sessInput.value)||0;
+      var dur=parseInt(durInput.value)||0;
+      if(sess>0) list.push({teacherId:tid,sessions:sess,duration:dur||0});
+    }
+  });
+  TEACHER_ASSIGNMENTS[courseId]=list;
+  saveAssignments();
+}
+
+// --- TOEFL Scheduling ---
+function doAutoToefl(){
+  if(!TEACHERS.length){showToast('请先添加老师');return;}
+  // Sync assignments from UI
+  INTENSIVE_COURSES.toefl.forEach(function(c){syncAssignment(c.id);});
+  var totalAssigned=0;
+  INTENSIVE_COURSES.toefl.forEach(function(c){
+    (TEACHER_ASSIGNMENTS[c.id]||[]).forEach(function(a){totalAssigned+=a.sessions;});
+  });
+  if(!totalAssigned){showToast('请先为老师分配课次');return;}
+  TOEFL_SCHEDULE=[];
+  var result=autoSchedule('toefl');
+  var errors=result.filter(function(e){return e.error;});
+  TOEFL_SCHEDULE=result.filter(function(e){return !e.error;});
+  saveToeflSchedule();
+  renderToeflSchedule();
+  if(errors.length){
+    showToast('排课完成, 有'+errors.length+'个警告');
+    document.getElementById('toeflConflicts').innerHTML=errors.map(function(e){return '<div class="conflict-alert">'+e.error+'</div>';}).join('');
+  }else{
+    showToast('托福排课完成!');
+    document.getElementById('toeflConflicts').innerHTML='';
+  }
+}
+function renderToeflSchedule(){
+  renderAssignUI('toeflAssignUI','toefl');
+  renderTimetableGrid('toeflTimetable',TOEFL_SCHEDULE,true);
+  renderScheduleList('toeflListBody',TOEFL_SCHEDULE,'toefl');
+  var conflicts=detectConflicts(TOEFL_SCHEDULE);
+  if(conflicts.length){
+    document.getElementById('toeflConflicts').innerHTML=conflicts.map(function(c){return '<div class="conflict-alert">&#9888; '+c.msg+'</div>';}).join('');
+  }
+}
+function renderScheduleList(tbodyId,scheduleArr,type){
+  var tbody=document.getElementById(tbodyId);
+  if(!tbody) return;
+  var sorted=scheduleArr.filter(function(e){return !e.error;}).slice().sort(function(a,b){return a.day===b.day?a.startSlot-b.startSlot:a.day-b.day;});
+  tbody.innerHTML=sorted.map(function(e,i){
+    return '<tr><td>'+SCH_CONFIG.dayLabels[e.day]+'</td><td>'+slotToTime(e.startSlot)+'-'+slotToTime(e.endSlot+1)+'</td>'
+      +'<td>'+getCourseName(e.courseId)+'</td><td><span style="color:'+getTeacherColor(e.teacherId)+'">&#9679;</span> '+getTeacherName(e.teacherId)+'</td>'
+      +'<td>'+(e.endSlot-e.startSlot+1)*SCH_CONFIG.slotMin+'分钟</td>'
+      +'<td><button class="btn btn-sm" style="color:var(--danger)" onclick="removeScheduleEntry(\''+type+'\','+i+')">删除</button></td></tr>';
+  }).join('');
+}
+function removeScheduleEntry(type,idx){
+  if(type==='toefl'){
+    var sorted=TOEFL_SCHEDULE.filter(function(e){return !e.error;}).sort(function(a,b){return a.day===b.day?a.startSlot-b.startSlot:a.day-b.day;});
+    var entry=sorted[idx];
+    TOEFL_SCHEDULE=TOEFL_SCHEDULE.filter(function(e){return e!==entry;});
+    saveToeflSchedule();renderToeflSchedule();
+  }else{
+    var sorted=IELTS_SCHEDULE.filter(function(e){return !e.error;}).sort(function(a,b){return a.day===b.day?a.startSlot-b.startSlot:a.day-b.day;});
+    var entry=sorted[idx];
+    IELTS_SCHEDULE=IELTS_SCHEDULE.filter(function(e){return e!==entry;});
+    saveIeltsSchedule();renderIeltsSchedule();
+  }
+  showToast('已删除');
+}
+
+// --- IELTS Scheduling ---
+function doAutoIelts(){
+  if(!TEACHERS.length){showToast('请先添加老师');return;}
+  INTENSIVE_COURSES.ielts.forEach(function(c){syncAssignment(c.id);});
+  var totalAssigned=0;
+  INTENSIVE_COURSES.ielts.forEach(function(c){
+    (TEACHER_ASSIGNMENTS[c.id]||[]).forEach(function(a){totalAssigned+=a.sessions;});
+  });
+  if(!totalAssigned){showToast('请先为老师分配课次');return;}
+  IELTS_SCHEDULE=[];
+  var result=autoSchedule('ielts');
+  var errors=result.filter(function(e){return e.error;});
+  IELTS_SCHEDULE=result.filter(function(e){return !e.error;});
+  saveIeltsSchedule();
+  renderIeltsSchedule();
+  if(errors.length){
+    showToast('排课完成, 有'+errors.length+'个警告');
+    document.getElementById('ieltsConflicts').innerHTML=errors.map(function(e){return '<div class="conflict-alert">'+e.error+'</div>';}).join('');
+  }else{
+    showToast('雅思排课完成!');
+    document.getElementById('ieltsConflicts').innerHTML='';
+  }
+}
+function renderIeltsSchedule(){
+  renderAssignUI('ieltsAssignUI','ielts');
+  renderTimetableGrid('ieltsTimetable',IELTS_SCHEDULE,true);
+  renderScheduleList('ieltsListBody',IELTS_SCHEDULE,'ielts');
+  var conflicts=detectConflicts(IELTS_SCHEDULE);
+  if(conflicts.length){
+    document.getElementById('ieltsConflicts').innerHTML=conflicts.map(function(c){return '<div class="conflict-alert">&#9888; '+c.msg+'</div>';}).join('');
+  }
+}
+
+// --- Combined View ---
+function renderSchView(){
+  var mode=document.getElementById('viewMode').value;
+  var exam=document.getElementById('viewExam').value;
+  var teacherSel=document.getElementById('viewTeacher');
+  var courseSel=document.getElementById('viewCourse');
+  teacherSel.style.display=mode==='teacher'?'':'none';
+  courseSel.style.display=mode==='course'?'':'none';
+  // Populate dropdowns
+  if(mode==='teacher'&&!teacherSel.options.length){
+    teacherSel.innerHTML=TEACHERS.map(function(t){return '<option value="'+t.id+'">'+t.name+'</option>';}).join('');
+  }
+  if(mode==='course'&&!courseSel.options.length){
+    courseSel.innerHTML=allCourseIds.map(function(cid){return '<option value="'+cid+'">'+getCourseObj(cid).name+'</option>';}).join('');
+  }
+  // Build combined schedule
+  var combined=[];
+  if(exam!=='ielts') combined=combined.concat(TOEFL_SCHEDULE);
+  if(exam!=='toefl') combined=combined.concat(IELTS_SCHEDULE);
+  // Filter
+  if(mode==='teacher'){
+    var tid=teacherSel.value;
+    combined=combined.filter(function(e){return e.teacherId===tid;});
+  }else if(mode==='course'){
+    var cid=courseSel.value;
+    combined=combined.filter(function(e){return e.courseId===cid;});
+  }
+  renderTimetableGrid('viewTimetable',combined,mode==='teacher');
+  // Legend
+  var legend=document.getElementById('viewLegend');
+  var teachers={};
+  combined.forEach(function(e){if(!e.error) teachers[e.teacherId]=true;});
+  legend.innerHTML='<div class="card-title">图例</div><div style="display:flex;flex-wrap:wrap;gap:8px">'+
+    Object.keys(teachers).map(function(tid){
+      return '<span style="display:inline-flex;align-items:center;gap:4px;font-size:.78rem"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:'+getTeacherColor(tid)+'"></span>'+getTeacherName(tid)+'</span>';
+    }).join('')+'</div>';
+  // Stats
+  var allForStats=[];
+  if(exam!=='ielts') allForStats=allForStats.concat(TOEFL_SCHEDULE);
+  if(exam!=='toefl') allForStats=allForStats.concat(IELTS_SCHEDULE);
+  var stats=getScheduleStats(allForStats);
+  var statsHtml='<div class="teacher-load-bars">';
+  TEACHERS.forEach(function(t){
+    var hrs=stats.byTeacher[t.id]||0;
+    var pct=Math.min(100,Math.round(hrs/(t.maxDaily*SCH_CONFIG.workdays.length)*100));
+    statsHtml+='<div class="teacher-load-bar"><span style="min-width:60px">'+t.name+'</span><div class="bar"><div class="bar-fill" style="width:'+pct+'%;background:'+t.color+'"></div></div><span>'+hrs.toFixed(1)+'h/周</span></div>';
+  });
+  statsHtml+='</div>';
+  document.getElementById('viewStats').innerHTML=statsHtml;
+}
+
+// --- Scheduler Dashboard ---
+function updateSchDashboard(){
+  document.getElementById('schStatTeachers').textContent=TEACHERS.length;
+  document.getElementById('schStatToefl').textContent=TOEFL_SCHEDULE.filter(function(e){return !e.error;}).length;
+  document.getElementById('schStatIelts').textContent=IELTS_SCHEDULE.filter(function(e){return !e.error;}).length;
+  var c1=detectConflicts(TOEFL_SCHEDULE).length;
+  var c2=detectConflicts(IELTS_SCHEDULE).length;
+  document.getElementById('schStatConflicts').textContent=c1+c2;
+  // Overviews
+  var tStats=getScheduleStats(TOEFL_SCHEDULE);
+  var iStats=getScheduleStats(IELTS_SCHEDULE);
+  document.getElementById('schToeflOverview').innerHTML=tStats.total?
+    INTENSIVE_COURSES.toefl.map(function(c){
+      var assigned=(TEACHER_ASSIGNMENTS[c.id]||[]).reduce(function(s,a){return s+a.sessions;},0);
+      return c.icon+' '+c.name+': <b>'+(tStats.byCourse[c.id]||0)+'/'+(assigned||c.perWeek)+'</b>节';
+    }).join('<br>'):
+    '尚未排课。前往"托福集训排课"分配老师和课次。';
+  document.getElementById('schIeltsOverview').innerHTML=iStats.total?
+    INTENSIVE_COURSES.ielts.map(function(c){
+      var assigned=(TEACHER_ASSIGNMENTS[c.id]||[]).reduce(function(s,a){return s+a.sessions;},0);
+      return c.icon+' '+c.name+': <b>'+(iStats.byCourse[c.id]||0)+'/'+(assigned||c.perWeek)+'</b>节';
+    }).join('<br>'):
+    '尚未排课。前往"雅思集训排课"分配老师和课次。';
+  // Teacher load
+  var loadHtml='';
+  TEACHERS.forEach(function(t){
+    var tHrs=(tStats.byTeacher[t.id]||0)+(iStats.byTeacher[t.id]||0);
+    var maxWeek=t.maxDaily*SCH_CONFIG.workdays.length;
+    var pct=Math.min(100,Math.round(tHrs/maxWeek*100));
+    loadHtml+='<div class="teacher-load-bar"><span style="min-width:60px">'+t.name+'</span><div class="bar"><div class="bar-fill" style="width:'+pct+'%;background:'+t.color+'"></div></div><span>'+tHrs.toFixed(1)+'/'+maxWeek+'h</span></div>';
+  });
+  document.getElementById('schTeacherLoad').innerHTML=loadHtml||'<p class="small">暂无老师。请前往"老师管理"添加。</p>';
+}
+
+// --- Export PDF/Image ---
+function exportSchPDF(){
+  var el=document.getElementById('viewTimetable');
+  if(!el||!el.innerHTML){showToast('请先查看课表');return;}
+  document.getElementById('pdfLoading').style.display='flex';
+  html2pdf().set({margin:10,filename:'prism-schedule.pdf',image:{type:'jpeg',quality:0.95},html2canvas:{scale:2},jsPDF:{orientation:'landscape'}}).from(el).save().then(function(){
+    document.getElementById('pdfLoading').style.display='none';showToast('PDF已下载');
+  });
+}
+function exportSchImage(){
+  var el=document.getElementById('viewTimetable');
+  if(!el||!el.innerHTML){showToast('请先查看课表');return;}
+  html2pdf().set({image:{type:'png',quality:1},html2canvas:{scale:2}}).from(el).toImg().get('img').then(function(img){
+    var a=document.createElement('a');a.href=img.src;a.download='prism-schedule.png';a.click();
+    showToast('图片已保存');
+  });
+}
+
+// --- Mobile Tab Bar ---
+document.querySelectorAll('.tab-item[data-page]').forEach(function(tab){
+  tab.addEventListener('click',function(){
+    var pg=tab.getAttribute('data-page');
+    if(pg==='more') return; // handled by onclick
+    document.querySelectorAll('.tab-item').forEach(function(t){t.classList.remove('active');});
+    tab.classList.add('active');
+    // Also update sidebar nav
+    document.querySelectorAll('.nav-item').forEach(function(n){
+      n.classList.toggle('active',n.getAttribute('data-page')===pg);
+    });
+    document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+    var target=document.getElementById('page-'+pg);
+    if(target) target.classList.add('active');
+    // Trigger page-specific renders
+    triggerPageRender(pg);
+  });
+});
+
+// ══════════ DATA QUALITY DASHBOARD ══════════
+function renderDataQuality(){
+  var s=getDataQualityStats();
+  document.getElementById('dqTotal').textContent=s.total;
+  document.getElementById('dqTSub').textContent=s.toeflSub;
+  document.getElementById('dqISub').textContent=s.ieltsSub;
+  document.getElementById('dqT6').textContent=s.toefl6Official;
+  // Region coverage bars
+  var regions=Object.keys(COMPASS_DATA);
+  var regNames={usa:'美国',uk:'英国',aus:'澳洲',nz:'新西兰',sea:'东南亚'};
+  var barsHtml='';
+  regions.forEach(function(reg){
+    var unis=COMPASS_DATA[reg]||[];
+    var total=unis.length,hasSub=0;
+    unis.forEach(function(u){
+      var ll=u.ll||{};var keys=Object.keys(ll);
+      var has=keys.some(function(k){return ll[k].toefl&&(ll[k].toefl.r!=null||ll[k].toefl.w!=null);});
+      if(has) hasSub++;
+    });
+    var pct=total?Math.round(hasSub/total*100):0;
+    barsHtml+='<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:.85rem"><span>'+(regNames[reg]||reg)+' ('+hasSub+'/'+total+')</span><span style="font-weight:600">'+pct+'%</span></div>';
+    barsHtml+='<div class="dq-bar"><div class="dq-bar-fill" style="width:'+pct+'%;background:'+(pct>=80?'var(--success)':pct>=50?'var(--warning)':'var(--danger)')+'"></div></div></div>';
+  });
+  document.getElementById('dqRegionBars').innerHTML=barsHtml;
+  // NT state distribution
+  var ntHtml='<div style="display:flex;flex-wrap:wrap;gap:10px">';
+  var ntKeys=Object.keys(NT_STATES);
+  ntKeys.forEach(function(k){
+    var count=s.ntStates[k]||0;
+    var obj=NT_STATES[k];
+    ntHtml+='<div style="flex:1;min-width:120px;text-align:center;padding:10px;border-radius:8px;border:1px solid var(--border)"><div style="font-size:1.5rem">'+obj.icon+'</div><div style="font-size:1.2rem;font-weight:700">'+count+'</div><div style="font-size:.72rem;color:var(--text-light)">'+obj.n+'</div></div>';
+  });
+  ntHtml+='</div>';
+  document.getElementById('dqNtStates').innerHTML=ntHtml;
+  // Missing table
+  var tbody='';
+  (s.missing||[]).forEach(function(m){
+    var ntK=resolveNtState(m.uni.pol&&m.uni.pol.nt);var ntO=NT_STATES[ntK];
+    tbody+='<tr><td>'+m.region+'</td><td>'+m.uni.n+'</td><td>'+(m.uni.r||'-')+'</td><td><span class="nt-badge nt-'+ntK+'">'+ntO.icon+' '+ntO.n+'</span></td></tr>';
+  });
+  document.getElementById('dqMissingBody').innerHTML=tbody||'<tr><td colspan="4" style="text-align:center;color:var(--text-light)">所有大学数据完整!</td></tr>';
+}
+
+function triggerPageRender(pg){
+  if(pg==='search') runSearch();
+  if(pg==='matcher') runMatcher();
+  if(pg==='favorites') renderFavorites();
+  if(pg==='calendar') renderCalendar();
+  if(pg==='dq') renderDataQuality();
+  if(pg==='sch-dash') updateSchDashboard();
+  if(pg==='sch-teachers'){renderTeacherSkillChecks();renderTeacherTable();}
+  if(pg==='sch-import'){restoreSchConfigUI();renderOccupiedPreview();}
+  if(pg==='sch-toefl') renderToeflSchedule();
+  if(pg==='sch-ielts') renderIeltsSchedule();
+  if(pg==='sch-view') renderSchView();
+  if(pg.startsWith('region-')){var r=pg.replace('region-','');renderRegion(r);}
+}
+
+// ══════════ INIT ══════════
+(function(){
+  // Load custom compass data
+  var custom=localStorage.getItem('compass_custom_data');
+  if(custom){
+    try{
+      var data=JSON.parse(custom);
+      if(data.usa)COMPASS_DATA.usa=data.usa;
+      if(data.uk)COMPASS_DATA.uk=data.uk;
+      if(data.aus)COMPASS_DATA.aus=data.aus;
+      if(data.nz)COMPASS_DATA.nz=data.nz;
+      if(data.sea)COMPASS_DATA.sea=data.sea;
+    }catch(e){}
+  }
+  // Restore preferences
+  if(localStorage.getItem('compass_dark')==='1') toggleDark();
+  var rUrl=localStorage.getItem('compass_remote_url');
+  if(rUrl) document.getElementById('remoteUrl').value=rUrl;
+  var ls=localStorage.getItem('compass_last_sync');
+  if(ls) document.getElementById('lastRemoteSync').textContent=ls;
+  // Load scheduler data
+  loadAllSchedulerData();
+  // Build UI
+  updateDashboard();
+  buildConvTable();
+  updateConverter();
+  updateUniSelect();
+  // Register service worker
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  }
+})();
+</script>
+</body>
+</html>

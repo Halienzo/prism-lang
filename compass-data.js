@@ -1,0 +1,650 @@
+/*
+ * compass-data.js - 棱镜 Prism 核心数据结构 & 专业分类
+ * v3.1 - Dual TOEFL scale (0-120 + 1-6) + ETS official conversion engine
+ *
+ * Data format:
+ *   Each university: {id, n(name), e(english), c(city), r(QS rank), cat,
+ *     ll(langLevels): {key: {ielts:{t,r,w,s,l}, toefl:{t,r,w,s,l}, toefl6:{t,r,w,s,l}(optional official)}},
+ *     pol(policies): {nt(newToefl status 5-state), mb(myBest), v(validity), note},
+ *     p(programs): [{c(category), l(langLevel key), g(gpa), o(override), note}]
+ *   }
+ *   Sub-scores: t=total, r=reading, w=writing, s=speaking, l=listening
+ *   null = not published / check official site
+ *   pol.nt values: "published"|"accepted"|"suspended"|"old_only"|"pending"
+ */
+
+// ══════════ Program Categories ══════════
+var PC = {
+  ug:{n:"本科通用",e:"General Undergraduate",f:"全校"},
+  cs_ms:{n:"计算机科学硕士",e:"Computer Science MS",f:"计算机/工程学院"},
+  cs_phd:{n:"计算机科学博士",e:"Computer Science PhD",f:"计算机/工程学院"},
+  ee_ms:{n:"电子电气工程硕士",e:"Electrical Engineering MS",f:"工程学院"},
+  me_ms:{n:"机械工程硕士",e:"Mechanical Engineering MS",f:"工程学院"},
+  ce_ms:{n:"土木工程硕士",e:"Civil Engineering MS",f:"工程学院"},
+  eng_ms:{n:"工程硕士(通用)",e:"Engineering MS",f:"工程学院"},
+  mba:{n:"MBA工商管理",e:"MBA",f:"商学院"},
+  fin_ms:{n:"金融硕士",e:"Finance MS",f:"商学院"},
+  acct_ms:{n:"会计硕士",e:"Accounting MS",f:"商学院"},
+  econ_ms:{n:"经济学硕士",e:"Economics MS",f:"社科/经济学院"},
+  econ_phd:{n:"经济学博士",e:"Economics PhD",f:"社科/经济学院"},
+  bus_ms:{n:"商科硕士(通用)",e:"Business MS",f:"商学院"},
+  law_llm:{n:"法学硕士LLM",e:"Law LLM",f:"法学院"},
+  law_jd:{n:"法学博士JD",e:"Law JD",f:"法学院"},
+  med:{n:"医学",e:"Medicine",f:"医学院"},
+  nurs:{n:"护理硕士",e:"Nursing MS",f:"护理学院"},
+  edu_ms:{n:"教育学硕士",e:"Education MS",f:"教育学院"},
+  tesol:{n:"TESOL硕士",e:"TESOL MA",f:"教育/语言学院"},
+  psych_ms:{n:"心理学硕士",e:"Psychology MS",f:"心理学院"},
+  psych_phd:{n:"心理学博士",e:"Psychology PhD",f:"心理学院"},
+  bio_ms:{n:"生物科学硕士",e:"Biological Sciences MS",f:"理学院"},
+  chem_ms:{n:"化学硕士",e:"Chemistry MS",f:"理学院"},
+  chem_phd:{n:"化学博士",e:"Chemistry PhD",f:"理学院"},
+  phys_ms:{n:"物理学硕士",e:"Physics MS",f:"理学院"},
+  math_ms:{n:"数学硕士",e:"Mathematics MS",f:"理学院"},
+  stat_ms:{n:"统计学硕士",e:"Statistics MS",f:"理学院"},
+  ds_ms:{n:"数据科学硕士",e:"Data Science MS",f:"计算机/信息学院"},
+  ai_ms:{n:"人工智能硕士",e:"Artificial Intelligence MS",f:"计算机/工程学院"},
+  arch_ms:{n:"建筑学硕士",e:"Architecture MArch",f:"建筑学院"},
+  media_ms:{n:"传媒硕士",e:"Media/Communications MA",f:"传媒学院"},
+  ir_ms:{n:"国际关系硕士",e:"International Relations MA",f:"社科/政治学院"},
+  pub_ms:{n:"公共政策硕士",e:"Public Policy MPP",f:"公共政策学院"},
+  ph_ms:{n:"公共卫生硕士",e:"Public Health MPH",f:"公共卫生学院"},
+  sw_ms:{n:"社会工作硕士",e:"Social Work MSW",f:"社会工作学院"},
+  art_ms:{n:"艺术设计硕士",e:"Art/Design MFA",f:"艺术学院"},
+  ling_ms:{n:"语言学硕士",e:"Linguistics MA",f:"人文学院"},
+  hist_ms:{n:"历史学硕士",e:"History MA",f:"人文学院"},
+  env_ms:{n:"环境科学硕士",e:"Environmental Science MS",f:"环境学院"},
+  dent:{n:"牙医",e:"Dentistry",f:"牙医学院"},
+  pharm:{n:"药学",e:"Pharmacy",f:"药学院"},
+  vet:{n:"兽医",e:"Veterinary",f:"兽医学院"}
+};
+
+// ══════════ Global data container ══════════
+var COMPASS_DATA = {usa:[], uk:[], aus:[], nz:[], sea:[]};
+
+// ══════════ Region metadata ══════════
+var REGION_META = {
+  usa:{n:"美国",e:"United States",flag:"\u{1F1FA}\u{1F1F8}"},
+  uk:{n:"英国",e:"United Kingdom",flag:"\u{1F1EC}\u{1F1E7}"},
+  aus:{n:"澳大利亚",e:"Australia",flag:"\u{1F1E6}\u{1F1FA}"},
+  nz:{n:"新西兰",e:"New Zealand",flag:"\u{1F1F3}\u{1F1FF}"},
+  sea:{n:"东南亚",e:"Southeast Asia",flag:"\u{1F30F}"}
+};
+
+// ══════════ New TOEFL policy states ══════════
+var NT_STATES = {
+  published:{n:"已发布新版要求",e:"Published new scale",cls:"badge-green",icon:"\u2705"},
+  accepted:{n:"接受新版(未发布分数)",e:"Accepted (no scores yet)",cls:"badge-green",icon:"\u2611"},
+  suspended:{n:"暂停接受新版",e:"Suspended",cls:"badge-red",icon:"\u26D4"},
+  old_only:{n:"仍以旧版评估",e:"Old scale only",cls:"badge-yellow",icon:"\u{1F504}"},
+  pending:{n:"未表态",e:"Pending",cls:"badge-na",icon:"\u2753"}
+};
+// backward compat: map old yes/no/pending to new states
+function resolveNtState(nt){
+  if(NT_STATES[nt]) return nt;
+  if(nt==='yes') return 'accepted';
+  if(nt==='no') return 'suspended';
+  return 'pending';
+}
+
+// ══════════ ETS Official Conversion Tables (Jan 2026) ══════════
+// Source: https://www.ets.org/toefl/china/toefl/score-scale-update.html
+
+// Section score conversion: old 0-30 → new 1-6 (per section)
+var CONV_READING =  [1,1,1.5,2,2.5,2.5,3,3,3,3,3,3,3.5,3.5,3.5,3.5,3.5,3.5,4,4,4,4,4.5,4.5,5,5,5,5.5,5.5,6,6];
+var CONV_LISTENING= [1,1,1.5,1.5,2,2,2.5,2.5,2.5,3,3,3,3,3.5,3.5,3.5,3.5,4,4,4,4.5,4.5,5,5,5,5,5.5,5.5,6,6,6];
+var CONV_SPEAKING = [1,1,1,1,1,1.5,1.5,1.5,1.5,1.5,2,2,2,2.5,2.5,2.5,3,3,3.5,3.5,4,4,4,4.5,4.5,5,5,5.5,6,6,6];
+var CONV_WRITING =  [1,1,1,1.5,1.5,1.5,1.5,2,2,2,2,2.5,2.5,3,3,3.5,3.5,4,4,4,4,4.5,4.5,4.5,5,5,5,5.5,5.5,6,6];
+
+// Total score conversion: old 0-120 → new 1-6
+var CONV_TOTAL = [
+  {min:114,band:6},{min:107,band:5.5},{min:95,band:5},{min:86,band:4.5},
+  {min:72,band:4},{min:58,band:3.5},{min:44,band:3},{min:34,band:2.5},
+  {min:24,band:2},{min:12,band:1.5},{min:0,band:1}
+];
+
+// Reverse: new 1-6 → approximate old total
+var CONV_TOTAL_REV = [
+  {band:6,min:114,max:120},{band:5.5,min:107,max:113},{band:5,min:95,max:106},
+  {band:4.5,min:86,max:94},{band:4,min:72,max:85},{band:3.5,min:58,max:71},
+  {band:3,min:44,max:57},{band:2.5,min:34,max:43},{band:2,min:24,max:33},
+  {band:1.5,min:12,max:23},{band:1,min:0,max:11}
+];
+
+// CEFR mapping for 1-6 scale
+var CEFR_MAP = [
+  {min:5.5,cefr:"C2",cn:"精通"},{min:5,cefr:"C1",cn:"高级"},
+  {min:4,cefr:"B2",cn:"中高级"},{min:3,cefr:"B1",cn:"中级"},
+  {min:2,cefr:"A2",cn:"初级"},{min:1,cefr:"A1",cn:"入门"}
+];
+
+// IELTS ↔ new TOEFL approximate mapping
+var IELTS_TOEFL6_MAP = [
+  {ielts:9,t6:6},{ielts:8.5,t6:6},{ielts:8,t6:5.5},{ielts:7.5,t6:5.5},
+  {ielts:7,t6:5},{ielts:6.5,t6:4.5},{ielts:6,t6:4},{ielts:5.5,t6:3.5},
+  {ielts:5,t6:3},{ielts:4.5,t6:2.5},{ielts:4,t6:2}
+];
+
+// ══════════ Conversion Functions ══════════
+function oldToNew_R(v){return v==null?null:(v>=0&&v<=30?CONV_READING[v]:null);}
+function oldToNew_L(v){return v==null?null:(v>=0&&v<=30?CONV_LISTENING[v]:null);}
+function oldToNew_S(v){return v==null?null:(v>=0&&v<=30?CONV_SPEAKING[v]:null);}
+function oldToNew_W(v){return v==null?null:(v>=0&&v<=30?CONV_WRITING[v]:null);}
+function oldToNew_T(v){
+  if(v==null) return null;
+  for(var i=0;i<CONV_TOTAL.length;i++){if(v>=CONV_TOTAL[i].min) return CONV_TOTAL[i].band;}
+  return 1;
+}
+function oldToNewSection(v,section){
+  if(section==='r') return oldToNew_R(v);
+  if(section==='l') return oldToNew_L(v);
+  if(section==='s') return oldToNew_S(v);
+  if(section==='w') return oldToNew_W(v);
+  if(section==='t') return oldToNew_T(v);
+  return null;
+}
+
+// Reverse: new 1-6 section → approximate old 0-30
+function newToOld_section(band,convArr){
+  if(band==null) return null;
+  // find the lowest old score that maps to this band
+  for(var i=0;i<convArr.length;i++){if(convArr[i]>=band) return i;}
+  return 30;
+}
+function newToOld_R(v){return newToOld_section(v,CONV_READING);}
+function newToOld_L(v){return newToOld_section(v,CONV_LISTENING);}
+function newToOld_S(v){return newToOld_section(v,CONV_SPEAKING);}
+function newToOld_W(v){return newToOld_section(v,CONV_WRITING);}
+function newToOld_T(v){
+  if(v==null) return null;
+  for(var i=0;i<CONV_TOTAL_REV.length;i++){if(CONV_TOTAL_REV[i].band===v) return CONV_TOTAL_REV[i].min;}
+  return 0;
+}
+
+// Convert entire toefl object {t,r,w,s,l} from old→new
+function convertToeflOldToNew(old){
+  if(!old) return null;
+  return {t:oldToNew_T(old.t),r:oldToNew_R(old.r),w:oldToNew_W(old.w),s:oldToNew_S(old.s),l:oldToNew_L(old.l)};
+}
+// Convert entire toefl6 object → approximate old
+function convertToeflNewToOld(nw){
+  if(!nw) return null;
+  return {t:newToOld_T(nw.t),r:newToOld_R(nw.r),w:newToOld_W(nw.w),s:newToOld_S(nw.s),l:newToOld_L(nw.l)};
+}
+
+// Get CEFR level from 1-6 band
+function getCEFR(band){
+  if(band==null) return {cefr:'-',cn:'-'};
+  for(var i=0;i<CEFR_MAP.length;i++){if(band>=CEFR_MAP[i].min) return CEFR_MAP[i];}
+  return {cefr:'A1',cn:'入门'};
+}
+
+// Get IELTS approximate from new TOEFL band
+function toefl6ToIelts(band){
+  if(band==null) return null;
+  for(var i=0;i<IELTS_TOEFL6_MAP.length;i++){
+    if(band>=IELTS_TOEFL6_MAP[i].t6) return IELTS_TOEFL6_MAP[i].ielts;
+  }
+  return 4;
+}
+
+// ══════════ Resolve language requirements (with toefl6) ══════════
+function resolveLang(uni, prog) {
+  var base = uni.ll[prog.l];
+  if (!base) base = uni.ll[Object.keys(uni.ll)[0]];
+  var r = JSON.parse(JSON.stringify(base));
+  if (prog.o) {
+    if (prog.o.toefl) Object.assign(r.toefl||{}, prog.o.toefl);
+    if (prog.o.ielts) Object.assign(r.ielts||{}, prog.o.ielts);
+    if (prog.o.toefl6) Object.assign(r.toefl6||{}, prog.o.toefl6);
+  }
+  // Auto-generate toefl6 from toefl if not officially provided
+  if (!r.toefl6 && r.toefl) {
+    r.toefl6 = convertToeflOldToNew(r.toefl);
+    r._t6auto = true; // flag: auto-converted, not official
+  }
+  return r;
+}
+
+// ══════════ Program helpers ══════════
+function progName(p) { var cat = PC[p.c]; return cat ? cat.n : p.c; }
+function progNameEn(p) { var cat = PC[p.c]; return cat ? cat.e : p.c; }
+function progFaculty(p) { var cat = PC[p.c]; return cat ? cat.f : ""; }
+
+// ══════════ Score matching (dual-scale aware) ══════════
+// examType: 'ielts' | 'toefl' | 'toefl6'
+function matchScores(langReq, examType, myScores) {
+  var req = langReq[examType];
+  if (!req) {
+    // If user inputs toefl6 but uni only has toefl, auto-convert
+    if (examType==='toefl6' && langReq.toefl) {
+      req = convertToeflOldToNew(langReq.toefl);
+    } else if (examType==='toefl' && !langReq.toefl && langReq.toefl6) {
+      req = convertToeflNewToOld(langReq.toefl6);
+    }
+  }
+  if (!req) return {status:'na', detail:{}};
+  var fields = ['t','r','w','s','l'];
+  var detail = {};
+  var overall = 'green';
+  for (var i=0; i<fields.length; i++) {
+    var f = fields[i];
+    if (req[f] == null || myScores[f] == null) { detail[f]='na'; continue; }
+    var diff = myScores[f] - req[f];
+    var yellowThreshold;
+    if (examType==='ielts') yellowThreshold = -0.5;
+    else if (examType==='toefl6') yellowThreshold = -0.5;
+    else yellowThreshold = -5; // old toefl
+    if (diff >= 0) { detail[f]='green'; }
+    else if (diff >= yellowThreshold) {
+      detail[f]='yellow';
+      if (overall !== 'red') overall='yellow';
+    } else {
+      detail[f]='red'; overall='red';
+    }
+  }
+  return {status:overall, detail:detail};
+}
+
+// ══════════ Get all programs (flat list) ══════════
+function getAllPrograms() {
+  var result = [];
+  var regions = Object.keys(COMPASS_DATA);
+  for (var ri=0; ri<regions.length; ri++) {
+    var reg = regions[ri];
+    var unis = COMPASS_DATA[reg];
+    for (var ui=0; ui<unis.length; ui++) {
+      var uni = unis[ui];
+      var progs = uni.p || [];
+      for (var pi=0; pi<progs.length; pi++) {
+        result.push({region:reg, uni:uni, prog:progs[pi]});
+      }
+    }
+  }
+  return result;
+}
+
+// ══════════ Filter programs ══════════
+function filterPrograms(opts) {
+  var all = getAllPrograms();
+  var results = [];
+  for (var i=0; i<all.length; i++) {
+    var item = all[i];
+    if (opts.region && opts.region !== 'all' && item.region !== opts.region) continue;
+    if (opts.uniId && item.uni.id !== opts.uniId) continue;
+    if (opts.degree) {
+      var isUG = item.prog.c === 'ug';
+      var isPhD = item.prog.c.indexOf('phd') > -1;
+      if (opts.degree === 'bachelor' && !isUG) continue;
+      if (opts.degree === 'master' && (isUG || isPhD)) continue;
+      if (opts.degree === 'phd' && !isPhD) continue;
+    }
+    if (opts.progCat && item.prog.c !== opts.progCat) continue;
+    if (opts.search) {
+      var s = opts.search.toLowerCase();
+      var pn = progName(item.prog).toLowerCase();
+      var pe = progNameEn(item.prog).toLowerCase();
+      var un = item.uni.n.toLowerCase();
+      var ue = item.uni.e.toLowerCase();
+      if (pn.indexOf(s)<0 && pe.indexOf(s)<0 && un.indexOf(s)<0 && ue.indexOf(s)<0) continue;
+    }
+    if (opts.myScores) {
+      var lang = resolveLang(item.uni, item.prog);
+      item.match = matchScores(lang, opts.examType || 'ielts', opts.myScores);
+    }
+    results.push(item);
+  }
+  if (opts.sortBy === 'rank') results.sort(function(a,b){return (a.uni.r||999)-(b.uni.r||999);});
+  else if (opts.sortBy === 'score_asc') results.sort(function(a,b){
+    var al = resolveLang(a.uni,a.prog), bl = resolveLang(b.uni,b.prog);
+    var as = (al.ielts&&al.ielts.t)||0, bs = (bl.ielts&&bl.ielts.t)||0;
+    return as-bs;
+  });
+  else if (opts.sortBy === 'score_desc') results.sort(function(a,b){
+    var al = resolveLang(a.uni,a.prog), bl = resolveLang(b.uni,b.prog);
+    var as = (al.ielts&&al.ielts.t)||0, bs = (bl.ielts&&bl.ielts.t)||0;
+    return bs-as;
+  });
+  return results;
+}
+
+// ══════════ Score display helpers ══════════
+function fmtScore(v) { return v == null ? '-' : v; }
+function fmtScoreWithCefr(v) {
+  if (v == null) return '-';
+  var c = getCEFR(v);
+  return v + ' <span class="cefr-tag">' + c.cefr + '</span>';
+}
+function fmtIelts(obj) {
+  if (!obj) return '-';
+  var s = fmtScore(obj.t);
+  var parts = [];
+  if (obj.r!=null) parts.push('R'+obj.r);
+  if (obj.w!=null) parts.push('W'+obj.w);
+  if (obj.s!=null) parts.push('S'+obj.s);
+  if (obj.l!=null) parts.push('L'+obj.l);
+  return parts.length ? s+' ('+parts.join(' ')+')' : ''+s;
+}
+function fmtToefl(obj) {
+  if (!obj) return '-';
+  var s = fmtScore(obj.t);
+  var parts = [];
+  if (obj.r!=null) parts.push('R'+obj.r);
+  if (obj.w!=null) parts.push('W'+obj.w);
+  if (obj.s!=null) parts.push('S'+obj.s);
+  if (obj.l!=null) parts.push('L'+obj.l);
+  return parts.length ? s+' ('+parts.join(' ')+')' : ''+s;
+}
+function fmtToefl6(obj, isAuto) {
+  if (!obj) return '-';
+  var s = fmtScore(obj.t);
+  var parts = [];
+  if (obj.r!=null) parts.push('R'+obj.r);
+  if (obj.w!=null) parts.push('W'+obj.w);
+  if (obj.s!=null) parts.push('S'+obj.s);
+  if (obj.l!=null) parts.push('L'+obj.l);
+  var str = parts.length ? s+' ('+parts.join(' ')+')' : ''+s;
+  if (isAuto) str += ' <span class="auto-tag">auto</span>';
+  return str;
+}
+
+// ══════════ Note translations (EN → CN) ══════════
+var NOTE_CN = {
+  // ── US: Harvard ──
+  "Test-optional":"可选择不提交标化成绩",
+  "HBS; avg GMAT 740":"哈佛商学院；GMAT均分740",
+  "HLS":"哈佛法学院",
+  "HMS":"哈佛医学院",
+  "HGSE":"哈佛教育研究生院",
+  "HSPH":"哈佛公共卫生学院",
+  "HKS":"哈佛肯尼迪政府学院",
+  // ── US: MIT ──
+  "Recommended 100+ iBT":"建议托福100+",
+  "EECS dept; extremely competitive":"电气工程与计算机科学系；竞争极其激烈",
+  "Sloan MBA":"斯隆管理学院MBA",
+  "Portfolio required":"需提交作品集",
+  // ── US: Stanford ──
+  "Not required for UG":"本科不强制要求",
+  "GSB; avg GMAT 738":"斯坦福商学院；GMAT均分738",
+  "Stanford Law":"斯坦福法学院",
+  // ── US: Caltech ──
+  "No official minimum; strongly recommended":"无官方最低分要求；强烈建议提交",
+  // ── US: Princeton ──
+  "Avg admitted ~108 iBT":"录取平均托福约108",
+  "Speaking 28+ for TA":"担任助教需口语28+",
+  "SPIA":"普林斯顿公共与国际事务学院",
+  // ── US: Yale ──
+  "No hard minimum; competitive 100+":"无硬性最低分；建议100+以增强竞争力",
+  "SOM":"耶鲁管理学院",
+  "YLS; S<=25 requires summer English":"耶鲁法学院；口语≤25需参加暑期英语课程",
+  "Jackson School":"杰克逊全球事务学院",
+  "School of Art MFA":"耶鲁艺术学院(美术硕士)",
+  // ── US: Columbia ──
+  "CBS":"哥伦比亚商学院",
+  "SIPA":"哥伦比亚国际与公共事务学院",
+  "Journalism School":"哥伦比亚新闻学院",
+  // ── US: UPenn ──
+  "Wharton MBA":"沃顿商学院MBA",
+  "Wharton":"沃顿商学院",
+  "GSE":"宾大教育研究生院",
+  // ── US: Cornell ──
+  "Johnson":"约翰逊商学院",
+  // ── US: Brown ──
+  "UG recommends 105":"本科建议托福105",
+  // ── US: Dartmouth ──
+  "Tuck MBA":"塔克商学院MBA",
+  "Thayer":"塞耶工程学院",
+  "Geisel":"盖泽尔医学院",
+  // ── US: Duke ──
+  "Fuqua":"富卡商学院",
+  "Sanford":"桑福德公共政策学院",
+  "Nicholas":"尼古拉斯环境学院",
+  // ── US: JHU ──
+  "Carey":"凯瑞商学院",
+  "Bloomberg SPH - top ranked":"彭博公共卫生学院 - 全美顶尖",
+  "SAIS":"高级国际研究学院",
+  // ── US: Northwestern ──
+  "McCormick PhD:90 MS:80":"麦考密克工程学院；博士要求90，硕士要求80",
+  "Kellogg":"凯洛格管理学院",
+  "Feinberg":"范伯格医学院",
+  "Medill - journalism top":"梅迪尔新闻学院 - 全美顶尖",
+  "MSDS requires 100":"数据科学硕士要求托福100",
+  // ── US: UChicago ──
+  "Booth":"布斯商学院",
+  "Harris":"哈里斯公共政策学院",
+  // ── US: Rice ──
+  "Jones":"琼斯商学院",
+  // ── US: Vanderbilt ──
+  "Owen":"欧文管理学院",
+  "Peabody - top ranked":"皮博迪教育学院 - 全美顶尖",
+  // ── US: WashU ──
+  "Olin":"奥林商学院",
+  "Brown School - top ranked":"布朗社会工作学院 - 全美顶尖",
+  // ── US: Emory ──
+  "Goizueta":"戈伊祖塔商学院",
+  "Rollins SPH":"罗林斯公共卫生学院",
+  // ── US: Georgetown ──
+  "McDonough":"麦克多诺商学院",
+  "GULC - top law":"乔治城法学院 - 全美顶尖法学院",
+  "SFS - top IR program":"沃尔什外交学院 - 全美顶尖国际关系项目",
+  "McCourt":"麦考特公共政策学院",
+  // ── US: NYU ──
+  "Tandon Engineering":"坦登工程学院",
+  "Stern":"斯特恩商学院",
+  "Grossman":"格罗斯曼医学院",
+  "Tisch":"蒂施艺术学院",
+  "Silver":"西尔弗社会工作学院",
+  "CDS":"数据科学中心",
+  // ── US: USC ──
+  "Avg admitted 111+":"录取平均托福111+",
+  "Viterbi":"维特比工程学院",
+  "Marshall":"马歇尔商学院",
+  "Gould":"古尔德法学院",
+  "Annenberg - top media":"安纳伯格传播学院 - 全美顶尖传媒",
+  "SCA - film top":"电影艺术学院 - 全球顶尖电影学院",
+  // ── US: CMU ──
+  "SCS; extremely competitive":"计算机科学学院；竞争极其激烈",
+  "ECE dept specific sub-scores":"电子与计算机工程系有单项分要求",
+  "Tepper":"泰珀商学院",
+  "School of Design/Drama":"设计学院/戏剧学院",
+  "English dept: 25 per sub-test":"英语系：每个单项最低25",
+  "Heinz":"海因茨信息系统与公共政策学院",
+  // ── US: UC Berkeley ──
+  "Haas":"哈斯商学院",
+  "Goldman":"戈德曼公共政策学院",
+  // ── US: UCLA ──
+  "Anderson":"安德森管理学院",
+  // ── US: UMich ──
+  "Ross":"罗斯商学院",
+  "Ford":"福特公共政策学院",
+  // ── US: Georgia Tech ──
+  "OMSCS online also available":"也可选择在线计算机科学硕士(OMSCS)",
+  "Scheller; new TOEFL 5.0 accepted":"舍勒商学院；接受新版TOEFL 5.0",
+  // ── US: UIUC ──
+  "Gies":"吉斯商学院",
+  "Avg admitted 105":"录取平均托福105",
+  "IELTS 7.5 for full qual":"雅思7.5可直接入学(无需语言课)",
+  // ── US: UVA ──
+  "Darden":"达顿商学院",
+  // ── US: UNC ──
+  "Recommends 100+":"建议托福100+",
+  "Kenan-Flagler":"凯南-弗拉格勒商学院",
+  "Gillings - top ranked":"吉林斯公共卫生学院 - 全美顶尖",
+  "Hussman":"赫斯曼新闻与媒体学院",
+  // ── US: UW ──
+  "Allen School; very competitive":"艾伦计算机科学学院；竞争非常激烈",
+  "Foster":"福斯特商学院",
+  // ── US: UMN ──
+  "Carlson":"卡尔森管理学院",
+  // ── US: Purdue ──
+  "Krannert":"克兰纳特管理学院",
+  // ── US: UMD ──
+  "Smith":"史密斯商学院",
+  // ── US: Penn State ──
+  "Smeal":"斯米尔商学院",
+  // ── US: Ohio State ──
+  "Fisher":"费舍尔商学院",
+  // ── US: UF ──
+  "Warrington/Hough":"沃灵顿/霍夫商学院",
+  // ── US: ASU ──
+  "Lowest threshold among top publics":"主要公立大学中最低门槛",
+  "W.P. Carey":"凯瑞商学院",
+  "Mary Lou Fulton":"富尔顿教育学院",
+  // ── US: Notre Dame ──
+  "Mendoza":"门多萨商学院",
+  // ── US: Tufts ──
+  "Fletcher - top IR":"弗莱彻法律与外交学院 - 顶尖国际关系项目",
+  "Cummings":"卡明斯兽医学院",
+  // ── US: BU ──
+  "Questrom":"奎斯特罗姆商学院",
+  "COM":"传播学院",
+  "SPH":"公共卫生学院",
+  "Wheelock":"惠洛克教育学院",
+  // ── US: Northeastern ──
+  "Khoury; co-op program":"霍利计算机学院；含合作实习项目(Co-op)",
+  "D'Amore-McKim":"达莫尔-麦金商学院",
+  // ── US: LACs ──
+  "Optional; expects high level":"可选提交；但期望较高英语水平",
+  "Need-blind for intl":"对国际生实行Need-blind录取(不因经济条件影响录取)",
+  "Not required; encouraged":"不强制要求；鼓励提交",
+  "Women's college":"女子学院",
+  "Test-optional since 1969":"自1969年起即为标化可选",
+  "Famous for language programs; avg 109":"以语言项目闻名；录取平均托福109",
+  // ── UK: Oxford ──
+  "Paused new TOEFL from 21 Jan 2026":"自2026年1月21日起暂停接受新版TOEFL",
+  "Said Business School":"赛德商学院",
+  "Graduate entry":"研究生入学制",
+  // ── UK: Cambridge ──
+  "Paused new TOEFL":"暂停接受新版TOEFL",
+  "Judge Business School":"贾奇商学院",
+  "Part III":"第三部分(数学高级课程)",
+  // ── UK: Imperial ──
+  "Imperial Business School":"帝国理工商学院",
+  // ── UK: UCL ──
+  "Level varies by program":"语言等级因专业而异",
+  "Bartlett - world leading":"巴特利特建筑学院 - 世界顶尖",
+  "MBBS":"临床医学本科(内外全科医学士)",
+  "IOE - top education":"教育学院(IOE) - 全球顶尖教育学院",
+  // ── UK: Manchester ──
+  "Alliance MBS":"联盟曼彻斯特商学院",
+  // ── UK: KCL ──
+  "Band A highest":"A级(最高语言要求等级)",
+  "War Studies top ranked":"战争研究专业全球顶尖",
+  // ── UK: Warwick ──
+  "WBS - top ranked":"华威商学院 - 全英顶尖",
+  // ── UK: Edinburgh ──
+  "Top AI program in UK":"全英顶尖人工智能项目",
+  "R6.5 L6.5 required":"阅读6.5 听力6.5(单项要求)",
+  // ── UK: Glasgow ──
+  "Adam Smith":"亚当·斯密商学院",
+  // ── UK: Loughborough ──
+  "Top for design/sport":"设计与体育专业全英顶尖",
+  // ── UK: Sussex ──
+  "Top for development studies":"发展研究专业全球顶尖",
+  // ── UK: Dundee ──
+  "Dundee top for art & design":"邓迪大学艺术与设计专业全英顶尖",
+  // ── UK: Strathclyde ──
+  "Strathclyde Business School - triple accredited":"思克莱德商学院 - 三重认证(AACSB/EQUIS/AMBA)",
+  // ── UK: SOAS ──
+  "Area studies focus":"以区域研究为特色",
+  // ── UK: City ──
+  "Bayes (formerly Cass) Business School":"贝叶斯商学院(原卡斯商学院)",
+  // ── UK: Aston ──
+  "Aston Business School":"阿斯顿商学院",
+  // ── UK: Westminster ──
+  "Top for media & communications":"传媒与传播专业全英顶尖",
+  // ── UK: UAL ──
+  "CSM/LCF/LCC - world leading art & design":"中央圣马丁/伦敦时装学院/伦敦传媒学院 - 世界顶尖艺术设计",
+  // ── UK: Reading ──
+  "Henley Business School":"亨利商学院",
+  // ── UK: UEA ──
+  "Top for environmental science":"环境科学专业全英顶尖",
+  // ── AUS: Melbourne ──
+  "Must use TOEFL iBT Australia for visa":"签证需使用TOEFL iBT澳洲专版",
+  "Melbourne Model":"墨尔本模式(本科通识+硕士专业化)",
+  "MBS reduced to 6.5 from 2026":"墨尔本商学院2026年起降至6.5",
+  "GAMSAT required":"需参加GAMSAT医学入学考试",
+  "AITSL: S8.0 L8.0 required":"澳洲教师协会要求：口语8.0 听力8.0",
+  // ── AUS: Sydney ──
+  "Must use TOEFL iBT Australia":"需使用TOEFL iBT澳洲专版",
+  "AHPRA registration requirements":"需满足AHPRA(澳洲医疗从业者注册机构)注册要求",
+  // ── AUS: ANU ──
+  "Crawford School":"克劳福德公共政策学院",
+  // ── AUS: Macquarie ──
+  "Top for accounting":"会计专业全澳顶尖",
+  // ── AUS: RMIT ──
+  "Top for art & design":"艺术与设计专业顶尖",
+  // ── NZ: Auckland ──
+  "MBChB":"临床医学本科(内外全科医学士)",
+  // ── NZ: Otago ──
+  "Oldest medical school in NZ":"新西兰历史最悠久的医学院",
+  // ── NZ: VUW ──
+  "Top NZ law school":"新西兰顶尖法学院",
+  // ── NZ: Waikato ──
+  "Triple-accredited":"三重认证(AACSB/EQUIS/AMBA)",
+  // ── NZ: Massey ──
+  "Only vet school in NZ":"新西兰唯一的兽医学院",
+  "Top NZ for creative arts":"新西兰创意艺术专业顶尖",
+  // ── NZ: Lincoln ──
+  "Agriculture & environment focus":"以农业与环境科学为特色",
+  // ── SEA: NUS ──
+  "NUS Business School":"新加坡国立大学商学院",
+  // ── SEA: NTU ──
+  "New TOEFL 5.0 / Speaking 5.0 accepted":"接受新版TOEFL 5.0 / 口语5.0",
+  "Nanyang MBA":"南洋MBA",
+  "WKWSCI":"黄金辉传播与信息学院",
+  "NIE":"南洋理工国立教育学院",
+  // ── SEA: SUTD ──
+  "Design-focused":"以设计为核心的理工大学",
+  // ── SEA: UPM ──
+  "Agriculture/Forestry strong":"农业/林业专业实力强",
+  // ── SEA: Mahidol ──
+  "Top medical school in Thailand":"泰国顶尖医学院",
+  // ── SEA: AIT ──
+  "All-English graduate institute":"全英文授课研究生院",
+  // ── SEA: FPT ──
+  "Direct entry; prep available for lower scores":"可直接入学；低分可参加预科",
+  // ── SEA: RMIT Vietnam ──
+  // (shares "Top for art & design" with RMIT AU)
+  // ── SEA: Philippines ──
+  "5=highest scale; English-medium":"5分为最高等级；英文授课",
+  "English-medium":"英文授课",
+  // ── SEA: JCU ──
+  "Tropical science focus":"以热带科学研究为特色"
+};
+
+function noteCn(en){
+  if(!en) return '';
+  var cn = NOTE_CN[en];
+  return cn ? en + ' <span class="note-cn">(' + cn + ')</span>' : en;
+}
+
+// ══════════ Data quality stats ══════════
+function getDataQualityStats() {
+  var stats = {total:0, toeflSub:0, ieltsSub:0, toefl6Official:0, ntStates:{}};
+  var regions = Object.keys(COMPASS_DATA);
+  var missing = []; // unis missing sub-scores
+  for (var ri=0; ri<regions.length; ri++) {
+    var unis = COMPASS_DATA[regions[ri]];
+    for (var ui=0; ui<unis.length; ui++) {
+      var uni = unis[ui];
+      stats.total++;
+      var nt = resolveNtState(uni.pol && uni.pol.nt);
+      stats.ntStates[nt] = (stats.ntStates[nt]||0)+1;
+      var hasTSub = false, hasISub = false, hasT6 = false;
+      var keys = Object.keys(uni.ll||{});
+      for (var ki=0; ki<keys.length; ki++) {
+        var lv = uni.ll[keys[ki]];
+        if (lv.toefl && (lv.toefl.r!=null||lv.toefl.w!=null)) hasTSub = true;
+        if (lv.ielts && (lv.ielts.r!=null||lv.ielts.w!=null)) hasISub = true;
+        if (lv.toefl6) hasT6 = true;
+      }
+      if (hasTSub) stats.toeflSub++;
+      if (hasISub) stats.ieltsSub++;
+      if (hasT6) stats.toefl6Official++;
+      if (!hasTSub) missing.push({region:regions[ri],uni:uni,issue:'toefl_sub'});
+    }
+  }
+  stats.missing = missing;
+  return stats;
+}

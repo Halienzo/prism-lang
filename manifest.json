@@ -1,0 +1,12 @@
+{
+  "name": "棱镜 Prism - 留学语言与集训排课平台",
+  "short_name": "棱镜 Prism",
+  "description": "TOEFL & IELTS 全球高校录取要求 + 集训智能排课系统",
+  "start_url": "compass.html",
+  "display": "standalone",
+  "background_color": "#f5f6fa",
+  "theme_color": "#4f6ef7",
+  "icons": [
+    {"src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔺</text></svg>", "sizes": "any", "type": "image/svg+xml"}
+  ]
+}
