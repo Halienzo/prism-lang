@@ -6,9 +6,9 @@
 
 // ══════════ 老师档案 (8位真实集训老师) ══════════
 var TEACHERS_DEFAULT = [
-  {id:"t01",name:"陈亮",aliases:["陈亮"],skills:["ielts_s","toefl_s"],maxDaily:4,color:"#4f6ef7"},
+  {id:"t01",name:"陈亮",aliases:["陈亮"],skills:["ielts_s","toefl_s"],maxDaily:4,color:"#27ae60"},
   {id:"t02",name:"段艳",aliases:["段艳"],skills:["ielts_w","toefl_w"],maxDaily:4,color:"#e74c3c"},
-  {id:"t03",name:"郑腾",aliases:["郑腾"],skills:["ielts_l","toefl_l"],maxDaily:4,color:"#27ae60"},
+  {id:"t03",name:"郑腾",aliases:["郑腾"],skills:["ielts_l","toefl_l"],maxDaily:4,color:"#0984e3"},
   {id:"t04",name:"牛斌",aliases:["牛斌"],skills:["ielts_r","toefl_r"],maxDaily:4,color:"#f39c12"},
   {id:"t05",name:"袁野",aliases:["袁野"],skills:["ielts_mock","toefl_mock"],maxDaily:4,color:"#9b59b6"},
   {id:"t06",name:"李鹤",aliases:["李鹤"],skills:["ielts_mock","toefl_mock"],maxDaily:4,color:"#1abc9c"},
