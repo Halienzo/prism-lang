@@ -30,7 +30,12 @@ self.addEventListener('activate', function(e) {
 });
 
 self.addEventListener('fetch', function(e) {
+  if (e.request.url.startsWith('chrome-extension://')) return;
   e.respondWith(
-    fetch(e.request).catch(function() { return caches.match(e.request); })
+    fetch(e.request).catch(function() {
+      return caches.match(e.request).then(function(r) {
+        return r || new Response('', {status: 404});
+      });
+    })
   );
 });
