@@ -11,6 +11,10 @@
 <script src="data-us.js"></script>
 <script src="data-uk.js"></script>
 <script src="data-other.js"></script>
+<script src="data-hk.js"></script>
+<script src="data-mo.js"></script>
+<script src="data-ca.js"></script>
+<script src="data-ie.js"></script>
 <script src="scheduler-data.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -21,10 +25,26 @@
 --radius:10px;--shadow:0 2px 12px rgba(0,0,0,.06);
 }
 body.dark{
---bg:#1a1a2e;--card:#16213e;--sidebar:#0f0f23;--sidebar-hover:#1a1a3e;
---text:#e0e0e0;--text-light:#a0a0b0;--border:#2a2a4a;--shadow:0 2px 12px rgba(0,0,0,.3);
---accent-light:#1a1a3e;
+--bg:#0b1120;--card:#111b2e;--sidebar:#060a16;--sidebar-hover:#0f1a30;
+--text:#d4b856;--text-light:#8b7d45;--border:#1a2540;--shadow:0 2px 16px rgba(0,0,0,.5);
+--accent:#5a7cf7;--accent-light:#0f1528;--gold:#d4b856;--gold-dim:#8b7d45;
 }
+body.dark .sidebar{background:var(--sidebar)}
+body.dark .sidebar-header h1{color:#d4b856}
+body.dark .sidebar-header p{color:rgba(212,184,86,.35)}
+body.dark .nav-item{color:rgba(212,184,86,.55)}
+body.dark .nav-item:hover,body.dark .nav-item.active{color:#d4b856}
+body.dark .nav-section{color:rgba(212,184,86,.25)}
+body.dark .sidebar-footer{color:rgba(212,184,86,.3);border-top-color:rgba(212,184,86,.1)}
+body.dark .stat-card .num{color:#d4b856}
+body.dark .page-title{color:#e8d48b}
+body.dark .card-title{color:#d4b856}
+body.dark .btn-primary{background:#2a4080;color:#e8d48b}
+body.dark .btn-primary:hover{background:#3a50a0}
+body.dark a{color:#7a9af7}
+body.dark .prog-card:hover{border-color:#d4b856}
+body.dark .tab-btn.active{color:#d4b856;border-bottom-color:#d4b856}
+body.dark .tag{background:#0f1528;color:#7a9af7}
 html{font-size:15px;scroll-behavior:smooth}
 body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh}
 .sidebar{width:260px;background:var(--sidebar);color:#fff;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
@@ -32,6 +52,9 @@ body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-s
 .sidebar-header h1{font-size:1.1rem;font-weight:700}
 .sidebar-header p{font-size:.7rem;color:rgba(255,255,255,.45);margin-top:3px}
 .sidebar nav{flex:1;overflow-y:auto;padding:8px 0}
+.nav-icon{width:18px;height:18px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-icon.filled{fill:currentColor;stroke:none}
+.ct-icon{width:16px;height:16px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle;margin-right:4px}
 .nav-item{display:flex;align-items:center;gap:8px;padding:9px 16px;cursor:pointer;font-size:.82rem;color:rgba(255,255,255,.65);transition:all .2s;border-left:3px solid transparent}
 .nav-item:hover{background:var(--sidebar-hover);color:#fff}
 .nav-item.active{background:var(--sidebar-hover);color:#fff;border-left-color:var(--accent)}
@@ -52,10 +75,10 @@ body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-s
 .alert-warning{background:#fff8e1;border-left:4px solid var(--warning);color:#856404}
 .alert-info{background:var(--accent-light);border-left:4px solid var(--accent);color:#1a3a8a}
 .alert-success{background:#e8f5e9;border-left:4px solid var(--success);color:#1b5e20}
-body.dark .alert-danger{background:#2d1518;color:#f5a0a0}
-body.dark .alert-warning{background:#2d2815;color:#f5d080}
-body.dark .alert-info{background:#151a2d;color:#90b0f5}
-body.dark .alert-success{background:#152d18;color:#90f5a0}
+body.dark .alert-danger{background:#1a0f12;border-left-color:#c0392b;color:#e8a0a0}
+body.dark .alert-warning{background:#1a1508;border-left-color:#d4a843;color:#e8d48b}
+body.dark .alert-info{background:#0b1025;border-left-color:#5a7cf7;color:#90b0f5}
+body.dark .alert-success{background:#0b1a0e;border-left-color:#27ae60;color:#80d898}
 .alert strong{display:block;margin-bottom:3px}
 .table-wrap{overflow-x:auto;margin-top:8px}
 table{width:100%;border-collapse:collapse;font-size:.82rem}
@@ -67,14 +90,14 @@ tr:hover td{background:var(--accent-light)}
 .badge-yellow{background:#fff8e1;color:#b8860b}
 .badge-red{background:#fdecea;color:var(--danger)}
 .cefr-tag{display:inline-block;padding:0 4px;border-radius:3px;font-size:.6rem;font-weight:700;background:#e3f2fd;color:#1565c0;vertical-align:middle;margin-left:2px}
-body.dark .cefr-tag{background:#1a2744;color:#64b5f6}
+body.dark .cefr-tag{background:#0f1528;color:#7a9af7}
 .auto-tag{display:inline-block;padding:0 3px;border-radius:3px;font-size:.55rem;background:var(--bg);color:var(--text-light);vertical-align:middle;margin-left:2px;border:1px solid var(--border)}
 .nt-badge{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border-radius:4px;font-size:.68rem;font-weight:600}
 .nt-published{background:#e8f5e9;color:#1b5e20}.nt-accepted{background:#e3f2fd;color:#1565c0}
 .nt-suspended{background:#fdecea;color:#c62828}.nt-old_only{background:#fff8e1;color:#e65100}
 .nt-pending{background:var(--bg);color:var(--text-light)}
-body.dark .nt-published{background:#152d18;color:#90f5a0}body.dark .nt-accepted{background:#151a2d;color:#90b0f5}
-body.dark .nt-suspended{background:#2d1518;color:#f5a0a0}body.dark .nt-old_only{background:#2d2815;color:#f5d080}
+body.dark .nt-published{background:#0b1a0e;color:#80d898}body.dark .nt-accepted{background:#0b1025;color:#90b0f5}
+body.dark .nt-suspended{background:#1a0f12;color:#e8a0a0}body.dark .nt-old_only{background:#1a1508;color:#e8d48b}
 .score-table .toefl6-row{background:rgba(79,110,247,.04)}
 .score-table .toefl6-row td{font-style:italic}
 .note-cn{color:var(--accent);font-size:.78em;font-weight:500}
@@ -86,9 +109,9 @@ body.dark .nt-suspended{background:#2d1518;color:#f5a0a0}body.dark .nt-old_only{
 .dq-bar{height:14px;background:var(--bg);border-radius:7px;overflow:hidden;margin:4px 0}
 .dq-bar-fill{height:100%;border-radius:7px;transition:width .3s ease}
 .badge-na{background:var(--bg);color:var(--text-light)}
-body.dark .badge-green{background:#152d18;color:#90f5a0}
-body.dark .badge-yellow{background:#2d2815;color:#f5d080}
-body.dark .badge-red{background:#2d1518;color:#f5a0a0}
+body.dark .badge-green{background:#0b1a0e;color:#80d898}
+body.dark .badge-yellow{background:#1a1508;color:#e8d48b}
+body.dark .badge-red{background:#1a0f12;color:#e8a0a0}
 .btn{padding:7px 16px;border:none;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s}
 .btn-primary{background:var(--accent);color:#fff}
 .btn-primary:hover{background:#3b5ae0}
@@ -159,8 +182,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .deadline-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;position:relative}
 .deadline-card.urgent{border-color:var(--danger);background:#fdecea}
 .deadline-card.soon{border-color:var(--warning);background:#fff8e1}
-body.dark .deadline-card.urgent{background:#2d1518}
-body.dark .deadline-card.soon{background:#2d2815}
+body.dark .deadline-card.urgent{background:#1a0f12;border-color:#8b2020}
+body.dark .deadline-card.soon{background:#1a1508;border-color:#8b7d45}
 .deadline-card h4{font-size:.88rem;margin-bottom:4px}
 .deadline-card p{font-size:.78rem;color:var(--text-light)}
 .deadline-card .days-left{font-size:1.2rem;font-weight:800;color:var(--accent)}
@@ -219,58 +242,85 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .teacher-load-bar .bar{flex:1;height:12px;background:var(--bg);border-radius:6px;overflow:hidden}
 .teacher-load-bar .bar-fill{height:100%;border-radius:6px;transition:width .3s}
 .conflict-alert{padding:8px 12px;background:#fdecea;border-left:4px solid var(--danger);border-radius:4px;margin-bottom:6px;font-size:.78rem}
-body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
+body.dark .conflict-alert{background:#1a0f12;color:#e8a0a0}
 .assign-course{transition:border-color .2s}
 .assign-course:hover{border-color:var(--accent)}
 .assign-row input[type="number"]{background:var(--card);color:var(--text)}
 .assign-row input[type="checkbox"]{width:16px;height:16px}
 
 /* ══════ Mobile Bottom Tab Bar ══════ */
-.mobile-tab-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);z-index:200;padding:4px 0 env(safe-area-inset-bottom);justify-content:space-around}
-.tab-item{display:flex;flex-direction:column;align-items:center;padding:6px 8px;cursor:pointer;color:var(--text-light);font-size:1.1rem;transition:color .2s;-webkit-tap-highlight-color:transparent}
-.tab-item small{font-size:.6rem;margin-top:1px}
+.mobile-tab-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);z-index:200;padding:6px 0 env(safe-area-inset-bottom);justify-content:space-around}
+.tab-item{display:flex;flex-direction:column;align-items:center;padding:8px 12px;cursor:pointer;color:var(--text-light);transition:color .2s;-webkit-tap-highlight-color:transparent;min-width:54px}
+.tab-item .nav-icon{width:22px;height:22px}
+.tab-item small{font-size:.62rem;margin-top:3px;font-weight:500}
 .tab-item.active{color:var(--accent)}
+body.dark .tab-item.active{color:#d4b856}
+body.dark .mobile-tab-bar{background:var(--card);border-top-color:var(--border)}
 
 /* ══════ Mobile Responsive ══════ */
 @media(max-width:900px){
   .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
-  .main{margin-left:0;padding:14px 10px 80px;max-width:100%}
-  .menu-toggle{display:block}
+  .main{margin-left:0;padding:14px 12px 90px;max-width:100%}
+  .menu-toggle{display:flex;align-items:center;justify-content:center;width:40px;height:40px;padding:0}
   .mobile-tab-bar{display:flex}
-  .page-title{font-size:1.2rem}
-  .page-subtitle{font-size:.78rem}
-  .card{padding:14px 12px}
+  .page-title{font-size:1.15rem;display:flex;align-items:center;gap:6px}
+  .page-title .ct-icon{width:20px;height:20px}
+  .page-subtitle{font-size:.76rem;margin-bottom:14px}
+  .card{padding:14px 12px;border-radius:8px}
+  .card-title{font-size:.92rem}
   .card-grid{grid-template-columns:1fr}
   .form-row{grid-template-columns:1fr}
   .compare-grid{grid-template-columns:1fr}
   .score-input-grid{grid-template-columns:1fr 1fr}
   .prog-detail .detail-grid{grid-template-columns:1fr}
   .converter-grid{grid-template-columns:1fr 1fr}
-  .filter-bar{flex-direction:column}
-  .filter-bar select,.filter-bar input[type="text"]{width:100%}
-  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .filter-bar{flex-direction:column;gap:6px}
+  .filter-bar select,.filter-bar input[type="text"]{width:100%;min-height:44px}
+  .stats-row{grid-template-columns:repeat(2,1fr);gap:8px}
+  .stat-card{padding:12px 8px}
+  .stat-card .num{font-size:1.5rem}
+  .stat-card .label{font-size:.68rem}
   .course-cards{grid-template-columns:1fr 1fr}
   .occupied-grid{grid-template-columns:1fr}
   .sidebar-footer{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
-  /* Score table: horizontal scroll */
   .score-table{font-size:.72rem}
   .score-table th,.score-table td{padding:5px 6px}
-  /* Touch targets */
-  .btn{min-height:44px;min-width:44px}
-  .nav-item{padding:12px 16px}
-  .fav-star{font-size:1.4rem;padding:4px}
-  /* Timetable: smaller on mobile */
+  .btn{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;gap:4px}
+  .btn-sm{min-height:38px}
+  .nav-item{padding:13px 16px;font-size:.88rem}
+  .fav-star{font-size:1.4rem;padding:6px}
+  .prog-card{padding:14px 12px}
+  .prog-card-header h4{font-size:.88rem}
+  .section-conv-grid{grid-template-columns:1fr}
   .timetable{min-width:500px;font-size:.65rem}
   .tt-block{font-size:.58rem}
+  .alert{font-size:.8rem;padding:10px 12px}
+  .calendar-grid{grid-template-columns:1fr}
+  .toggle-row{margin-top:10px}
+  .toggle-btn{min-height:36px;padding:6px 12px}
+  .modal{width:95%;padding:16px;max-height:90vh}
+  .modal h2{font-size:1rem}
+  .deadline-card{padding:12px}
+  .export-bar{gap:4px}
+  .btn-export{min-height:38px;padding:6px 10px}
 }
 @media(max-width:480px){
-  .stats-row{grid-template-columns:1fr 1fr}
+  .main{padding:10px 8px 90px}
+  .stats-row{grid-template-columns:1fr 1fr;gap:6px}
   .score-input-grid{grid-template-columns:1fr}
   .course-cards{grid-template-columns:1fr}
   .converter-grid{grid-template-columns:1fr}
-  .card-grid{gap:10px}
+  .card-grid{gap:8px}
+  .card{padding:12px 10px}
   .timetable .time-col{width:40px;font-size:.6rem}
   body{font-size:14px}
+  .page-title{font-size:1.05rem}
+  .prog-card-header{flex-direction:column;gap:6px}
+  .compare-card{padding:12px}
+  .filter-bar input,.filter-bar select{font-size:.84rem}
+  .score-table{font-size:.68rem}
+  .score-table th,.score-table td{padding:4px 5px}
+  .section-conv-card{padding:10px}
 }
 @media print{
   .sidebar,.menu-toggle,.mobile-tab-bar,.filter-bar,.btn,.export-bar,.btn-export{display:none!important}
@@ -283,43 +333,91 @@ body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
 </style>
 </head>
 <body>
-<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
+<!-- SVG Icon Sprite -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+<symbol id="i-prism" viewBox="0 0 24 24"><path d="M12 2L3 20h18L12 2z" fill="currentColor" opacity=".15"/><path d="M12 2L3 20h18L12 2z"/><line x1="12" y1="2" x2="7" y2="14"/><line x1="12" y1="2" x2="17" y2="14"/><line x1="5" y1="16" x2="19" y2="16"/></symbol>
+<symbol id="i-dash" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+<symbol id="i-convert" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+<symbol id="i-brain" viewBox="0 0 24 24"><path d="M9.5 2A5.5 5.5 0 0 0 5 9.2V12a2 2 0 0 0 2 2h1v4a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-4h1a2 2 0 0 0 2-2V9.2A5.5 5.5 0 0 0 14.5 2h-5z"/><line x1="9" y1="10" x2="9" y2="14"/><line x1="15" y1="10" x2="15" y2="14"/></symbol>
+<symbol id="i-building" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="9" y1="6" x2="9" y2="6.01"/><line x1="15" y1="6" x2="15" y2="6.01"/><line x1="9" y1="10" x2="9" y2="10.01"/><line x1="15" y1="10" x2="15" y2="10.01"/><line x1="9" y1="14" x2="9" y2="14.01"/><line x1="15" y1="14" x2="15" y2="14.01"/><path d="M10 22v-4h4v4"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></symbol>
+<symbol id="i-maple" viewBox="0 0 24 24"><path d="M12 2L9 7 3 8l3 5-2 6 8-2 8 2-2-6 3-5-6-1z"/></symbol>
+<symbol id="i-clover" viewBox="0 0 24 24"><path d="M12 8a4 4 0 1 0-4 4"/><path d="M12 8a4 4 0 1 1 4 4"/><path d="M8 12a4 4 0 1 0 4 4"/><path d="M16 12a4 4 0 1 1-4 4"/><line x1="12" y1="16" x2="12" y2="22"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+<symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="6" x2="12" y2="18"/><path d="M9 9.5C9 8.12 10.34 7 12 7s3 1.12 3 2.5S13.66 12 12 12s-3 1.12-3 2.5S10.34 17 12 17s3-1.12 3-2.5"/></symbol>
+<symbol id="i-plane" viewBox="0 0 24 24"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3s-3-1-4.5.5L13 7 4.8 5.2c-.5-.1-1 .1-1.2.5L2.8 7.5l6.3 3.6-2.8 2.8L4 13l-1.5 1.5L6 16l1.5 3.5L9 18l-1-2.3 2.8-2.8 3.6 6.3 1.8-.8c.4-.2.6-.7.5-1.2z"/></symbol>
+<symbol id="i-trophy" viewBox="0 0 24 24"><path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"/><path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"/><path d="M6 3h12v7a6 6 0 0 1-12 0V3z"/><path d="M9 21h6"/><path d="M12 16v5"/></symbol>
+<symbol id="i-clipboard" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></symbol>
+<symbol id="i-teacher" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
+<symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+<symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
+<symbol id="i-timeline" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/><line x1="12" y1="7" x2="12" y2="10"/><line x1="12" y1="14" x2="12" y2="17"/></symbol>
+<symbol id="i-read" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+<symbol id="i-headphones" viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></symbol>
+<symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></symbol>
+<symbol id="i-pen" viewBox="0 0 24 24"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></symbol>
+</svg>
+
+<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')"><svg class="nav-icon" style="width:20px;height:20px;stroke:#fff"><use href="#i-menu"/></svg></button>
 <aside class="sidebar">
-<div class="sidebar-header"><h1>&#128314; 棱镜 Prism</h1><p>留学语言 & 集训排课平台</p></div>
+<div class="sidebar-header"><h1><svg class="nav-icon" style="width:22px;height:22px"><use href="#i-prism"/></svg> 棱镜 Prism</h1><p>留学语言 & 集训排课平台</p></div>
 <nav>
 <div class="nav-section">总览</div>
-<div class="nav-item active" data-page="dashboard"><span>&#128202;</span> <span>仪表盘</span></div>
-<div class="nav-item" data-page="converter"><span>&#128260;</span> <span>分数换算器</span></div>
+<div class="nav-item active" data-page="dashboard"><svg class="nav-icon"><use href="#i-dash"/></svg> <span>仪表盘</span></div>
+<div class="nav-item" data-page="converter"><svg class="nav-icon"><use href="#i-convert"/></svg> <span>分数换算器</span></div>
 <div class="nav-section">核心功能</div>
-<div class="nav-item" data-page="search"><span>&#128270;</span> <span>智能选校</span></div>
-<div class="nav-item" data-page="matcher"><span>&#127919;</span> <span>成绩匹配(单项)</span></div>
-<div class="nav-item" data-page="recommend"><span>&#129302;</span> <span>智能推荐</span></div>
+<div class="nav-item" data-page="search"><svg class="nav-icon"><use href="#i-search"/></svg> <span>智能选校</span></div>
+<div class="nav-item" data-page="matcher"><svg class="nav-icon"><use href="#i-target"/></svg> <span>成绩匹配(单项)</span></div>
+<div class="nav-item" data-page="recommend"><svg class="nav-icon"><use href="#i-brain"/></svg> <span>智能推荐</span></div>
 <div class="nav-section">各地区高校</div>
-<div class="nav-item" data-page="region-usa"><span>&#127482;&#127480;</span> <span>美国</span></div>
-<div class="nav-item" data-page="region-uk"><span>&#127468;&#127463;</span> <span>英国</span></div>
-<div class="nav-item" data-page="region-aus"><span>&#127462;&#127482;</span> <span>澳大利亚</span></div>
-<div class="nav-item" data-page="region-nz"><span>&#127475;&#127487;</span> <span>新西兰</span></div>
-<div class="nav-item" data-page="region-sea"><span>&#127758;</span> <span>东南亚</span></div>
+<div class="nav-item" data-page="region-usa"><svg class="nav-icon"><use href="#i-building"/></svg> <span>美国</span></div>
+<div class="nav-item" data-page="region-uk"><svg class="nav-icon"><use href="#i-building"/></svg> <span>英国</span></div>
+<div class="nav-item" data-page="region-aus"><svg class="nav-icon"><use href="#i-building"/></svg> <span>澳大利亚</span></div>
+<div class="nav-item" data-page="region-nz"><svg class="nav-icon"><use href="#i-building"/></svg> <span>新西兰</span></div>
+<div class="nav-item" data-page="region-sea"><svg class="nav-icon"><use href="#i-globe"/></svg> <span>东南亚</span></div>
+<div class="nav-item" data-page="region-hk"><svg class="nav-icon"><use href="#i-building"/></svg> <span>中国香港</span></div>
+<div class="nav-item" data-page="region-mo"><svg class="nav-icon"><use href="#i-building"/></svg> <span>中国澳门</span></div>
+<div class="nav-item" data-page="region-ca"><svg class="nav-icon"><use href="#i-maple"/></svg> <span>加拿大</span></div>
+<div class="nav-item" data-page="region-ie"><svg class="nav-icon"><use href="#i-clover"/></svg> <span>爱尔兰</span></div>
+<div class="nav-section">留学规划</div>
+<div class="nav-item" data-page="profile"><svg class="nav-icon"><use href="#i-user"/></svg> <span>个人档案</span></div>
+<div class="nav-item" data-page="cost"><svg class="nav-icon"><use href="#i-coin"/></svg> <span>费用估算</span></div>
+<div class="nav-item" data-page="visa"><svg class="nav-icon"><use href="#i-plane"/></svg> <span>签证政策</span></div>
+<div class="nav-item" data-page="scholarship"><svg class="nav-icon"><use href="#i-trophy"/></svg> <span>奖学金</span></div>
 <div class="nav-section">集训排课</div>
-<div class="nav-item" data-page="sch-dash"><span>&#128203;</span> <span>排课仪表盘</span></div>
-<div class="nav-item" data-page="sch-teachers"><span>&#128104;&#8205;&#127979;</span> <span>老师管理</span></div>
-<div class="nav-item" data-page="sch-import"><span>&#128229;</span> <span>导入综合课表</span></div>
-<div class="nav-item" data-page="sch-toefl"><span>&#127383;</span> <span>托福集训排课</span></div>
-<div class="nav-item" data-page="sch-ielts"><span>&#127383;</span> <span>雅思集训排课</span></div>
-<div class="nav-item" data-page="sch-view"><span>&#128197;</span> <span>课表可视化</span></div>
-<div class="nav-item" data-page="sch-export"><span>&#128228;</span> <span>导出中心</span></div>
+<div class="nav-item" data-page="sch-dash"><svg class="nav-icon"><use href="#i-clipboard"/></svg> <span>排课仪表盘</span></div>
+<div class="nav-item" data-page="sch-teachers"><svg class="nav-icon"><use href="#i-teacher"/></svg> <span>老师管理</span></div>
+<div class="nav-item" data-page="sch-import"><svg class="nav-icon"><use href="#i-download"/></svg> <span>导入综合课表</span></div>
+<div class="nav-item" data-page="sch-toefl"><svg class="nav-icon"><use href="#i-book"/></svg> <span>托福集训排课</span></div>
+<div class="nav-item" data-page="sch-ielts"><svg class="nav-icon"><use href="#i-book"/></svg> <span>雅思集训排课</span></div>
+<div class="nav-item" data-page="sch-view"><svg class="nav-icon"><use href="#i-calendar"/></svg> <span>课表可视化</span></div>
+<div class="nav-item" data-page="sch-export"><svg class="nav-icon"><use href="#i-upload"/></svg> <span>导出中心</span></div>
 <div class="nav-section">工具与策略</div>
-<div class="nav-item" data-page="traps"><span>&#9888;&#65039;</span> <span>政策雷区</span></div>
-<div class="nav-item" data-page="favorites"><span>&#11088;</span> <span>收藏与对比</span></div>
-<div class="nav-item" data-page="calendar"><span>&#128197;</span> <span>申请日历</span></div>
-<div class="nav-item" data-page="validity"><span>&#9201;</span> <span>有效期计算</span></div>
-<div class="nav-item" data-page="data"><span>&#128472;</span> <span>数据管理</span></div>
-<div class="nav-item" data-page="dq"><span>&#128200;</span> <span>数据质量</span></div>
+<div class="nav-item" data-page="traps"><svg class="nav-icon"><use href="#i-alert"/></svg> <span>政策雷区</span></div>
+<div class="nav-item" data-page="favorites"><svg class="nav-icon"><use href="#i-star"/></svg> <span>收藏与对比</span></div>
+<div class="nav-item" data-page="calendar"><svg class="nav-icon"><use href="#i-calendar"/></svg> <span>申请日历</span></div>
+<div class="nav-item" data-page="validity"><svg class="nav-icon"><use href="#i-clock"/></svg> <span>有效期计算</span></div>
+<div class="nav-item" data-page="data"><svg class="nav-icon"><use href="#i-database"/></svg> <span>数据管理</span></div>
+<div class="nav-item" data-page="dq"><svg class="nav-icon"><use href="#i-chart"/></svg> <span>数据质量</span></div>
 </nav>
 <div class="sidebar-footer">
-<span id="lastUpdate">棱镜 Prism v3.0</span>
+<span id="lastUpdate">棱镜 Prism v4.0</span>
 <div class="toggle-row">
-<button class="toggle-btn" id="darkToggle" onclick="toggleDark()">&#127769; Dark</button>
+<button class="toggle-btn" id="darkToggle" onclick="toggleDark()"><svg class="nav-icon" style="width:14px;height:14px"><use href="#i-moon"/></svg> <span id="themeLabel">暗色</span></button>
 <button class="toggle-btn" id="langToggle" onclick="toggleLang()">EN</button>
 </div>
 </div>
@@ -334,39 +432,39 @@ body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
 <div class="stats-row">
 <div class="stat-card"><div class="num" id="statUnis">0</div><div class="label">覆盖高校</div></div>
 <div class="stat-card"><div class="num" id="statProgs">0</div><div class="label">专业条目</div></div>
-<div class="stat-card"><div class="num">5</div><div class="label">国家/地区</div></div>
+<div class="stat-card"><div class="num" id="statRegions">9</div><div class="label">国家/地区</div></div>
 <div class="stat-card"><div class="num">2028</div><div class="label">旧分制截止</div></div>
 </div>
-<div class="alert alert-danger"><strong>&#9888; 三大致命陷阱</strong>1. 澳大利亚签证<b>只接受"TOEFL iBT Australia"专版</b>（120分制）<br>2. 牛津、剑桥<b>已暂停接受新版托福</b>（2026年1月21日后成绩）<br>3. 英国签证(UKVI)<b>不认可任何版本的托福</b></div>
+<div class="alert alert-danger"><strong><svg class="ct-icon"><use href="#i-alert"/></svg> 三大致命陷阱</strong>1. 澳大利亚签证<b>只接受"TOEFL iBT Australia"专版</b>（120分制）<br>2. 牛津、剑桥<b>已暂停接受新版托福</b>（2026年1月21日后成绩）<br>3. 英国签证(UKVI)<b>不认可任何版本的托福</b></div>
 <div class="card-grid">
-<div class="card"><div class="card-title">&#128197; 关键时间线</div><div class="timeline"><div class="timeline-item"><h4>2025年5月</h4><p>ETS宣布新版托福改革</p></div><div class="timeline-item danger"><h4>2026年1月21日</h4><p>新版托福上线, 1-6分制启用</p></div><div class="timeline-item"><h4>2026-2028 过渡期</h4><p>成绩报告同时显示双分制</p></div><div class="timeline-item danger"><h4>2028年1月后</h4><p>0-120分制永久移除</p></div></div></div>
-<div class="card"><div class="card-title">&#127758; 各地区核心建议</div><div class="alert alert-info"><strong>申请英国</strong>优先考IELTS Academic; pre-sessional需IELTS for UKVI</div><div class="alert alert-warning"><strong>申请澳大利亚</strong>签证只能用TOEFL iBT Australia (120分制)</div><div class="alert alert-success"><strong>申请美国/加拿大</strong>新版托福通过双重成绩报告被所有学校接受</div></div>
+<div class="card"><div class="card-title"><svg class="ct-icon"><use href="#i-timeline"/></svg> 关键时间线</div><div class="timeline"><div class="timeline-item"><h4>2025年5月</h4><p>ETS宣布新版托福改革</p></div><div class="timeline-item danger"><h4>2026年1月21日</h4><p>新版托福上线, 1-6分制启用</p></div><div class="timeline-item"><h4>2026-2028 过渡期</h4><p>成绩报告同时显示双分制</p></div><div class="timeline-item danger"><h4>2028年1月后</h4><p>0-120分制永久移除</p></div></div></div>
+<div class="card"><div class="card-title"><svg class="ct-icon"><use href="#i-globe"/></svg> 各地区核心建议</div><div class="alert alert-info"><strong>申请英国</strong>优先考IELTS Academic; pre-sessional需IELTS for UKVI</div><div class="alert alert-warning"><strong>申请澳大利亚</strong>签证只能用TOEFL iBT Australia (120分制)</div><div class="alert alert-success"><strong>申请美国/加拿大</strong>新版托福通过双重成绩报告被所有学校接受</div></div>
 </div>
-<div class="card"><div class="card-title">v3.0 棱镜 Prism 功能</div><p class="small">&#10003; 专业级语言要求 (IELTS/TOEFL 单项分) &nbsp; &#10003; GPA要求 &nbsp; &#10003; 智能选校三级筛选 &nbsp; &#10003; 单项分匹配 &nbsp; &#10003; UCL五级/牛津双级完整数据 &nbsp; &#10003; 188所大学1800+专业 &nbsp; &#10003; <b>集训智能排课系统</b> &nbsp; &#10003; <b>Excel综合课表导入</b> &nbsp; &#10003; <b>iCal日历同步</b></p></div>
+<div class="card"><div class="card-title"><svg class="ct-icon"><use href="#i-prism"/></svg> v4.0 棱镜 Prism</div><p class="small"><svg class="ct-icon" style="width:12px;height:12px"><use href="#i-check"/></svg> 9地区200+大学 &nbsp; <svg class="ct-icon" style="width:12px;height:12px"><use href="#i-check"/></svg> 专业级语言要求+GPA &nbsp; <svg class="ct-icon" style="width:12px;height:12px"><use href="#i-check"/></svg> 智能选校三级筛选 &nbsp; <svg class="ct-icon" style="width:12px;height:12px"><use href="#i-check"/></svg> 单项分匹配 &nbsp; <svg class="ct-icon" style="width:12px;height:12px"><use href="#i-check"/></svg> 集训智能排课 &nbsp; <svg class="ct-icon" style="width:12px;height:12px"><use href="#i-check"/></svg> 费用/签证/奖学金 &nbsp; <svg class="ct-icon" style="width:12px;height:12px"><use href="#i-check"/></svg> 亮色/暗色主题</p></div>
 </div>
 
 <!-- CONVERTER -->
 <div class="page" id="page-converter">
 <h2 class="page-title">分数换算器</h2>
 <p class="page-subtitle">基于ETS官方RR-25-02联合研究报告</p>
-<div class="card"><div class="card-title">&#128260; 总分换算</div>
+<div class="card"><div class="card-title"><svg class="ct-icon"><use href="#i-convert"/></svg> 总分换算</div>
 <div class="slider-group"><label>选择新版托福总分: <b id="sliderVal">5.0</b></label><input type="range" id="scoreSlider" min="1" max="6" step="0.5" value="5" oninput="updateConverter()"></div>
 <div class="converter-grid"><div class="converter-box"><label>新版托福</label><div class="value" id="cvNew">5.0</div><div class="sub">1-6分制</div></div><div class="converter-box"><label>旧版iBT</label><div class="value" id="cvOld">95-106</div><div class="sub">0-120分制</div></div><div class="converter-box"><label>雅思</label><div class="value" id="cvIELTS">7.0</div><div class="sub">0-9分制</div></div><div class="converter-box"><label>CEFR</label><div class="value" id="cvCEFR">C1</div><div class="sub">欧洲标准</div></div></div></div>
-<div class="card"><div class="card-title">&#128209; 总分对照表</div><div class="table-wrap"><table><thead><tr><th>新托福(1-6)</th><th>旧版iBT(0-120)</th><th>雅思</th><th>CEFR</th></tr></thead><tbody id="convTableBody"></tbody></table></div></div>
-<div class="card"><div class="card-title">&#128221; 单项分换算 (旧0-30 ↔ 新1-6)</div>
+<div class="card"><div class="card-title"><svg class="ct-icon"><use href="#i-grid"/></svg> 总分对照表</div><div class="table-wrap"><table><thead><tr><th>新托福(1-6)</th><th>旧版iBT(0-120)</th><th>雅思</th><th>CEFR</th></tr></thead><tbody id="convTableBody"></tbody></table></div></div>
+<div class="card"><div class="card-title"><svg class="ct-icon"><use href="#i-convert"/></svg> 单项分换算 (旧0-30 ↔ 新1-6)</div>
 <p class="small" style="margin-bottom:12px">ETS官方逐分转换表 — 四个单项各自独立换算，每个section的转换比例不同</p>
 <div class="section-conv-grid">
-<div class="section-conv-card"><h4>&#128214; 阅读 Reading</h4><div class="conv-input"><label class="small">旧分(0-30):</label><input type="number" id="cvR" min="0" max="30" value="24" oninput="updateSectionConv('r')" style="width:55px;padding:4px"><span>→</span><span class="conv-result" id="cvRnew">5.0</span><span class="cefr-tag" id="cvRcefr">C1</span></div><div class="table-wrap"><table class="small"><thead><tr><th>旧</th><th>新</th><th>旧</th><th>新</th><th>旧</th><th>新</th></tr></thead><tbody id="cvRtable"></tbody></table></div></div>
-<div class="section-conv-card"><h4>&#127911; 听力 Listening</h4><div class="conv-input"><label class="small">旧分(0-30):</label><input type="number" id="cvL" min="0" max="30" value="24" oninput="updateSectionConv('l')" style="width:55px;padding:4px"><span>→</span><span class="conv-result" id="cvLnew">5.0</span><span class="cefr-tag" id="cvLcefr">C1</span></div><div class="table-wrap"><table class="small"><thead><tr><th>旧</th><th>新</th><th>旧</th><th>新</th><th>旧</th><th>新</th></tr></thead><tbody id="cvLtable"></tbody></table></div></div>
-<div class="section-conv-card"><h4>&#128483; 口语 Speaking</h4><div class="conv-input"><label class="small">旧分(0-30):</label><input type="number" id="cvS" min="0" max="30" value="24" oninput="updateSectionConv('s')" style="width:55px;padding:4px"><span>→</span><span class="conv-result" id="cvSnew">4.5</span><span class="cefr-tag" id="cvScefr">B2</span></div><div class="table-wrap"><table class="small"><thead><tr><th>旧</th><th>新</th><th>旧</th><th>新</th><th>旧</th><th>新</th></tr></thead><tbody id="cvStable"></tbody></table></div></div>
-<div class="section-conv-card"><h4>&#9997; 写作 Writing</h4><div class="conv-input"><label class="small">旧分(0-30):</label><input type="number" id="cvW" min="0" max="30" value="24" oninput="updateSectionConv('w')" style="width:55px;padding:4px"><span>→</span><span class="conv-result" id="cvWnew">5.0</span><span class="cefr-tag" id="cvWcefr">C1</span></div><div class="table-wrap"><table class="small"><thead><tr><th>旧</th><th>新</th><th>旧</th><th>新</th><th>旧</th><th>新</th></tr></thead><tbody id="cvWtable"></tbody></table></div></div>
+<div class="section-conv-card"><h4><svg class="ct-icon"><use href="#i-read"/></svg> 阅读 Reading</h4><div class="conv-input"><label class="small">旧分(0-30):</label><input type="number" id="cvR" min="0" max="30" value="24" oninput="updateSectionConv('r')" style="width:55px;padding:4px"><span>→</span><span class="conv-result" id="cvRnew">5.0</span><span class="cefr-tag" id="cvRcefr">C1</span></div><div class="table-wrap"><table class="small"><thead><tr><th>旧</th><th>新</th><th>旧</th><th>新</th><th>旧</th><th>新</th></tr></thead><tbody id="cvRtable"></tbody></table></div></div>
+<div class="section-conv-card"><h4><svg class="ct-icon"><use href="#i-headphones"/></svg> 听力 Listening</h4><div class="conv-input"><label class="small">旧分(0-30):</label><input type="number" id="cvL" min="0" max="30" value="24" oninput="updateSectionConv('l')" style="width:55px;padding:4px"><span>→</span><span class="conv-result" id="cvLnew">5.0</span><span class="cefr-tag" id="cvLcefr">C1</span></div><div class="table-wrap"><table class="small"><thead><tr><th>旧</th><th>新</th><th>旧</th><th>新</th><th>旧</th><th>新</th></tr></thead><tbody id="cvLtable"></tbody></table></div></div>
+<div class="section-conv-card"><h4><svg class="ct-icon"><use href="#i-mic"/></svg> 口语 Speaking</h4><div class="conv-input"><label class="small">旧分(0-30):</label><input type="number" id="cvS" min="0" max="30" value="24" oninput="updateSectionConv('s')" style="width:55px;padding:4px"><span>→</span><span class="conv-result" id="cvSnew">4.5</span><span class="cefr-tag" id="cvScefr">B2</span></div><div class="table-wrap"><table class="small"><thead><tr><th>旧</th><th>新</th><th>旧</th><th>新</th><th>旧</th><th>新</th></tr></thead><tbody id="cvStable"></tbody></table></div></div>
+<div class="section-conv-card"><h4><svg class="ct-icon"><use href="#i-pen"/></svg> 写作 Writing</h4><div class="conv-input"><label class="small">旧分(0-30):</label><input type="number" id="cvW" min="0" max="30" value="24" oninput="updateSectionConv('w')" style="width:55px;padding:4px"><span>→</span><span class="conv-result" id="cvWnew">5.0</span><span class="cefr-tag" id="cvWcefr">C1</span></div><div class="table-wrap"><table class="small"><thead><tr><th>旧</th><th>新</th><th>旧</th><th>新</th><th>旧</th><th>新</th></tr></thead><tbody id="cvWtable"></tbody></table></div></div>
 </div>
 </div>
 </div>
 
 <!-- SMART SEARCH (NEW CORE FEATURE) -->
 <div class="page" id="page-search">
-<h2 class="page-title">&#128270; 智能选校</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-search"/></svg> 智能选校</h2>
 <p class="page-subtitle">国家 &rarr; 大学 &rarr; 专业 三级联动筛选, 支持单项分匹配</p>
 <div class="card">
 <div class="card-title">筛选条件</div>
@@ -395,7 +493,7 @@ body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
 
 <!-- MATCHER (UPGRADED) -->
 <div class="page" id="page-matcher">
-<h2 class="page-title">&#127919; 成绩匹配 (含单项分)</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-target"/></svg> 成绩匹配 (含单项分)</h2>
 <p class="page-subtitle">输入你的总分+各单项分, 匹配全部专业 - 绿色达标/黄色接近/红色不够</p>
 <div class="card">
 <div class="card-title">输入你的成绩</div>
@@ -416,7 +514,7 @@ body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
 
 <!-- RECOMMEND -->
 <div class="page" id="page-recommend">
-<h2 class="page-title">&#129302; 智能推荐</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-brain"/></svg> 智能推荐</h2>
 <p class="page-subtitle">根据分数+GPA自动分档: 冲刺/稳妥/保底</p>
 <div class="card">
 <div class="score-input-grid">
@@ -431,63 +529,169 @@ body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
 
 <!-- REGION PAGES -->
 <div class="page" id="page-region-usa">
-<h2 class="page-title">&#127482;&#127480; 美国高校</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-building"/></svg> 美国高校</h2>
 <p class="page-subtitle">50所大学 - 点击展开查看各专业语言要求</p>
 <div class="alert alert-success">过渡期内所有美国高校均可通过双重成绩报告评估新版托福。成绩有效期 <b>2年</b>。</div>
 <div class="filter-bar"><input type="text" id="usaFilter" placeholder="搜索大学..." oninput="renderRegion('usa')"><select id="usaCat" onchange="renderRegion('usa')"><option value="">全部</option><option value="ivy">常青藤</option><option value="private">顶尖私立</option><option value="public">公立旗舰</option><option value="lac">文理学院</option></select></div>
 <div id="regionUSA"></div>
 </div>
 <div class="page" id="page-region-uk">
-<h2 class="page-title">&#127468;&#127463; 英国高校</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-building"/></svg> 英国高校</h2>
 <p class="page-subtitle">50所大学 - UCL五级体系/牛津双级完整收录</p>
-<div class="alert alert-danger"><strong>&#9888; 英国签证警告</strong>托福从未被列入UKVI认可清单。学生可能拿到录取却无法获签。Pre-sessional需IELTS for UKVI。</div>
+<div class="alert alert-danger"><strong><svg class="ct-icon"><use href="#i-alert"/></svg> 英国签证警告</strong>托福从未被列入UKVI认可清单。学生可能拿到录取却无法获签。Pre-sessional需IELTS for UKVI。</div>
 <div class="filter-bar"><input type="text" id="ukFilter" placeholder="搜索大学..." oninput="renderRegion('uk')"><select id="ukCat" onchange="renderRegion('uk')"><option value="">全部</option><option value="russell">罗素集团</option><option value="other">其他</option></select></div>
 <div id="regionUK"></div>
 </div>
 <div class="page" id="page-region-aus">
-<h2 class="page-title">&#127462;&#127482; 澳大利亚高校</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-building"/></svg> 澳大利亚高校</h2>
 <p class="page-subtitle">30所大学 - 签证必须使用TOEFL iBT Australia</p>
-<div class="alert alert-danger"><strong>&#9888; 致命陷阱</strong>内政部不接受新版全球托福。必须考"TOEFL iBT Australia" (120分制)。Home Edition永久不被接受。</div>
+<div class="alert alert-danger"><strong><svg class="ct-icon"><use href="#i-alert"/></svg> 致命陷阱</strong>内政部不接受新版全球托福。必须考"TOEFL iBT Australia" (120分制)。Home Edition永久不被接受。</div>
 <div class="filter-bar"><input type="text" id="ausFilter" placeholder="搜索大学..." oninput="renderRegion('aus')"><select id="ausCat" onchange="renderRegion('aus')"><option value="">全部</option><option value="go8">八大Go8</option><option value="other">其他</option></select></div>
 <div id="regionAUS"></div>
 </div>
 <div class="page" id="page-region-nz">
-<h2 class="page-title">&#127475;&#127487; 新西兰高校</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-building"/></svg> 新西兰高校</h2>
 <p class="page-subtitle">全部8所大学</p>
 <div class="alert alert-info">INZ不为学生签证设定单独英语要求。截至2026年3月无大学公布新版分制要求。</div>
 <div id="regionNZ"></div>
 </div>
 <div class="page" id="page-region-sea">
-<h2 class="page-title">&#127758; 东南亚高校</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-globe"/></svg> 东南亚高校</h2>
 <p class="page-subtitle">新加坡/马来西亚/泰国/越南/印尼/菲律宾</p>
 <div class="alert alert-info">南洋理工NTU是东南亚唯一公布新版托福要求的大学 (总分5.0/口语5.0)。</div>
 <div class="filter-bar"><input type="text" id="seaFilter" placeholder="搜索大学..." oninput="renderRegion('sea')"><select id="seaCat" onchange="renderRegion('sea')"><option value="">全部</option><option value="sg">新加坡</option><option value="my">马来西亚</option><option value="th">泰国</option><option value="vn">越南</option><option value="id">印尼</option><option value="ph">菲律宾</option></select></div>
 <div id="regionSEA"></div>
 </div>
 
+<!-- ══════════ NEW REGIONS ══════════ -->
+<div class="page" id="page-region-hk">
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-building"/></svg> 中国香港高校</h2>
+<p class="page-subtitle">港八大 - IANG签证毕业后可留港2年</p>
+<div class="filter-bar"><input type="text" id="hkFilter" placeholder="搜索大学..." oninput="renderRegion('hk')"></div>
+<div id="regionHK"></div>
+</div>
+<div class="page" id="page-region-mo">
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-building"/></svg> 中国澳门高校</h2>
+<p class="page-subtitle">澳门大学/澳门科技等 - 中葡双语环境</p>
+<div id="regionMO"></div>
+</div>
+<div class="page" id="page-region-ca">
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-maple"/></svg> 加拿大高校</h2>
+<p class="page-subtitle">U15研究型大学 - PGWP毕业工签1-3年</p>
+<div class="filter-bar"><input type="text" id="caFilter" placeholder="搜索大学..." oninput="renderRegion('ca')"><select id="caCat" onchange="renderRegion('ca')"><option value="">全部</option><option value="u15">U15联盟</option><option value="other">其他</option></select></div>
+<div id="regionCA"></div>
+</div>
+<div class="page" id="page-region-ie">
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-clover"/></svg> 爱尔兰高校</h2>
+<p class="page-subtitle">圣三一/UCD等 - Stay Back签证1-2年</p>
+<div class="filter-bar"><input type="text" id="ieFilter" placeholder="搜索大学..." oninput="renderRegion('ie')"></div>
+<div id="regionIE"></div>
+</div>
+
+<!-- ══════════ PERSONAL PROFILE ══════════ -->
+<div class="page" id="page-profile">
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-user"/></svg> 个人档案</h2>
+<p class="page-subtitle">保存你的背景信息, 一键填入匹配器 - 数据仅存本地</p>
+<div class="card">
+<div class="card-title">学术背景</div>
+<div class="form-grid">
+<div><label>本科院校</label><input type="text" id="pfSchool" placeholder="如: 北京大学"></div>
+<div><label>GPA / 均分</label><input type="number" id="pfGpa" step="0.01" placeholder="如: 3.5 或 85"></div>
+<div><label>GPA制度</label><select id="pfGpaScale"><option value="4">4.0制</option><option value="100">百分制</option><option value="5">5.0制</option></select></div>
+<div><label>学历层次</label><select id="pfDegree"><option value="bachelor">申请本科</option><option value="master">申请硕士</option><option value="phd">申请博士</option></select></div>
+</div>
+</div>
+<div class="card">
+<div class="card-title">语言成绩</div>
+<div class="form-grid">
+<div><label>考试类型</label><select id="pfExam"><option value="ielts">IELTS</option><option value="toefl">TOEFL</option><option value="toefl6">TOEFL 1-6</option></select></div>
+<div><label>总分</label><input type="number" id="pfTotal" step="0.5" placeholder="总分"></div>
+<div><label>阅读 R</label><input type="number" id="pfR" step="0.5"></div>
+<div><label>写作 W</label><input type="number" id="pfW" step="0.5"></div>
+<div><label>口语 S</label><input type="number" id="pfS" step="0.5"></div>
+<div><label>听力 L</label><input type="number" id="pfL" step="0.5"></div>
+</div>
+</div>
+<div class="card">
+<div class="card-title">意向</div>
+<div class="form-grid">
+<div><label>意向地区</label><select id="pfRegion" multiple style="height:120px"><option value="usa">美国</option><option value="uk">英国</option><option value="aus">澳大利亚</option><option value="nz">新西兰</option><option value="sea">东南亚</option><option value="hk">中国香港</option><option value="mo">中国澳门</option><option value="ca">加拿大</option><option value="ie">爱尔兰</option></select></div>
+<div><label>意向专业方向</label><select id="pfMajor"><option value="">不限</option><option value="cs">计算机/数据科学</option><option value="eng">工程</option><option value="bus">商科/MBA/金融</option><option value="law">法学</option><option value="edu">教育</option><option value="med">医学</option><option value="art">艺术设计</option><option value="media">传媒</option><option value="sci">理学</option><option value="social">社科/公共政策</option></select></div>
+</div>
+</div>
+<div style="display:flex;gap:10px;margin-top:12px">
+<button class="btn btn-primary" onclick="saveProfile()"><svg class="ct-icon" style="width:14px;height:14px"><use href="#i-database"/></svg> 保存档案</button>
+<button class="btn btn-outline" onclick="fillMatcherFromProfile()"><svg class="ct-icon" style="width:14px;height:14px"><use href="#i-target"/></svg> 填入匹配器</button>
+<button class="btn btn-outline" onclick="clearProfile()"><svg class="ct-icon" style="width:14px;height:14px"><use href="#i-alert"/></svg> 清除</button>
+</div>
+</div>
+
+<!-- ══════════ COST ESTIMATOR ══════════ -->
+<div class="page" id="page-cost">
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-coin"/></svg> 费用估算器</h2>
+<p class="page-subtitle">选择地区和大学, 自动计算学费+生活费+签证费总预算</p>
+<div class="card">
+<div class="card-title">选择目标</div>
+<div class="form-grid">
+<div><label>地区</label><select id="costRegion" onchange="updateCostUniList()"><option value="">请选择</option></select></div>
+<div><label>大学</label><select id="costUni" onchange="calcCost()"><option value="">请选择</option></select></div>
+<div><label>学历</label><select id="costDegree" onchange="calcCost()"><option value="pg">硕士(1-2年)</option><option value="ug">本科(3-4年)</option></select></div>
+<div><label>汇率(对人民币)</label><input type="number" id="costRate" step="0.01" value="1" onchange="calcCost()"></div>
+</div>
+</div>
+<div class="stats-row" id="costResult" style="display:none">
+<div class="stat-card"><div class="num" id="costTuition">-</div><div class="label">学费/年</div></div>
+<div class="stat-card"><div class="num" id="costLiving">-</div><div class="label">生活费/年</div></div>
+<div class="stat-card"><div class="num" id="costVisa">-</div><div class="label">签证+机票</div></div>
+<div class="stat-card" style="background:var(--accent);color:#fff"><div class="num" id="costTotalCNY">-</div><div class="label">总预算(万CNY)</div></div>
+</div>
+<div class="card" id="costCompare" style="display:none">
+<div class="card-title">各地区硕士1年费用对比 (万人民币)</div>
+<div id="costBars"></div>
+</div>
+</div>
+
+<!-- ══════════ VISA POLICY CENTER ══════════ -->
+<div class="page" id="page-visa">
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-plane"/></svg> 签证政策中心</h2>
+<p class="page-subtitle">9个地区签证类型、材料、毕业工签一览</p>
+<div id="visaCards"></div>
+</div>
+
+<!-- ══════════ SCHOLARSHIP ══════════ -->
+<div class="page" id="page-scholarship">
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-trophy"/></svg> 奖学金大全</h2>
+<p class="page-subtitle">政府级 + 校级奖学金信息汇总</p>
+<div class="filter-bar">
+<select id="scholRegion" onchange="renderScholarships()"><option value="all">全部地区</option></select>
+<select id="scholType" onchange="renderScholarships()"><option value="all">全部类型</option><option value="full">全额</option><option value="partial">部分</option><option value="tuition">学费减免</option></select>
+</div>
+<div id="scholList"></div>
+</div>
+
 <!-- TRAPS -->
 <div class="page" id="page-traps">
-<h2 class="page-title">&#9888;&#65039; 政策雷区</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-alert"/></svg> 政策雷区</h2>
 <p class="page-subtitle">申请中最容易踩的致命陷阱</p>
-<div class="card"><div class="card-title text-danger">&#9888; 陷阱1: 澳大利亚签证TOEFL版本</div><p class="small">内政部不接受新版全球TOEFL。必须在注册时选择"Taking TOEFL for Australia", 考出TOEFL iBT Australia (120分制)。误选无法转换、无法退款。Home Edition永久不被接受。</p></div>
-<div class="card"><div class="card-title text-danger">&#9888; 陷阱2: 牛津剑桥暂停新版TOEFL</div><p class="small">2026年1月21日后的TOEFL成绩暂不被牛津、剑桥接受。帝国理工、UCL、华威已明确接受新版。</p></div>
-<div class="card"><div class="card-title text-danger">&#9888; 陷阱3: 英国签证UKVI不认托福</div><p class="small">托福从未被列入UKVI认可的SELT清单。可获得学术录取但无法用于签证。Pre-sessional需IELTS for UKVI。</p></div>
-<div class="card"><div class="card-title text-warning">&#9888; 陷阱4: 单项分不达标</div><p class="small">很多大学总分达标但单项分有硬性要求。例如UCL Level 3要求IELTS每项不低于7.0; USC要求TOEFL各科不低于20。总分够但单项差一分也会被拒。</p></div>
-<div class="card"><div class="card-title text-warning">&#9888; 陷阱5: MyBest/SuperScore政策</div><p class="small">多数顶尖大学(MIT, Princeton, UPenn等)不接受MyBest Scores。Cornell和Stanford是少数接受的。务必确认目标校政策。</p></div>
-<div class="card"><div class="card-title text-warning">&#9888; 陷阱6: 成绩有效期</div><p class="small">IELTS和TOEFL成绩通常有效期为2年。UCL要求成绩在入学前2年内考取(2026入学则需2024年9月1日后)。部分学校有更严格的时间窗口。</p></div>
+<div class="card"><div class="card-title text-danger"><svg class="ct-icon"><use href="#i-alert"/></svg> 陷阱1: 澳大利亚签证TOEFL版本</div><p class="small">内政部不接受新版全球TOEFL。必须在注册时选择"Taking TOEFL for Australia", 考出TOEFL iBT Australia (120分制)。误选无法转换、无法退款。Home Edition永久不被接受。</p></div>
+<div class="card"><div class="card-title text-danger"><svg class="ct-icon"><use href="#i-alert"/></svg> 陷阱2: 牛津剑桥暂停新版TOEFL</div><p class="small">2026年1月21日后的TOEFL成绩暂不被牛津、剑桥接受。帝国理工、UCL、华威已明确接受新版。</p></div>
+<div class="card"><div class="card-title text-danger"><svg class="ct-icon"><use href="#i-alert"/></svg> 陷阱3: 英国签证UKVI不认托福</div><p class="small">托福从未被列入UKVI认可的SELT清单。可获得学术录取但无法用于签证。Pre-sessional需IELTS for UKVI。</p></div>
+<div class="card"><div class="card-title text-warning"><svg class="ct-icon"><use href="#i-alert"/></svg> 陷阱4: 单项分不达标</div><p class="small">很多大学总分达标但单项分有硬性要求。例如UCL Level 3要求IELTS每项不低于7.0; USC要求TOEFL各科不低于20。总分够但单项差一分也会被拒。</p></div>
+<div class="card"><div class="card-title text-warning"><svg class="ct-icon"><use href="#i-alert"/></svg> 陷阱5: MyBest/SuperScore政策</div><p class="small">多数顶尖大学(MIT, Princeton, UPenn等)不接受MyBest Scores。Cornell和Stanford是少数接受的。务必确认目标校政策。</p></div>
+<div class="card"><div class="card-title text-warning"><svg class="ct-icon"><use href="#i-alert"/></svg> 陷阱6: 成绩有效期</div><p class="small">IELTS和TOEFL成绩通常有效期为2年。UCL要求成绩在入学前2年内考取(2026入学则需2024年9月1日后)。部分学校有更严格的时间窗口。</p></div>
 </div>
 
 <!-- FAVORITES -->
 <div class="page" id="page-favorites">
-<h2 class="page-title">&#11088; 收藏与对比</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-star"/></svg> 收藏与对比</h2>
 <p class="page-subtitle">收藏感兴趣的大学+专业, 并排对比语言要求</p>
-<div id="favEmpty" class="no-results"><div class="icon">&#11088;</div><p>暂无收藏。在智能选校或地区页面点击星标收藏。</p></div>
+<div id="favEmpty" class="no-results"><div class="icon"><svg style="width:48px;height:48px;stroke:var(--text-light);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><use href="#i-star"/></svg></div><p>暂无收藏。在智能选校或地区页面点击星标收藏。</p></div>
 <div class="compare-grid" id="favGrid"></div>
 </div>
 
 <!-- CALENDAR -->
 <div class="page" id="page-calendar">
-<h2 class="page-title">&#128197; 申请截止日历</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-calendar"/></svg> 申请截止日历</h2>
 <p class="page-subtitle">添加和追踪各校申请截止日期</p>
 <div class="card">
 <div class="form-row">
@@ -504,7 +708,7 @@ body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
 
 <!-- VALIDITY -->
 <div class="page" id="page-validity">
-<h2 class="page-title">&#9201; 有效期计算</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-clock"/></svg> 有效期计算</h2>
 <p class="page-subtitle">计算你的语言成绩是否在有效期内</p>
 <div class="card">
 <div class="form-row">
@@ -518,27 +722,27 @@ body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
 
 <!-- DATA MANAGEMENT -->
 <div class="page" id="page-data">
-<h2 class="page-title">&#128472; 数据管理中心</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-database"/></svg> 数据管理中心</h2>
 <p class="page-subtitle">远程刷新、导入/导出</p>
 <div class="card" style="border-left:4px solid var(--accent)">
-<div class="card-title">&#128225; 远程数据刷新</div>
+<div class="card-title"><svg class="ct-icon"><use href="#i-convert"/></svg> 远程数据刷新</div>
 <p class="small" style="margin-bottom:10px">配置远程JSON地址 (GitHub Gist Raw URL), 点击刷新即可拉取最新数据。</p>
 <div class="form-row">
 <div class="form-group"><label>远程JSON地址</label><input type="text" id="remoteUrl" placeholder="https://gist.githubusercontent.com/..."></div>
-<div class="form-group"><label>&nbsp;</label><button class="btn btn-primary" onclick="fetchRemoteData()" style="width:100%">&#128260; 一键刷新</button></div>
+<div class="form-group"><label>&nbsp;</label><button class="btn btn-primary" onclick="fetchRemoteData()" style="width:100%"><svg class="ct-icon" style="width:14px;height:14px"><use href="#i-convert"/></svg> 一键刷新</button></div>
 </div>
 <div class="small">上次刷新: <span id="lastRemoteSync">从未</span></div>
 </div>
 <div class="card-grid">
-<div class="card" style="text-align:center"><div class="card-title" style="justify-content:center">&#128228; 导出JSON</div><button class="btn btn-primary btn-sm" onclick="exportData()">导出全部数据</button></div>
-<div class="card" style="text-align:center"><div class="card-title" style="justify-content:center">&#128229; 导入JSON</div><input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)"><button class="btn btn-primary btn-sm" onclick="document.getElementById('importFile').click()">选择文件</button></div>
-<div class="card" style="text-align:center"><div class="card-title" style="justify-content:center">&#128260; 重置</div><button class="btn btn-danger btn-sm" onclick="resetData()">恢复默认</button></div>
+<div class="card" style="text-align:center"><div class="card-title" style="justify-content:center"><svg class="ct-icon"><use href="#i-upload"/></svg> 导出JSON</div><button class="btn btn-primary btn-sm" onclick="exportData()">导出全部数据</button></div>
+<div class="card" style="text-align:center"><div class="card-title" style="justify-content:center"><svg class="ct-icon"><use href="#i-download"/></svg> 导入JSON</div><input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)"><button class="btn btn-primary btn-sm" onclick="document.getElementById('importFile').click()">选择文件</button></div>
+<div class="card" style="text-align:center"><div class="card-title" style="justify-content:center"><svg class="ct-icon"><use href="#i-convert"/></svg> 重置</div><button class="btn btn-danger btn-sm" onclick="resetData()">恢复默认</button></div>
 </div>
 </div>
 
 <!-- ══════════ DATA QUALITY ══════════ -->
 <div class="page" id="page-dq">
-<h2 class="page-title">&#128200; 数据质量仪表盘</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-chart"/></svg> 数据质量仪表盘</h2>
 <p class="page-subtitle">监控各地区数据覆盖率, 定位缺失单项分和新版态度未更新的大学</p>
 <div class="stats-row">
 <div class="stat-card"><div class="num" id="dqTotal">0</div><div class="label">大学总数</div></div>
@@ -547,15 +751,15 @@ body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
 <div class="stat-card"><div class="num" id="dqT6">0</div><div class="label">有官方新版1-6</div></div>
 </div>
 <div class="card">
-<div class="card-title">&#128202; 各地区TOEFL单项分覆盖率</div>
+<div class="card-title"><svg class="ct-icon"><use href="#i-chart"/></svg> 各地区TOEFL单项分覆盖率</div>
 <div id="dqRegionBars"></div>
 </div>
 <div class="card">
-<div class="card-title">&#128313; 新版TOEFL态度分布</div>
+<div class="card-title"><svg class="ct-icon"><use href="#i-chart"/></svg> 新版TOEFL态度分布</div>
 <div id="dqNtStates"></div>
 </div>
 <div class="card">
-<div class="card-title">&#9888; 缺失TOEFL单项分的大学</div>
+<div class="card-title"><svg class="ct-icon"><use href="#i-alert"/></svg> 缺失TOEFL单项分的大学</div>
 <p class="small" style="margin-bottom:8px">以下大学的TOEFL语言等级中缺少R/W/S/L单项分数据, 建议优先补全</p>
 <div class="table-wrap"><table><thead><tr><th>地区</th><th>大学</th><th>QS排名</th><th>新版态度</th></tr></thead><tbody id="dqMissingBody"></tbody></table></div>
 </div>
@@ -563,7 +767,7 @@ body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
 
 <!-- ══════════ SCHEDULER: DASHBOARD ══════════ -->
 <div class="page" id="page-sch-dash">
-<h2 class="page-title">&#128203; 排课仪表盘</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-clipboard"/></svg> 排课仪表盘</h2>
 <p class="page-subtitle">集训排课总览 - 老师/课程/时段一目了然</p>
 <div class="stats-row">
 <div class="stat-card"><div class="num" id="schStatTeachers">10</div><div class="label">老师</div></div>
@@ -573,23 +777,23 @@ body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
 </div>
 <div class="card-grid">
 <div class="card">
-<div class="card-title">&#128214; 托福集训概览</div>
+<div class="card-title"><svg class="ct-icon"><use href="#i-book"/></svg> 托福集训概览</div>
 <div id="schToeflOverview" class="small">尚未排课。请先导入综合课表, 再前往"托福集训排课"页面。</div>
 </div>
 <div class="card">
-<div class="card-title">&#128214; 雅思集训概览</div>
+<div class="card-title"><svg class="ct-icon"><use href="#i-book"/></svg> 雅思集训概览</div>
 <div id="schIeltsOverview" class="small">尚未排课。请先导入综合课表, 再前往"雅思集训排课"页面。</div>
 </div>
 </div>
 <div class="card">
-<div class="card-title">&#128100; 老师工作量</div>
+<div class="card-title"><svg class="ct-icon"><use href="#i-teacher"/></svg> 老师工作量</div>
 <div id="schTeacherLoad"></div>
 </div>
 </div>
 
 <!-- ══════════ SCHEDULER: TEACHERS ══════════ -->
 <div class="page" id="page-sch-teachers">
-<h2 class="page-title">&#128104;&#8205;&#127979; 老师管理</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-teacher"/></svg> 老师管理</h2>
 <p class="page-subtitle">添加、编辑老师信息与可教科目</p>
 <div class="card">
 <div class="card-title">添加/编辑老师</div>
@@ -621,20 +825,20 @@ body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
 
 <!-- ══════════ SCHEDULER: IMPORT ══════════ -->
 <div class="page" id="page-sch-import">
-<h2 class="page-title">&#128229; 导入综合课表</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-download"/></svg> 导入综合课表</h2>
 <p class="page-subtitle">上传学校综合课表Excel, 系统自动解析老师已占用时段</p>
 <div class="card" style="border-left:4px solid var(--accent)">
-<div class="card-title">&#128196; 上传Excel文件</div>
+<div class="card-title"><svg class="ct-icon"><use href="#i-upload"/></svg> 上传Excel文件</div>
 <p class="small" style="margin-bottom:10px">支持 .xlsx / .xls 格式。系统自动检测三种常见课表格式:<br>A) 行=时段, 列=星期 &nbsp; B) 行=老师, 列=时段 &nbsp; C) 含"老师/星期/时间"列名</p>
 <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
 <input type="file" id="schExcelFile" accept=".xlsx,.xls" style="flex:1;min-width:200px">
-<button class="btn btn-primary" onclick="handleImportExcel()">&#128202; 解析课表</button>
+<button class="btn btn-primary" onclick="handleImportExcel()"><svg class="ct-icon" style="width:14px;height:14px"><use href="#i-chart"/></svg> 解析课表</button>
 <button class="btn btn-outline" onclick="clearOccupied()">清空已导入</button>
 </div>
 <div id="importResult" style="margin-top:12px"></div>
 </div>
 <div class="card">
-<div class="card-title">&#128200; 排课参数配置</div>
+<div class="card-title"><svg class="ct-icon"><use href="#i-clipboard"/></svg> 排课参数配置</div>
 <div class="form-row">
 <div class="form-group"><label>每天开始时间</label><input type="number" id="cfgStart" value="8" min="6" max="12" onchange="updateSchConfig()"></div>
 <div class="form-group"><label>每天结束时间</label><input type="number" id="cfgEnd" value="21" min="16" max="23" onchange="updateSchConfig()"></div>
@@ -659,7 +863,7 @@ body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
 </div>
 </div>
 <div class="card">
-<div class="card-title">&#128101; 老师已占用时段预览</div>
+<div class="card-title"><svg class="ct-icon"><use href="#i-teacher"/></svg> 老师已占用时段预览</div>
 <p class="small" style="margin-bottom:8px">下方显示从综合课表中解析出的各老师已占用时段 (灰色=被占用)</p>
 <div id="occupiedPreview" class="occupied-grid"></div>
 </div>
@@ -667,15 +871,15 @@ body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
 
 <!-- ══════════ SCHEDULER: TOEFL ══════════ -->
 <div class="page" id="page-sch-toefl">
-<h2 class="page-title">&#127383; 托福集训排课</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-book"/></svg> 托福集训排课</h2>
 <p class="page-subtitle">为每门科目分配老师并输入课次 → 一键生成课表</p>
 <div class="card">
-<div class="card-title">&#9997; 分配老师与课次</div>
+<div class="card-title"><svg class="ct-icon"><use href="#i-pen"/></svg> 分配老师与课次</div>
 <p class="small" style="margin-bottom:10px">为每门科目选择参与的老师, 并为每位老师单独输入每周课次数。不同老师的课次可以不同。</p>
 <div id="toeflAssignUI"></div>
 </div>
 <div style="margin:12px 0;display:flex;gap:8px;flex-wrap:wrap">
-<button class="btn btn-primary" onclick="doAutoToefl()">&#9889; 一键自动排课</button>
+<button class="btn btn-primary" onclick="doAutoToefl()"><svg class="ct-icon" style="width:14px;height:14px"><use href="#i-brain"/></svg> 一键自动排课</button>
 <button class="btn btn-danger" onclick="if(confirm('清空托福排课?')){TOEFL_SCHEDULE=[];saveToeflSchedule();renderToeflSchedule();}">清空排课</button>
 </div>
 <div id="toeflConflicts"></div>
@@ -691,15 +895,15 @@ body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
 
 <!-- ══════════ SCHEDULER: IELTS ══════════ -->
 <div class="page" id="page-sch-ielts">
-<h2 class="page-title">&#127383; 雅思集训排课</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-book"/></svg> 雅思集训排课</h2>
 <p class="page-subtitle">为每门科目分配老师并输入课次 → 一键生成课表</p>
 <div class="card">
-<div class="card-title">&#9997; 分配老师与课次</div>
+<div class="card-title"><svg class="ct-icon"><use href="#i-pen"/></svg> 分配老师与课次</div>
 <p class="small" style="margin-bottom:10px">为每门科目选择参与的老师, 并为每位老师单独输入每周课次数。不同老师的课次可以不同。</p>
 <div id="ieltsAssignUI"></div>
 </div>
 <div style="margin:12px 0;display:flex;gap:8px;flex-wrap:wrap">
-<button class="btn btn-primary" onclick="doAutoIelts()">&#9889; 一键自动排课</button>
+<button class="btn btn-primary" onclick="doAutoIelts()"><svg class="ct-icon" style="width:14px;height:14px"><use href="#i-brain"/></svg> 一键自动排课</button>
 <button class="btn btn-danger" onclick="if(confirm('清空雅思排课?')){IELTS_SCHEDULE=[];saveIeltsSchedule();renderIeltsSchedule();}">清空排课</button>
 </div>
 <div id="ieltsConflicts"></div>
@@ -715,7 +919,7 @@ body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
 
 <!-- ══════════ SCHEDULER: TIMETABLE VIEW ══════════ -->
 <div class="page" id="page-sch-view">
-<h2 class="page-title">&#128197; 课表可视化</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-calendar"/></svg> 课表可视化</h2>
 <p class="page-subtitle">多维度查看: 老师视角 / 科目视角 / 全局总览</p>
 <div class="filter-bar">
 <select id="viewMode" onchange="renderSchView()">
@@ -736,43 +940,43 @@ body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
 </div>
 <div class="card" id="viewLegend"></div>
 <div class="card">
-<div class="card-title">&#128202; 统计</div>
+<div class="card-title"><svg class="ct-icon"><use href="#i-chart"/></svg> 统计</div>
 <div id="viewStats"></div>
 </div>
 </div>
 
 <!-- ══════════ SCHEDULER: EXPORT ══════════ -->
 <div class="page" id="page-sch-export">
-<h2 class="page-title">&#128228; 导出中心</h2>
+<h2 class="page-title"><svg class="ct-icon" style="width:22px;height:22px"><use href="#i-upload"/></svg> 导出中心</h2>
 <p class="page-subtitle">导出课程表为 Excel / PDF / iCal日历文件</p>
 <div class="card-grid">
 <div class="card" style="text-align:center">
-<div class="card-title" style="justify-content:center">&#128197; 托福课表 → iCal</div>
+<div class="card-title" style="justify-content:center"><svg class="ct-icon"><use href="#i-calendar"/></svg> 托福课表 → iCal</div>
 <p class="small">导入系统日历(Windows/Mac/手机)</p>
 <button class="btn btn-primary btn-sm" onclick="downloadICS(TOEFL_SCHEDULE,'toefl-schedule.ics','托福集训')">下载 .ics</button>
 </div>
 <div class="card" style="text-align:center">
-<div class="card-title" style="justify-content:center">&#128197; 雅思课表 → iCal</div>
+<div class="card-title" style="justify-content:center"><svg class="ct-icon"><use href="#i-calendar"/></svg> 雅思课表 → iCal</div>
 <p class="small">导入系统日历(Windows/Mac/手机)</p>
 <button class="btn btn-primary btn-sm" onclick="downloadICS(IELTS_SCHEDULE,'ielts-schedule.ics','雅思集训')">下载 .ics</button>
 </div>
 <div class="card" style="text-align:center">
-<div class="card-title" style="justify-content:center">&#128196; 托福课表 → Excel</div>
+<div class="card-title" style="justify-content:center"><svg class="ct-icon"><use href="#i-grid"/></svg> 托福课表 → Excel</div>
 <p class="small">标准xlsx格式, 方便打印和分发</p>
 <button class="btn btn-primary btn-sm" onclick="exportScheduleExcel(TOEFL_SCHEDULE,'toefl-schedule.xlsx')">下载 .xlsx</button>
 </div>
 <div class="card" style="text-align:center">
-<div class="card-title" style="justify-content:center">&#128196; 雅思课表 → Excel</div>
+<div class="card-title" style="justify-content:center"><svg class="ct-icon"><use href="#i-grid"/></svg> 雅思课表 → Excel</div>
 <p class="small">标准xlsx格式, 方便打印和分发</p>
 <button class="btn btn-primary btn-sm" onclick="exportScheduleExcel(IELTS_SCHEDULE,'ielts-schedule.xlsx')">下载 .xlsx</button>
 </div>
 <div class="card" style="text-align:center">
-<div class="card-title" style="justify-content:center">&#128438; 课表 → PDF</div>
+<div class="card-title" style="justify-content:center"><svg class="ct-icon"><use href="#i-book"/></svg> 课表 → PDF</div>
 <p class="small">打印友好排版</p>
 <button class="btn btn-primary btn-sm" onclick="exportSchPDF()">生成PDF</button>
 </div>
 <div class="card" style="text-align:center">
-<div class="card-title" style="justify-content:center">&#128247; 课表 → 图片</div>
+<div class="card-title" style="justify-content:center"><svg class="ct-icon"><use href="#i-grid"/></svg> 课表 → 图片</div>
 <p class="small">截图PNG, 方便微信/钉钉分享</p>
 <button class="btn btn-primary btn-sm" onclick="exportSchImage()">截图保存</button>
 </div>
@@ -783,11 +987,11 @@ body.dark .conflict-alert{background:#2d1518;color:#f5a0a0}
 
 <!-- ══════════ MOBILE BOTTOM TAB BAR ══════════ -->
 <nav class="mobile-tab-bar" id="mobileTabBar">
-<div class="tab-item active" data-page="dashboard"><span>&#128202;</span><small>首页</small></div>
-<div class="tab-item" data-page="search"><span>&#128270;</span><small>选校</small></div>
-<div class="tab-item" data-page="sch-dash"><span>&#128203;</span><small>排课</small></div>
-<div class="tab-item" data-page="favorites"><span>&#11088;</span><small>收藏</small></div>
-<div class="tab-item" data-page="more" onclick="document.querySelector('.sidebar').classList.toggle('open')"><span>&#9776;</span><small>更多</small></div>
+<div class="tab-item active" data-page="dashboard"><svg class="nav-icon" style="width:22px;height:22px"><use href="#i-dash"/></svg><small>首页</small></div>
+<div class="tab-item" data-page="search"><svg class="nav-icon" style="width:22px;height:22px"><use href="#i-search"/></svg><small>选校</small></div>
+<div class="tab-item" data-page="sch-dash"><svg class="nav-icon" style="width:22px;height:22px"><use href="#i-clipboard"/></svg><small>排课</small></div>
+<div class="tab-item" data-page="favorites"><svg class="nav-icon" style="width:22px;height:22px"><use href="#i-star"/></svg><small>收藏</small></div>
+<div class="tab-item" data-page="more" onclick="document.querySelector('.sidebar').classList.toggle('open')"><svg class="nav-icon" style="width:22px;height:22px"><use href="#i-menu"/></svg><small>更多</small></div>
 </nav>
 
 <div class="pdf-loading" id="pdfLoading"><div class="spinner"></div><p>正在生成PDF...</p></div>
@@ -1005,7 +1209,7 @@ function renderSearchResults(){
     html+='</div></div>';
     html+='</div>';
   });
-  container.innerHTML=html||'<div class="no-results"><div class="icon">&#128270;</div><p>无匹配结果, 请调整筛选条件</p></div>';
+  container.innerHTML=html||'<div class="no-results"><div class="icon"><svg style="width:48px;height:48px;stroke:var(--text-light);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><use href="#i-search"/></svg></div><p>无匹配结果, 请调整筛选条件</p></div>';
   loadMore.style.display=end<total?'block':'none';
 }
 
@@ -1072,13 +1276,13 @@ function runRecommend(){
     else if(item.match.status==='yellow') match.push(item);
     else safe.push(item);
   });
-  var html='<div class="card"><div class="card-title text-danger">&#128640; 冲刺 ('+reach.length+')</div>';
+  var html='<div class="card"><div class="card-title text-danger"><svg class="ct-icon"><use href="#i-alert"/></svg> 冲刺 ('+reach.length+')</div>';
   html+=reach.slice(0,15).map(function(i){return '<div class="small" style="padding:4px 0;border-bottom:1px solid var(--border)">'+i.uni.n+' - '+progName(i.prog)+' | '+examType.toUpperCase()+': '+fmtScore(resolveLang(i.uni,i.prog)[examType].t)+'</div>'}).join('');
   html+='</div>';
-  html+='<div class="card"><div class="card-title text-warning">&#127919; 稳妥 ('+match.length+')</div>';
+  html+='<div class="card"><div class="card-title text-warning"><svg class="ct-icon"><use href="#i-target"/></svg> 稳妥 ('+match.length+')</div>';
   html+=match.slice(0,15).map(function(i){return '<div class="small" style="padding:4px 0;border-bottom:1px solid var(--border)">'+i.uni.n+' - '+progName(i.prog)+' | '+examType.toUpperCase()+': '+fmtScore(resolveLang(i.uni,i.prog)[examType].t)+'</div>'}).join('');
   html+='</div>';
-  html+='<div class="card"><div class="card-title text-success">&#127969; 保底 ('+safe.length+')</div>';
+  html+='<div class="card"><div class="card-title text-success"><svg class="ct-icon"><use href="#i-check"/></svg> 保底 ('+safe.length+')</div>';
   html+=safe.slice(0,15).map(function(i){return '<div class="small" style="padding:4px 0;border-bottom:1px solid var(--border)">'+i.uni.n+' - '+progName(i.prog)+' | '+examType.toUpperCase()+': '+fmtScore(resolveLang(i.uni,i.prog)[examType].t)+'</div>'}).join('');
   html+='</div>';
   document.getElementById('recResults').innerHTML=html;
@@ -1086,7 +1290,7 @@ function runRecommend(){
 
 // ══════════ REGION PAGES ══════════
 function renderRegion(reg){
-  var containerId={usa:'regionUSA',uk:'regionUK',aus:'regionAUS',nz:'regionNZ',sea:'regionSEA'}[reg];
+  var containerId={usa:'regionUSA',uk:'regionUK',aus:'regionAUS',nz:'regionNZ',sea:'regionSEA',hk:'regionHK',mo:'regionMO',ca:'regionCA',ie:'regionIE'}[reg];
   var container=document.getElementById(containerId);
   if(!container)return;
   var unis=COMPASS_DATA[reg]||[];
@@ -1099,7 +1303,7 @@ function renderRegion(reg){
     var uid='ru_'+uni.id;
     html+='<div class="card">';
     html+='<div class="card-title" style="cursor:pointer" onclick="document.getElementById(\''+uid+'\').style.display=document.getElementById(\''+uid+'\').style.display===\'none\'?\'block\':\'none\'">';
-    html+=uni.n+' <span class="small">'+uni.e+' | '+(uni.r?'QS #'+uni.r:'-')+' | '+uni.c+'</span>';
+    html+=uni.n+' <span class="small">'+uni.e+' | '+(uni.r?'QS #'+uni.r:'-')+(uni.the?' / THE #'+uni.the:'')+' | '+uni.c+'</span>';
     html+='<span style="margin-left:auto;font-size:.8rem;color:var(--accent)">'+(uni.p?uni.p.length:0)+' programs &#9660;</span></div>';
     // Lang levels summary
     var llKeys=Object.keys(uni.ll||{});
@@ -1267,7 +1471,10 @@ function fetchRemoteData(){
 function toggleDark(){
   document.body.classList.toggle('dark');
   var on=document.body.classList.contains('dark');
-  document.getElementById('darkToggle').classList.toggle('on',on);
+  var btn=document.getElementById('darkToggle');
+  btn.classList.toggle('on',on);
+  btn.querySelector('use').setAttribute('href',on?'#i-sun':'#i-moon');
+  document.getElementById('themeLabel').textContent=on?'亮色':'暗色';
   localStorage.setItem('compass_dark',on?'1':'0');
 }
 function toggleLang(){showToast('Language toggle: coming in next update');}
@@ -1822,12 +2029,217 @@ function renderDataQuality(){
   document.getElementById('dqMissingBody').innerHTML=tbody||'<tr><td colspan="4" style="text-align:center;color:var(--text-light)">所有大学数据完整!</td></tr>';
 }
 
+// ══════════ PERSONAL PROFILE ══════════
+function saveProfile(){
+  var p={school:document.getElementById('pfSchool').value,gpa:parseFloat(document.getElementById('pfGpa').value)||null,gpaScale:document.getElementById('pfGpaScale').value,degree:document.getElementById('pfDegree').value,exam:document.getElementById('pfExam').value,total:parseFloat(document.getElementById('pfTotal').value)||null,r:parseFloat(document.getElementById('pfR').value)||null,w:parseFloat(document.getElementById('pfW').value)||null,s:parseFloat(document.getElementById('pfS').value)||null,l:parseFloat(document.getElementById('pfL').value)||null};
+  var sel=document.getElementById('pfRegion');
+  p.regions=Array.from(sel.selectedOptions).map(function(o){return o.value;});
+  p.major=document.getElementById('pfMajor').value;
+  localStorage.setItem('prism_profile',JSON.stringify(p));
+  showToast('档案已保存');
+}
+function loadProfile(){
+  var s=localStorage.getItem('prism_profile');if(!s)return null;
+  try{return JSON.parse(s);}catch(e){return null;}
+}
+function restoreProfileUI(){
+  var p=loadProfile();if(!p)return;
+  if(p.school) document.getElementById('pfSchool').value=p.school;
+  if(p.gpa) document.getElementById('pfGpa').value=p.gpa;
+  if(p.gpaScale) document.getElementById('pfGpaScale').value=p.gpaScale;
+  if(p.degree) document.getElementById('pfDegree').value=p.degree;
+  if(p.exam) document.getElementById('pfExam').value=p.exam;
+  if(p.total) document.getElementById('pfTotal').value=p.total;
+  if(p.r) document.getElementById('pfR').value=p.r;
+  if(p.w) document.getElementById('pfW').value=p.w;
+  if(p.s) document.getElementById('pfS').value=p.s;
+  if(p.l) document.getElementById('pfL').value=p.l;
+  if(p.major) document.getElementById('pfMajor').value=p.major;
+  if(p.regions){var sel=document.getElementById('pfRegion');Array.from(sel.options).forEach(function(o){o.selected=p.regions.indexOf(o.value)>-1;});}
+}
+function fillMatcherFromProfile(){
+  var p=loadProfile();if(!p||!p.total){showToast('请先保存档案');return;}
+  document.getElementById('mExam').value=p.exam||'ielts';
+  document.getElementById('mTotal').value=p.total||'';
+  document.getElementById('mR').value=p.r||'';
+  document.getElementById('mW').value=p.w||'';
+  document.getElementById('mS').value=p.s||'';
+  document.getElementById('mL').value=p.l||'';
+  showPage('matcher');runMatcher();showToast('已从档案填入');
+}
+function clearProfile(){localStorage.removeItem('prism_profile');['pfSchool','pfGpa','pfTotal','pfR','pfW','pfS','pfL'].forEach(function(id){document.getElementById(id).value='';});showToast('档案已清除');}
+
+// ══════════ COST ESTIMATOR ══════════
+var COST_EXTRA={visa:{usa:1200,uk:500,aus:700,nz:400,sea:300,hk:200,mo:100,ca:300,ie:200},flight:{usa:8000,uk:6000,aus:5000,nz:6000,sea:3000,hk:1500,mo:1500,ca:8000,ie:6000}};
+var DEFAULT_RATES={USD:7.2,GBP:9.2,AUD:4.7,NZD:4.3,SGD:5.4,MYR:1.6,THB:0.2,HKD:0.92,MOP:0.9,CAD:5.2,EUR:7.8,CNY:1,PHP:0.13,IDR:0.00045,VND:0.0003};
+function updateCostUniList(){
+  var reg=document.getElementById('costRegion').value;
+  var sel=document.getElementById('costUni');sel.innerHTML='<option value="">请选择</option>';
+  if(!reg)return;
+  (COMPASS_DATA[reg]||[]).forEach(function(u){var o=document.createElement('option');o.value=u.id;o.textContent=u.n;sel.appendChild(o);});
+}
+function calcCost(){
+  var reg=document.getElementById('costRegion').value;
+  var uid=document.getElementById('costUni').value;
+  var deg=document.getElementById('costDegree').value;
+  if(!reg||!uid){document.getElementById('costResult').style.display='none';return;}
+  var uni=null;(COMPASS_DATA[reg]||[]).some(function(u){if(u.id===uid){uni=u;return true;}});
+  if(!uni){return;}
+  var rate=parseFloat(document.getElementById('costRate').value)||1;
+  var fee=uni.fee||{};
+  var tuitionStr=deg==='ug'?(fee.ug||'N/A'):(fee.pg||'N/A');
+  var livingStr=uni.living||'N/A';
+  var currency=fee.currency||'CNY';
+  var cRate=DEFAULT_RATES[currency]||1;
+  var actualRate=rate>1?rate:cRate;
+  // Parse rough number from string
+  function parseRange(s){if(!s||s==='N/A')return 0;var nums=s.match(/[\d,]+/g);if(!nums)return 0;var arr=nums.map(function(n){return parseInt(n.replace(/,/g,''));});return arr.length>1?(arr[0]+arr[arr.length-1])/2:arr[0];}
+  var tuitionLocal=parseRange(tuitionStr);
+  var livingLocal=parseRange(livingStr);
+  var tuitionCNY=Math.round(tuitionLocal*actualRate/10000*10)/10;
+  var livingCNY=Math.round(livingLocal*actualRate/10000*10)/10;
+  var extraCNY=Math.round(((COST_EXTRA.visa[reg]||500)+(COST_EXTRA.flight[reg]||5000))*7.2/10000*10)/10;
+  document.getElementById('costTuition').textContent=tuitionStr;
+  document.getElementById('costLiving').textContent=livingStr;
+  document.getElementById('costVisa').innerHTML='~&yen;'+(extraCNY*10000).toLocaleString();
+  document.getElementById('costTotalCNY').textContent='~'+(tuitionCNY+livingCNY+extraCNY).toFixed(1)+'万';
+  document.getElementById('costResult').style.display='flex';
+  // Build comparison bars
+  var regions=Object.keys(COMPASS_DATA);
+  var regCosts=[];
+  regions.forEach(function(r){
+    var unis=COMPASS_DATA[r];if(!unis||!unis.length)return;
+    var totals=[];
+    unis.forEach(function(u){if(!u.fee)return;var f=parseRange(u.fee.pg||'');var l=parseRange(u.living||'');var c=u.fee.currency||'CNY';var cr=DEFAULT_RATES[c]||1;totals.push((f+l)*cr);});
+    if(totals.length){var avg=totals.reduce(function(a,b){return a+b;},0)/totals.length;regCosts.push({reg:r,avg:Math.round(avg/10000)});}
+  });
+  regCosts.sort(function(a,b){return b.avg-a.avg;});
+  var maxCost=regCosts.length?regCosts[0].avg:1;
+  var barsHtml='';
+  regCosts.forEach(function(rc){
+    var meta=REGION_META[rc.reg]||{n:rc.reg};
+    var pct=Math.round(rc.avg/maxCost*100);
+    barsHtml+='<div style="margin-bottom:6px"><div style="display:flex;justify-content:space-between;font-size:.82rem"><span>'+meta.flag+' '+meta.n+'</span><span style="font-weight:600">~'+rc.avg+'万CNY/年</span></div>';
+    barsHtml+='<div class="dq-bar"><div class="dq-bar-fill" style="width:'+pct+'%;background:'+(rc.reg===reg?'var(--accent)':'var(--text-light)')+'"></div></div></div>';
+  });
+  document.getElementById('costBars').innerHTML=barsHtml;
+  document.getElementById('costCompare').style.display='block';
+}
+
+// ══════════ VISA POLICY CENTER ══════════
+var VISA_DATA={
+  usa:{type:"F-1 Student Visa",psw:"OPT 1年 (STEM专业3年)",cost:"$185 SEVIS + $160 签证费",materials:"I-20, DS-160, 财力证明, 护照, 成绩单",note:"H-1B工作签证需抽签; STEM OPT最长36个月"},
+  uk:{type:"Student Visa (Tier 4)",psw:"Graduate Route (PSW) 2年 (博士3年)",cost:"£490 + IHS £1,035/年",materials:"CAS, 财力证明, 护照, TB检测(部分国家)",note:"IHS医疗附加费必须预付; BRP卡到达后领取"},
+  aus:{type:"Student Visa (Subclass 500)",psw:"485 Temporary Graduate 2-4年",cost:"AUD 710",materials:"CoE, GTE声明, OSHC保险, 财力证明, 护照",note:"必须购买OSHC海外学生医疗保险; 可合法工作48h/两周"},
+  nz:{type:"Student Visa",psw:"Post-Study Work Visa 1-3年",cost:"NZD 375",materials:"Offer, 财力证明, 护照, 体检",note:"学习期间可工作20h/周; 配偶可申请开放工签"},
+  sea:{type:"各国不同",psw:"因国家而异",cost:"SGD 90 (新加坡) / MYR 500 (马来)",materials:"因国家而异",note:"新加坡: Student Pass, 毕业后需找到工作转EP/SP; 马来西亚: Student Pass + eVAL"},
+  hk:{type:"学生签证 (Student Visa)",psw:"IANG 非本地毕业生留港 2年",cost:"HKD 230",materials:"入学通知, ID995A表, 财力证明, 护照",note:"IANG签证可自由工作; 满7年可申请永居"},
+  mo:{type:"逗留特别许可 (Student)",psw:"无毕业工签",cost:"MOP 200",materials:"入学通知, 财力证明, 护照",note:"毕业后需获雇主担保方可留澳工作"},
+  ca:{type:"Study Permit",psw:"PGWP 1-3年 (按项目时长)",cost:"CAD 150",materials:"入学通知, GIC $20,635, 护照, 体检",note:"2年项目=3年PGWP; 工作1年可申请PR; 配偶可申请开放工签"},
+  ie:{type:"Stamp 2 Student Visa",psw:"Stay Back: L8学位1年, L9/L10学位2年",cost:"EUR 300 IRP注册",materials:"入学通知, 财力EUR 10,000, 护照, 保险",note:"学习期间可工作20h/周(假期40h); 需注册IRP卡"}
+};
+function renderVisaCards(){
+  var html='';
+  Object.keys(VISA_DATA).forEach(function(reg){
+    var v=VISA_DATA[reg];var meta=REGION_META[reg]||{n:reg,flag:''};
+    html+='<div class="card"><div class="card-title">'+meta.flag+' '+meta.n+'</div>';
+    html+='<table class="score-table"><tbody>';
+    html+='<tr><td style="width:100px"><b>签证类型</b></td><td>'+v.type+'</td></tr>';
+    html+='<tr><td><b>毕业工签</b></td><td style="color:var(--success);font-weight:600">'+v.psw+'</td></tr>';
+    html+='<tr><td><b>签证费用</b></td><td>'+v.cost+'</td></tr>';
+    html+='<tr><td><b>申请材料</b></td><td>'+v.materials+'</td></tr>';
+    html+='<tr><td><b>重要提醒</b></td><td style="color:var(--warning)">'+v.note+'</td></tr>';
+    html+='</tbody></table></div>';
+  });
+  document.getElementById('visaCards').innerHTML=html;
+}
+
+// ══════════ SCHOLARSHIP ══════════
+var SCHOLARSHIP_DATA=[
+  {region:"uk",name:"Chevening Scholarship",type:"full",amount:"全额(学费+生活费+机票)",eligibility:"2年工作经验, 回国服务2年",ddl:"Nov",note:"英国政府旗舰奖学金"},
+  {region:"uk",name:"Commonwealth Scholarship",type:"full",amount:"全额",eligibility:"发展中国家公民",ddl:"Dec",note:"英联邦奖学金"},
+  {region:"uk",name:"Great Scholarships",type:"partial",amount:"GBP 10,000",eligibility:"特定国家学生",ddl:"Varies",note:"British Council联合各校"},
+  {region:"usa",name:"Fulbright Program",type:"full",amount:"全额",eligibility:"需回国服务2年",ddl:"Oct",note:"美国政府旗舰学术交流项目"},
+  {region:"usa",name:"Hubert H. Humphrey Fellowship",type:"full",amount:"全额(非学位,10个月)",eligibility:"中期职业专业人士",ddl:"Sep",note:"领导力发展项目"},
+  {region:"aus",name:"Australia Awards",type:"full",amount:"全额(学费+生活费+机票)",eligibility:"发展中国家公民",ddl:"Apr",note:"澳洲政府奖学金"},
+  {region:"aus",name:"Endeavour Scholarships",type:"full",amount:"全额",eligibility:"任何国籍",ddl:"Jun",note:"澳洲政府研究类奖学金"},
+  {region:"nz",name:"New Zealand Scholarships",type:"full",amount:"全额",eligibility:"发展中国家",ddl:"Mar",note:"新西兰政府发展援助奖学金"},
+  {region:"ca",name:"Vanier Canada Graduate Scholarships",type:"full",amount:"CAD 50,000/年 x 3年",eligibility:"博士生",ddl:"Nov",note:"加拿大顶级博士奖学金"},
+  {region:"ca",name:"Banting Postdoctoral Fellowships",type:"full",amount:"CAD 70,000/年 x 2年",eligibility:"博士后",ddl:"Sep",note:"加拿大顶级博后奖学金"},
+  {region:"hk",name:"Hong Kong PhD Fellowship",type:"full",amount:"HKD 331,200/年 + 旅费",eligibility:"PhD申请者",ddl:"Dec",note:"香港研究资助局(RGC)"},
+  {region:"ie",name:"Government of Ireland Postgraduate Scholarship",type:"full",amount:"EUR 16,000/年 + 学费",eligibility:"任何国籍硕博生",ddl:"Oct",note:"爱尔兰研究委员会"},
+  {region:"sea",name:"ASEAN Scholarships (Singapore)",type:"tuition",amount:"学费全免",eligibility:"东盟国家学生",ddl:"Varies",note:"新加坡政府提供"},
+  {region:"mo",name:"UM Macao PhD Scholarship",type:"partial",amount:"MOP 12,500/月",eligibility:"PhD申请者",ddl:"Jan",note:"澳门大学博士奖学金"}
+];
+function renderScholarships(){
+  var reg=document.getElementById('scholRegion').value;
+  var type=document.getElementById('scholType').value;
+  var list=SCHOLARSHIP_DATA.filter(function(s){
+    if(reg!=='all'&&s.region!==reg) return false;
+    if(type!=='all'&&s.type!==type) return false;
+    return true;
+  });
+  var html='';
+  list.forEach(function(s){
+    var meta=REGION_META[s.region]||{n:s.region,flag:''};
+    var typeBadge=s.type==='full'?'<span class="badge badge-green">全额</span>':s.type==='partial'?'<span class="badge badge-yellow">部分</span>':'<span class="badge badge-na">学费减免</span>';
+    html+='<div class="card" style="margin-bottom:10px"><div class="card-title">'+meta.flag+' '+s.name+' '+typeBadge+'</div>';
+    html+='<div style="display:grid;grid-template-columns:80px 1fr;gap:4px 12px;font-size:.85rem">';
+    html+='<b>金额</b><span>'+s.amount+'</span>';
+    html+='<b>申请条件</b><span>'+s.eligibility+'</span>';
+    html+='<b>截止月份</b><span>'+s.ddl+'</span>';
+    html+='<b>备注</b><span>'+s.note+'</span>';
+    html+='</div></div>';
+  });
+  document.getElementById('scholList').innerHTML=html||'<div class="no-results">无匹配奖学金</div>';
+}
+function initScholFilter(){
+  var sel=document.getElementById('scholRegion');
+  Object.keys(REGION_META).forEach(function(r){
+    var o=document.createElement('option');o.value=r;o.textContent=REGION_META[r].flag+' '+REGION_META[r].n;sel.appendChild(o);
+  });
+}
+
+// ══════════ COST PAGE INIT ══════════
+function initCostPage(){
+  var sel=document.getElementById('costRegion');
+  sel.innerHTML='<option value="">请选择</option>';
+  Object.keys(COMPASS_DATA).forEach(function(r){
+    if(!COMPASS_DATA[r].length) return;
+    var meta=REGION_META[r]||{n:r};
+    var o=document.createElement('option');o.value=r;o.textContent=meta.flag+' '+meta.n;sel.appendChild(o);
+  });
+}
+
+// ══════════ PDF EXPORT FOR FAVORITES ══════════
+function exportFavPDF(){
+  var el=document.getElementById('favGrid');
+  if(!el||!el.innerHTML||!favorites.length){showToast('请先添加收藏');return;}
+  if(typeof html2pdf==='undefined'){showToast('正在加载PDF库...');var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=function(){doFavExport();};document.head.appendChild(s);return;}
+  doFavExport();
+}
+function doFavExport(){
+  var logo=localStorage.getItem('prism_logo')||'';
+  var header='<div style="text-align:center;margin-bottom:20px">';
+  if(logo) header+='<img src="'+logo+'" style="max-height:60px;margin-bottom:8px"><br>';
+  header+='<h2>选校方案 - 棱镜 Prism</h2><p style="color:#888">生成日期: '+new Date().toLocaleDateString()+'</p></div>';
+  var clone=document.getElementById('favGrid').cloneNode(true);
+  var wrap=document.createElement('div');
+  wrap.innerHTML=header;
+  wrap.appendChild(clone);
+  html2pdf().set({margin:10,filename:'prism-school-plan.pdf',image:{type:'jpeg',quality:0.95},html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(wrap).save().then(function(){showToast('PDF选校方案已下载');});
+}
+
 function triggerPageRender(pg){
   if(pg==='search') runSearch();
   if(pg==='matcher') runMatcher();
   if(pg==='favorites') renderFavorites();
   if(pg==='calendar') renderCalendar();
   if(pg==='dq') renderDataQuality();
+  if(pg==='profile') restoreProfileUI();
+  if(pg==='cost') initCostPage();
+  if(pg==='visa') renderVisaCards();
+  if(pg==='scholarship'){initScholFilter();renderScholarships();}
   if(pg==='sch-dash') updateSchDashboard();
   if(pg==='sch-teachers'){renderTeacherSkillChecks();renderTeacherTable();}
   if(pg==='sch-import'){restoreSchConfigUI();renderOccupiedPreview();}

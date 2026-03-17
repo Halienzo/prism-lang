@@ -60,7 +60,7 @@ var PC = {
 };
 
 // ══════════ Global data container ══════════
-var COMPASS_DATA = {usa:[], uk:[], aus:[], nz:[], sea:[]};
+var COMPASS_DATA = {usa:[], uk:[], aus:[], nz:[], sea:[], hk:[], mo:[], ca:[], ie:[]};
 
 // ══════════ Region metadata ══════════
 var REGION_META = {
@@ -68,7 +68,11 @@ var REGION_META = {
   uk:{n:"英国",e:"United Kingdom",flag:"\u{1F1EC}\u{1F1E7}"},
   aus:{n:"澳大利亚",e:"Australia",flag:"\u{1F1E6}\u{1F1FA}"},
   nz:{n:"新西兰",e:"New Zealand",flag:"\u{1F1F3}\u{1F1FF}"},
-  sea:{n:"东南亚",e:"Southeast Asia",flag:"\u{1F30F}"}
+  sea:{n:"东南亚",e:"Southeast Asia",flag:"\u{1F30F}"},
+  hk:{n:"中国香港",e:"Hong Kong",flag:"\u{1F1ED}\u{1F1F0}"},
+  mo:{n:"中国澳门",e:"Macau",flag:"\u{1F1F2}\u{1F1F4}"},
+  ca:{n:"加拿大",e:"Canada",flag:"\u{1F1E8}\u{1F1E6}"},
+  ie:{n:"爱尔兰",e:"Ireland",flag:"\u{1F1EE}\u{1F1EA}"}
 };
 
 // ══════════ New TOEFL policy states ══════════
