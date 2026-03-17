@@ -230,6 +230,8 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .tt-block .tt-course{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tt-block .tt-teacher{opacity:.85;font-size:.6rem}
 .tt-occ{background:var(--border);opacity:.4}
+.tt-occ-ielts{background:#5a7cf7;opacity:.35}
+.tt-occ-toefl{background:#e67e22;opacity:.35}
 .occupied-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
 .occ-teacher{padding:10px;border-radius:8px;border:1px solid var(--border)}
 .occ-teacher h4{font-size:.85rem;margin-bottom:6px;display:flex;align-items:center;gap:6px}
@@ -237,7 +239,18 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .occ-bar{display:flex;gap:1px;margin:2px 0 6px}
 .occ-slot{width:8px;height:14px;border-radius:2px;background:var(--success)}
 .occ-slot.busy{background:var(--text-light)}
+.occ-slot.occ-ielts{background:#5a7cf7}
+.occ-slot.occ-toefl{background:#e67e22}
 .occ-slot.intensive{background:var(--accent)}
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:9999;display:none;justify-content:center;align-items:center;padding:20px}
+.modal-overlay.active{display:flex}
+.modal-content{background:var(--card);border-radius:12px;padding:0;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border)}
+.modal-header h3{margin:0;font-size:1.1rem}
+.modal-close{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--text);padding:0 4px}
+.modal-body{padding:16px 20px;max-height:60vh;overflow:auto}
+.modal-footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+.stat-chip{background:var(--accent-light);padding:4px 10px;border-radius:6px;font-size:.82rem}
 .teacher-load-bar{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:.78rem}
 .teacher-load-bar .bar{flex:1;height:12px;background:var(--bg);border-radius:6px;overflow:hidden}
 .teacher-load-bar .bar-fill{height:100%;border-radius:6px;transition:width .3s}
@@ -806,6 +819,7 @@ body.dark .mobile-tab-bar{background:var(--card);border-top-color:var(--border)}
 <div class="card-title">添加/编辑老师</div>
 <div class="form-row">
 <div class="form-group"><label>姓名</label><input type="text" id="tName" placeholder="如: 张老师"></div>
+<div class="form-group"><label>别名 (逗号分隔)</label><input type="text" id="tAliases" placeholder="如: Antonio,安东尼"></div>
 <div class="form-group"><label>每日最大课时</label><input type="number" id="tMaxDaily" value="4" min="1" max="8"></div>
 <div class="form-group"><label>标识色</label><input type="color" id="tColor" value="#4f6ef7"></div>
 </div>
@@ -847,10 +861,10 @@ body.dark .mobile-tab-bar{background:var(--card);border-top-color:var(--border)}
 <div class="card">
 <div class="card-title"><svg class="ct-icon"><use href="#i-clipboard"/></svg> 排课参数配置</div>
 <div class="form-row">
-<div class="form-group"><label>每天开始时间</label><input type="number" id="cfgStart" value="8" min="6" max="12" onchange="updateSchConfig()"></div>
-<div class="form-group"><label>每天结束时间</label><input type="number" id="cfgEnd" value="21" min="16" max="23" onchange="updateSchConfig()"></div>
-<div class="form-group"><label>课间休息(分钟)</label><input type="number" id="cfgBreak" value="15" min="0" max="30" onchange="updateSchConfig()"></div>
-<div class="form-group"><label>时间粒度(分钟)</label><select id="cfgSlot" onchange="updateSchConfig()"><option value="30">30分钟</option><option value="60">60分钟</option></select></div>
+<div class="form-group"><label>每天开始时间</label><select id="cfgStart" onchange="updateSchConfig()"></select></div>
+<div class="form-group"><label>每天结束时间</label><select id="cfgEnd" onchange="updateSchConfig()"></select></div>
+<div class="form-group"><label>课间休息(分钟)</label><input type="number" id="cfgBreak" value="10" min="0" max="30" onchange="updateSchConfig()"></div>
+<div class="form-group"><label>时间粒度(分钟)</label><select id="cfgSlot" onchange="updateSchConfig()"><option value="30">30分钟</option><option value="40">40分钟</option><option value="60">60分钟</option><option value="90">90分钟</option><option value="120">120分钟</option></select></div>
 </div>
 <div class="form-row">
 <div class="form-group"><label>学期开始</label><input type="date" id="cfgTermStart" onchange="updateSchConfig()"></div>
@@ -1003,6 +1017,11 @@ body.dark .mobile-tab-bar{background:var(--card);border-top-color:var(--border)}
 
 <div class="pdf-loading" id="pdfLoading"><div class="spinner"></div><p>正在生成PDF...</p></div>
 <div class="toast" id="toast"></div>
+
+<!-- Schedule Preview Modal -->
+<div class="modal-overlay" id="schedulePreviewModal">
+<div class="modal-content" style="max-width:900px;max-height:90vh;overflow:auto"></div>
+</div>
 
 <script>
 // ══════════ GLOBALS ══════════
@@ -1524,8 +1543,9 @@ function renderTeacherTable(){
   tbody.innerHTML=TEACHERS.map(function(t){
     var skills=t.skills.map(function(s){return getCourseObj(s).name;}).join(', ');
     var dup=colorCount[t.color.toLowerCase()]>1;
+    var aliasStr=(t.aliases&&t.aliases.length)?'<br><span style="font-size:.7rem;color:var(--text-light)">别名: '+t.aliases.join(', ')+'</span>':'';
     return '<tr'+(dup?' style="background:#fdecea"':'')+'><td><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:'+t.color+';border:'+(dup?'2px solid var(--danger)':'none')+'"></span>'+(dup?' <span style="color:var(--danger);font-size:.65rem">重复</span>':'')+'</td>'
-      +'<td>'+t.name+'</td><td class="small">'+skills+'</td><td>'+t.maxDaily+'h</td>'
+      +'<td>'+t.name+aliasStr+'</td><td class="small">'+skills+'</td><td>'+t.maxDaily+'h</td>'
       +'<td><button class="btn btn-outline btn-sm" onclick="editTeacher(\''+t.id+'\')">编辑</button> '
       +'<button class="btn btn-sm" style="color:var(--danger)" onclick="deleteTeacher(\''+t.id+'\')">删除</button></td></tr>';
   }).join('');
@@ -1533,13 +1553,13 @@ function renderTeacherTable(){
 function saveTeacherForm(){
   var name=document.getElementById('tName').value.trim();
   if(!name){showToast('请输入姓名');return;}
+  var aliasStr=document.getElementById('tAliases').value.trim();
+  var aliases=aliasStr?aliasStr.split(/[,，]/).map(function(s){return s.trim();}).filter(Boolean):[];
   var maxD=parseInt(document.getElementById('tMaxDaily').value)||4;
   var color=document.getElementById('tColor').value;
   var editId=document.getElementById('tEditId').value;
-  // 颜色重复检测
   if(isColorUsed(color,editId||'__new__')){
     showToast('该颜色已被其他老师使用, 请选择不同颜色');
-    // 自动建议下一个可用颜色
     var suggest=nextAvailableColor(editId||'__new__');
     document.getElementById('tColor').value=suggest;
     return;
@@ -1547,10 +1567,10 @@ function saveTeacherForm(){
   var skills=[];
   document.querySelectorAll('#tSkills input:checked').forEach(function(cb){skills.push(cb.value);});
   if(editId){
-    updateTeacher(editId,{name:name,maxDaily:maxD,color:color,skills:skills});
+    updateTeacher(editId,{name:name,aliases:aliases,maxDaily:maxD,color:color,skills:skills});
     showToast('已更新');
   }else{
-    addTeacher({id:nextTeacherId(),name:name,skills:skills,maxDaily:maxD,color:color});
+    addTeacher({id:nextTeacherId(),name:name,aliases:aliases,skills:skills,maxDaily:maxD,color:color});
     showToast('已添加');
   }
   clearTeacherForm();
@@ -1558,6 +1578,7 @@ function saveTeacherForm(){
 }
 function clearTeacherForm(){
   document.getElementById('tName').value='';
+  document.getElementById('tAliases').value='';
   document.getElementById('tMaxDaily').value='4';
   document.getElementById('tColor').value=nextAvailableColor('__new__');
   document.getElementById('tEditId').value='';
@@ -1567,6 +1588,7 @@ function editTeacher(id){
   var t=TEACHERS.find(function(t){return t.id===id;});
   if(!t) return;
   document.getElementById('tName').value=t.name;
+  document.getElementById('tAliases').value=(t.aliases||[]).join(', ');
   document.getElementById('tMaxDaily').value=t.maxDaily;
   document.getElementById('tColor').value=t.color;
   document.getElementById('tEditId').value=t.id;
@@ -1619,11 +1641,27 @@ function renderOccupiedPreview(){
   TEACHERS.forEach(function(t){
     html+='<div class="occ-teacher"><h4><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+t.color+'"></span> '+t.name+'</h4>';
     SCH_CONFIG.workdays.forEach(function(day){
-      var occ=(OCCUPIED[t.id]&&OCCUPIED[t.id][day])||[];
-      html+='<div class="occ-day">'+SCH_CONFIG.dayLabels[day]+' (占用'+occ.length+'/'+total+'时段)</div>';
+      var occArr=(OCCUPIED[t.id]&&OCCUPIED[t.id][day])||[];
+      // Count occupied slots
+      var occSlots={};
+      occArr.forEach(function(o){
+        if(typeof o==='object') occSlots[o.slot]={group:o.group,subject:o.subject};
+        else occSlots[o]={group:'other',subject:''};
+      });
+      var occCount=Object.keys(occSlots).length;
+      html+='<div class="occ-day">'+SCH_CONFIG.dayLabels[day]+' (占用'+occCount+'/'+total+'时段)</div>';
       html+='<div class="occ-bar">';
       for(var s=0;s<total;s++){
-        html+='<div class="occ-slot'+(occ.indexOf(s)>-1?' busy':'')+'" title="'+slotToTime(s)+'"></div>';
+        var info=occSlots[s];
+        var cls='occ-slot';
+        var tip=slotToTime(s);
+        if(info){
+          cls+=' busy';
+          if(info.group==='ielts') cls+=' occ-ielts';
+          else if(info.group==='toefl') cls+=' occ-toefl';
+          tip+=' | '+info.group+(info.subject?' ('+info.subject+')':'');
+        }
+        html+='<div class="'+cls+'" title="'+tip+'"></div>';
       }
       html+='</div>';
     });
@@ -1634,9 +1672,9 @@ function renderOccupiedPreview(){
 
 // --- Schedule Config ---
 function updateSchConfig(){
-  SCH_CONFIG.startHour=parseInt(document.getElementById('cfgStart').value)||8;
-  SCH_CONFIG.endHour=parseInt(document.getElementById('cfgEnd').value)||21;
-  SCH_CONFIG.breakMin=parseInt(document.getElementById('cfgBreak').value)||15;
+  SCH_CONFIG.startMin=parseInt(document.getElementById('cfgStart').value)||530;
+  SCH_CONFIG.endMin=parseInt(document.getElementById('cfgEnd').value)||1260;
+  SCH_CONFIG.breakMin=parseInt(document.getElementById('cfgBreak').value)||10;
   SCH_CONFIG.slotMin=parseInt(document.getElementById('cfgSlot').value)||30;
   var sd=document.getElementById('cfgTermStart').value;
   var ed=document.getElementById('cfgTermEnd').value;
@@ -1647,9 +1685,20 @@ function updateSchConfig(){
   if(days.length) SCH_CONFIG.workdays=days;
   saveSchConfig();
 }
+function populateTimeSelects(){
+  var opts=generateTimeOptions(6,23);
+  var startSel=document.getElementById('cfgStart');
+  var endSel=document.getElementById('cfgEnd');
+  startSel.innerHTML='';endSel.innerHTML='';
+  opts.forEach(function(o){
+    startSel.innerHTML+='<option value="'+o.value+'">'+o.label+'</option>';
+    endSel.innerHTML+='<option value="'+o.value+'">'+o.label+'</option>';
+  });
+}
 function restoreSchConfigUI(){
-  document.getElementById('cfgStart').value=SCH_CONFIG.startHour;
-  document.getElementById('cfgEnd').value=SCH_CONFIG.endHour;
+  populateTimeSelects();
+  document.getElementById('cfgStart').value=SCH_CONFIG.startMin;
+  document.getElementById('cfgEnd').value=SCH_CONFIG.endMin;
   document.getElementById('cfgBreak').value=SCH_CONFIG.breakMin;
   document.getElementById('cfgSlot').value=SCH_CONFIG.slotMin;
   document.getElementById('cfgTermStart').value=SCH_CONFIG.termStart;
@@ -1702,15 +1751,18 @@ function renderTimetableGrid(containerId,scheduleArr,showOccupied){
   if(showOccupied){
     TEACHERS.forEach(function(t){
       days.forEach(function(d,dayIdx){
-        var occ=(OCCUPIED[t.id]&&OCCUPIED[t.id][d])||[];
-        occ.forEach(function(s){
-          var row=table.rows[s+1];
+        var occArr=(OCCUPIED[t.id]&&OCCUPIED[t.id][d])||[];
+        occArr.forEach(function(o){
+          var slotIdx=(typeof o==='object')?o.slot:o;
+          var row=table.rows[slotIdx+1];
           if(!row) return;
           var cell=row.cells[dayIdx+1];
           if(!cell) return;
           var blk=document.createElement('div');
-          blk.className='tt-block tt-occ';
-          blk.style.height='26px';blk.title=t.name+' 综合课';
+          var grp=(typeof o==='object')?o.group:'';
+          blk.className='tt-block tt-occ'+(grp==='ielts'?' tt-occ-ielts':'')+(grp==='toefl'?' tt-occ-toefl':'');
+          blk.style.height='26px';
+          blk.title=t.name+' 综合课'+((typeof o==='object'&&o.subject)?' ('+o.subject+')':'');
           cell.appendChild(blk);
         });
       });
@@ -1782,34 +1834,33 @@ function syncAssignment(courseId){
 // --- TOEFL Scheduling ---
 function doAutoToefl(){
   if(!TEACHERS.length){showToast('请先添加老师');return;}
-  // Sync assignments from UI
   INTENSIVE_COURSES.toefl.forEach(function(c){syncAssignment(c.id);});
   var totalAssigned=0;
   INTENSIVE_COURSES.toefl.forEach(function(c){
     (TEACHER_ASSIGNMENTS[c.id]||[]).forEach(function(a){totalAssigned+=a.sessions;});
   });
   if(!totalAssigned){showToast('请先为老师分配课次');return;}
-  TOEFL_SCHEDULE=[];
   var result=autoSchedule('toefl');
   var errors=result.filter(function(e){return e.error;});
-  TOEFL_SCHEDULE=result.filter(function(e){return !e.error;});
+  var scheduled=result.filter(function(e){return !e.error;});
+  // Show preview modal
+  showSchedulePreview(scheduled,errors,'toefl');
+}
+function confirmToeflSchedule(scheduled){
+  TOEFL_SCHEDULE=scheduled;
   saveToeflSchedule();
   renderToeflSchedule();
-  if(errors.length){
-    showToast('排课完成, 有'+errors.length+'个警告');
-    document.getElementById('toeflConflicts').innerHTML=errors.map(function(e){return '<div class="conflict-alert">'+e.error+'</div>';}).join('');
-  }else{
-    showToast('托福排课完成!');
-    document.getElementById('toeflConflicts').innerHTML='';
-  }
+  showToast('托福排课已确认!');
 }
 function renderToeflSchedule(){
   renderAssignUI('toeflAssignUI','toefl');
   renderTimetableGrid('toeflTimetable',TOEFL_SCHEDULE,true);
   renderScheduleList('toeflListBody',TOEFL_SCHEDULE,'toefl');
-  var conflicts=detectConflicts(TOEFL_SCHEDULE);
+  var conflicts=detectConflicts(TOEFL_SCHEDULE,'toefl');
   if(conflicts.length){
     document.getElementById('toeflConflicts').innerHTML=conflicts.map(function(c){return '<div class="conflict-alert">&#9888; '+c.msg+'</div>';}).join('');
+  }else{
+    document.getElementById('toeflConflicts').innerHTML='';
   }
 }
 function renderScheduleList(tbodyId,scheduleArr,type){
@@ -1847,28 +1898,103 @@ function doAutoIelts(){
     (TEACHER_ASSIGNMENTS[c.id]||[]).forEach(function(a){totalAssigned+=a.sessions;});
   });
   if(!totalAssigned){showToast('请先为老师分配课次');return;}
-  IELTS_SCHEDULE=[];
   var result=autoSchedule('ielts');
   var errors=result.filter(function(e){return e.error;});
-  IELTS_SCHEDULE=result.filter(function(e){return !e.error;});
+  var scheduled=result.filter(function(e){return !e.error;});
+  showSchedulePreview(scheduled,errors,'ielts');
+}
+function confirmIeltsSchedule(scheduled){
+  IELTS_SCHEDULE=scheduled;
   saveIeltsSchedule();
   renderIeltsSchedule();
-  if(errors.length){
-    showToast('排课完成, 有'+errors.length+'个警告');
-    document.getElementById('ieltsConflicts').innerHTML=errors.map(function(e){return '<div class="conflict-alert">'+e.error+'</div>';}).join('');
-  }else{
-    showToast('雅思排课完成!');
-    document.getElementById('ieltsConflicts').innerHTML='';
-  }
+  showToast('雅思排课已确认!');
 }
 function renderIeltsSchedule(){
   renderAssignUI('ieltsAssignUI','ielts');
   renderTimetableGrid('ieltsTimetable',IELTS_SCHEDULE,true);
   renderScheduleList('ieltsListBody',IELTS_SCHEDULE,'ielts');
-  var conflicts=detectConflicts(IELTS_SCHEDULE);
+  var conflicts=detectConflicts(IELTS_SCHEDULE,'ielts');
   if(conflicts.length){
     document.getElementById('ieltsConflicts').innerHTML=conflicts.map(function(c){return '<div class="conflict-alert">&#9888; '+c.msg+'</div>';}).join('');
+  }else{
+    document.getElementById('ieltsConflicts').innerHTML='';
   }
+}
+
+// --- Schedule Preview Modal ---
+var _previewSchedule=[];
+var _previewExamType='';
+function showSchedulePreview(scheduled,errors,examType){
+  _previewSchedule=scheduled;
+  _previewExamType=examType;
+  var modal=document.getElementById('schedulePreviewModal');
+  if(!modal) return;
+  var label=examType==='toefl'?'托福':'雅思';
+  var conflicts=detectConflicts(scheduled,examType);
+  var stats=getScheduleStats(scheduled);
+
+  var html='<div class="modal-header"><h3>'+label+'集训排课预览</h3><button class="modal-close" onclick="closePreviewModal()">&times;</button></div>';
+  html+='<div class="modal-body">';
+
+  // Stats summary
+  html+='<div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px">';
+  html+='<div class="stat-chip">共 <b>'+stats.total+'</b> 节课</div>';
+  html+='<div class="stat-chip">涉及 <b>'+Object.keys(stats.byTeacher).length+'</b> 位老师</div>';
+  if(conflicts.length) html+='<div class="stat-chip" style="color:var(--danger)">冲突 <b>'+conflicts.length+'</b></div>';
+  if(errors.length) html+='<div class="stat-chip" style="color:var(--warning)">警告 <b>'+errors.length+'</b></div>';
+  html+='</div>';
+
+  // Warnings
+  if(errors.length){
+    html+='<div style="margin-bottom:10px">';
+    errors.forEach(function(e){html+='<div class="conflict-alert" style="font-size:.8rem">'+e.error+'</div>';});
+    html+='</div>';
+  }
+  if(conflicts.length){
+    html+='<div style="margin-bottom:10px">';
+    conflicts.forEach(function(c){html+='<div class="conflict-alert" style="font-size:.8rem">&#9888; '+c.msg+'</div>';});
+    html+='</div>';
+  }
+
+  // Preview timetable
+  html+='<div class="timetable-wrap" id="previewTimetable"></div>';
+
+  // Preview list with delete
+  html+='<div class="table-wrap" style="margin-top:10px;max-height:300px;overflow:auto"><table><thead><tr><th>星期</th><th>时间</th><th>课程</th><th>老师</th><th>时长</th><th>删除</th></tr></thead><tbody>';
+  var sorted=scheduled.slice().sort(function(a,b){return a.day===b.day?a.startSlot-b.startSlot:a.day-b.day;});
+  sorted.forEach(function(e,i){
+    html+='<tr><td>'+SCH_CONFIG.dayLabels[e.day]+'</td><td>'+slotToTime(e.startSlot)+'-'+slotToTime(e.endSlot+1)+'</td>'
+      +'<td>'+getCourseName(e.courseId)+'</td><td><span style="color:'+getTeacherColor(e.teacherId)+'">&#9679;</span> '+getTeacherName(e.teacherId)+'</td>'
+      +'<td>'+(e.endSlot-e.startSlot+1)*SCH_CONFIG.slotMin+'分钟</td>'
+      +'<td><button class="btn btn-sm" style="color:var(--danger)" onclick="removePreviewEntry('+i+')">删除</button></td></tr>';
+  });
+  html+='</tbody></table></div>';
+
+  html+='</div>';
+  html+='<div class="modal-footer">';
+  html+='<button class="btn btn-outline" onclick="closePreviewModal()">取消</button>';
+  html+='<button class="btn btn-primary" onclick="confirmPreviewSchedule()">确认排课</button>';
+  html+='</div>';
+
+  modal.querySelector('.modal-content').innerHTML=html;
+  modal.classList.add('active');
+  // Render preview timetable after DOM update
+  setTimeout(function(){renderTimetableGrid('previewTimetable',_previewSchedule,true);},50);
+}
+function removePreviewEntry(idx){
+  var sorted=_previewSchedule.slice().sort(function(a,b){return a.day===b.day?a.startSlot-b.startSlot:a.day-b.day;});
+  var entry=sorted[idx];
+  _previewSchedule=_previewSchedule.filter(function(e){return e!==entry;});
+  showSchedulePreview(_previewSchedule,[],_previewExamType);
+}
+function confirmPreviewSchedule(){
+  if(_previewExamType==='toefl') confirmToeflSchedule(_previewSchedule);
+  else confirmIeltsSchedule(_previewSchedule);
+  closePreviewModal();
+}
+function closePreviewModal(){
+  var modal=document.getElementById('schedulePreviewModal');
+  if(modal) modal.classList.remove('active');
 }
 
 // --- Combined View ---
@@ -1927,8 +2053,8 @@ function updateSchDashboard(){
   document.getElementById('schStatTeachers').textContent=TEACHERS.length;
   document.getElementById('schStatToefl').textContent=TOEFL_SCHEDULE.filter(function(e){return !e.error;}).length;
   document.getElementById('schStatIelts').textContent=IELTS_SCHEDULE.filter(function(e){return !e.error;}).length;
-  var c1=detectConflicts(TOEFL_SCHEDULE).length;
-  var c2=detectConflicts(IELTS_SCHEDULE).length;
+  var c1=detectConflicts(TOEFL_SCHEDULE,'toefl').length;
+  var c2=detectConflicts(IELTS_SCHEDULE,'ielts').length;
   document.getElementById('schStatConflicts').textContent=c1+c2;
   // Overviews
   var tStats=getScheduleStats(TOEFL_SCHEDULE);

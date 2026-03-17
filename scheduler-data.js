@@ -1,25 +1,23 @@
 /*
- * scheduler-data.js - 棱镜 Prism 集训排课系统
+ * scheduler-data.js - 棱镜 Prism 集训排课系统 v2
  * 老师管理 / 综合课表解析 / 自动排课算法 / iCal导出
+ * 支持: 分钟级时间精度, 班级组感知占用, 重叠规则, 一键排课预览
  */
 
-// ══════════ 老师档案 (动态可选, 可0~N位, 占位数据仅供参考) ══════════
+// ══════════ 老师档案 (8位真实集训老师) ══════════
 var TEACHERS_DEFAULT = [
-  {id:"t01",name:"张明",skills:["toefl_r","ielts_r"],maxDaily:4,color:"#4f6ef7"},
-  {id:"t02",name:"李华",skills:["toefl_w","ielts_w"],maxDaily:4,color:"#e74c3c"},
-  {id:"t03",name:"王芳",skills:["toefl_s","ielts_s"],maxDaily:3,color:"#27ae60"},
-  {id:"t04",name:"赵磊",skills:["toefl_l","ielts_l"],maxDaily:4,color:"#f39c12"},
-  {id:"t05",name:"陈静",skills:["toefl_r","toefl_w","ielts_r"],maxDaily:4,color:"#9b59b6"},
-  {id:"t06",name:"刘洋",skills:["toefl_s","toefl_l","ielts_s"],maxDaily:3,color:"#1abc9c"},
-  {id:"t07",name:"周婷",skills:["ielts_w","ielts_s"],maxDaily:4,color:"#e67e22"},
-  {id:"t08",name:"吴刚",skills:["ielts_l","ielts_r","toefl_l"],maxDaily:4,color:"#3498db"},
-  {id:"t09",name:"孙悦",skills:["toefl_w","toefl_s"],maxDaily:3,color:"#e91e63"},
-  {id:"t10",name:"郑浩",skills:["ielts_w","ielts_l","toefl_r"],maxDaily:4,color:"#607d8b"}
+  {id:"t01",name:"陈亮",aliases:["陈亮"],skills:["ielts_s","toefl_s"],maxDaily:4,color:"#4f6ef7"},
+  {id:"t02",name:"段艳",aliases:["段艳"],skills:["ielts_w","toefl_w"],maxDaily:4,color:"#e74c3c"},
+  {id:"t03",name:"郑腾",aliases:["郑腾"],skills:["ielts_l","toefl_l"],maxDaily:4,color:"#27ae60"},
+  {id:"t04",name:"牛斌",aliases:["牛斌"],skills:["ielts_r","toefl_r"],maxDaily:4,color:"#f39c12"},
+  {id:"t05",name:"袁野",aliases:["袁野"],skills:["ielts_mock","toefl_mock"],maxDaily:4,color:"#9b59b6"},
+  {id:"t06",name:"李鹤",aliases:["李鹤"],skills:["ielts_mock","toefl_mock"],maxDaily:4,color:"#1abc9c"},
+  {id:"t07",name:"安东",aliases:["安东","Antonio","antonio"],skills:["ielts_mock","toefl_mock"],maxDaily:4,color:"#e67e22"},
+  {id:"t08",name:"王舒雅",aliases:["王舒雅"],skills:["ielts_w","toefl_w"],maxDaily:4,color:"#3498db"}
 ];
-// 实际使用的老师列表(从localStorage加载或使用默认, 用户可增删改)
 var TEACHERS = [];
 
-// ══════════ 颜色池 (不可重复) ══════════
+// ══════════ 颜色池 ══════════
 var COLOR_POOL = [
   "#4f6ef7","#e74c3c","#27ae60","#f39c12","#9b59b6",
   "#1abc9c","#e67e22","#3498db","#e91e63","#607d8b",
@@ -38,90 +36,162 @@ function nextAvailableColor(excludeId){
   for(var i=0;i<COLOR_POOL.length;i++){
     if(used.indexOf(COLOR_POOL[i].toLowerCase())<0) return COLOR_POOL[i];
   }
-  // 超出池子, 随机生成
   return '#'+Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');
 }
 
 // ══════════ 集训科目定义 ══════════
-// duration=默认时长(分钟), perWeek仅做参考默认值
-// 实际课次由 TEACHER_ASSIGNMENTS 中每位老师手动输入决定
 var INTENSIVE_COURSES = {
   toefl:[
     {id:"toefl_r",name:"托福阅读集训",nameEn:"TOEFL Reading",duration:120,perWeek:3,icon:"\u{1F4D6}"},
     {id:"toefl_w",name:"托福写作集训",nameEn:"TOEFL Writing",duration:120,perWeek:3,icon:"\u{270D}"},
     {id:"toefl_s",name:"托福口语集训",nameEn:"TOEFL Speaking",duration:90,perWeek:4,icon:"\u{1F5E3}"},
-    {id:"toefl_l",name:"托福听力集训",nameEn:"TOEFL Listening",duration:120,perWeek:3,icon:"\u{1F3A7}"}
+    {id:"toefl_l",name:"托福听力集训",nameEn:"TOEFL Listening",duration:120,perWeek:3,icon:"\u{1F3A7}"},
+    {id:"toefl_mock",name:"托福模考",nameEn:"TOEFL Mock",duration:120,perWeek:2,icon:"\u{1F4CB}"}
   ],
   ielts:[
     {id:"ielts_r",name:"雅思阅读集训",nameEn:"IELTS Reading",duration:120,perWeek:3,icon:"\u{1F4D6}"},
     {id:"ielts_w",name:"雅思写作集训",nameEn:"IELTS Writing",duration:120,perWeek:3,icon:"\u{270D}"},
     {id:"ielts_s",name:"雅思口语集训",nameEn:"IELTS Speaking",duration:90,perWeek:4,icon:"\u{1F5E3}"},
-    {id:"ielts_l",name:"雅思听力集训",nameEn:"IELTS Listening",duration:120,perWeek:3,icon:"\u{1F3A7}"}
+    {id:"ielts_l",name:"雅思听力集训",nameEn:"IELTS Listening",duration:120,perWeek:3,icon:"\u{1F3A7}"},
+    {id:"ielts_mock",name:"雅思模考",nameEn:"IELTS Mock",duration:120,perWeek:2,icon:"\u{1F4CB}"}
   ]
 };
 
-// ══════════ 老师课次分配 (核心: 排课人手动输入) ══════════
-// 格式: {courseId: [{teacherId, sessions(课次数), duration(可覆盖默认时长)}]}
-// 每位参与集训的老师各自的课次量不同, 以手动输入为准
+// ══════════ 老师课次分配 ══════════
 var TEACHER_ASSIGNMENTS = {};
 
-// ══════════ 排课配置 ══════════
+// ══════════ 排课配置 (v2: 分钟级精度) ══════════
 var SCH_CONFIG = {
-  startHour:8,
-  endHour:21,
-  slotMin:30,       // 最小粒度30分钟
-  breakMin:15,      // 课间休息
-  workdays:[1,2,3,4,5,6], // 1=周一 ... 6=周六
-  holidays:[],      // "YYYY-MM-DD"格式
+  startMin:530,        // 8:50 = 8*60+50 = 530 (minutes from midnight)
+  endMin:1260,         // 21:00 = 21*60 = 1260
+  slotMin:30,          // 最小粒度30分钟 (可选: 30/40/60/90/120)
+  breakMin:10,         // 课间休息
+  workdays:[1,2,3,4,5,6],
+  holidays:[],
   termStart:"2026-03-16",
   termEnd:"2026-06-30",
   dayLabels:["","周一","周二","周三","周四","周五","周六","周日"]
 };
 
+// ══════════ 班级组与重叠规则 ══════════
+// 综合课表中的班级组标识:
+//   "ielts" = A Level E + A Level B (合班, IELTS集训目标班)
+//   "toefl" = AP / AP Year3 (TOEFL集训目标班)
+//   "ify_e" / "ify_b" = IFY (不参加集训)
+//   "eng1" / "eng2" = 其他英语课
+// 重叠规则: 排IELTS集训时, 老师教ielts组的课可重叠; 排TOEFL集训时, 老师教toefl组的课可重叠
+var OVERLAP_RULES = {
+  ielts: ["ielts"],          // A Level E + B = 单一 "ielts" 组
+  toefl: ["toefl"]           // AP + AP Year3 = "toefl" 组
+};
+
 // ══════════ 全局排课数据 ══════════
-// 老师被综合课表占用的时段: {teacherId: {dayOfWeek: [slotIndex,...]}}
+// v2: OCCUPIED[teacherId][day] = [{slot, group, subject}]
+// group: 班级组标识, subject: 课程名称
 var OCCUPIED = {};
-// 排课结果: [{courseId, teacherId, day(1-7), startSlot, endSlot, weekNum}]
 var TOEFL_SCHEDULE = [];
 var IELTS_SCHEDULE = [];
-// 手动不可用标记: {teacherId: {day: [slotIndex,...]}}
 var TEACHER_BLOCKED = {};
 
-// ══════════ 时间槽工具函数 ══════════
-function slotCount(){return (SCH_CONFIG.endHour-SCH_CONFIG.startHour)*60/SCH_CONFIG.slotMin;}
+// ══════════ 时间槽工具函数 (v2: 分钟级) ══════════
+function slotCount(){return Math.floor((SCH_CONFIG.endMin-SCH_CONFIG.startMin)/SCH_CONFIG.slotMin);}
 function slotToTime(s){
-  var totalMin=SCH_CONFIG.startHour*60+s*SCH_CONFIG.slotMin;
+  var totalMin=SCH_CONFIG.startMin+s*SCH_CONFIG.slotMin;
   var h=Math.floor(totalMin/60),m=totalMin%60;
   return (h<10?'0':'')+h+':'+(m<10?'0':'')+m;
 }
+function slotToMinute(s){return SCH_CONFIG.startMin+s*SCH_CONFIG.slotMin;}
+function minuteToSlot(min){return Math.floor((min-SCH_CONFIG.startMin)/SCH_CONFIG.slotMin);}
 function timeToSlot(timeStr){
   var parts=timeStr.split(':');
   var h=parseInt(parts[0]),m=parseInt(parts[1]||'0');
-  return Math.floor((h*60+m-SCH_CONFIG.startHour*60)/SCH_CONFIG.slotMin);
+  return Math.floor((h*60+m-SCH_CONFIG.startMin)/SCH_CONFIG.slotMin);
 }
 function durationToSlots(minutes){return Math.ceil(minutes/SCH_CONFIG.slotMin);}
 function breakSlots(){return Math.ceil(SCH_CONFIG.breakMin/SCH_CONFIG.slotMin);}
 
-// ══════════ Excel综合课表解析 ══════════
+// Generate time options for config selects (10-min increments)
+function generateTimeOptions(startHour,endHour){
+  var opts=[];
+  for(var h=startHour;h<=endHour;h++){
+    for(var m=0;m<60;m+=10){
+      var min=h*60+m;
+      var label=(h<10?'0':'')+h+':'+(m<10?'0':'')+m;
+      opts.push({value:min,label:label});
+    }
+  }
+  return opts;
+}
+
+// ══════════ 综合课表专用解析器 (Timetable_2025_2026_Fall) ══════════
 /*
- * 支持的Excel格式 (自动检测):
- * 格式A (标准周课表): 行=时间段, 列=星期几, 单元格=老师名/课程名
- * 格式B (老师行课表): 行=老师, 列=时间段(周一1/周一2.../周二1...)
- * 格式C (自由格式):   含有"老师/教师"+"星期/周"+"时间/节次"列
+ * 课表布局 (双面板):
+ *   Mon: rows 0-17, cols 11-19 (time col=10)
+ *   Tue: rows 0-17, cols 21-29 (time col=20)
+ *   Wed: rows 18-35, cols 1-9  (time col=0)
+ *   Thu: rows 18-35, cols 11-19 (time col=10)
+ *   Fri: rows 18-35, cols 21-29 (time col=20)
+ *
+ * 每天9列班级:
+ *   offset+0: Eng1, +1: Eng2, +2: IELTS/A-Level E, +3: A-Level B,
+ *   +4: TOEFL/AP, +5: IFY E, +6: IFY B, +7: AP Year3, +8: (reserve)
+ *
+ * 班级 → 组映射:
+ *   col offset 2 (A-Level E) → "ielts"
+ *   col offset 3 (A-Level B) → "ielts"   (合班)
+ *   col offset 4 (AP)        → "toefl"
+ *   col offset 7 (AP Year3)  → "toefl"
+ *   col offset 5 (IFY E)     → "ify"
+ *   col offset 6 (IFY B)     → "ify"
+ *   col offset 0 (Eng1)      → "eng1"
+ *   col offset 1 (Eng2)      → "eng2"
  */
+
+var TIMETABLE_LAYOUT = {
+  days: [
+    {day:1, rowStart:0,  rowEnd:17, colStart:11, timeCol:10}, // Mon
+    {day:2, rowStart:0,  rowEnd:17, colStart:21, timeCol:20}, // Tue
+    {day:3, rowStart:18, rowEnd:35, colStart:1,  timeCol:0},  // Wed
+    {day:4, rowStart:18, rowEnd:35, colStart:11, timeCol:10}, // Thu
+    {day:5, rowStart:18, rowEnd:35, colStart:21, timeCol:20}  // Fri
+  ],
+  colGroupMap: {
+    0: "eng1",
+    1: "eng2",
+    2: "ielts",    // A-Level E
+    3: "ielts",    // A-Level B (合班 = same group)
+    4: "toefl",    // AP
+    5: "ify",      // IFY E
+    6: "ify",      // IFY B
+    7: "toefl"     // AP Year3
+  }
+};
+
+// Known time slots in the timetable (hh:mm-hh:mm)
+var TIMETABLE_TIMES = [
+  "08:00-08:40","08:50-09:30","10:10-10:50","11:05-11:45",
+  null, // lunch row
+  "14:00-14:40","14:50-15:30","15:45-16:25","16:35-17:15","17:25-18:05",
+  null, // dinner row
+  "18:50-19:50","20:00-21:00","21:10-22:10"
+];
+
 function parseExcelSchedule(workbook){
   var sheet=workbook.Sheets[workbook.SheetNames[0]];
   var data=XLSX.utils.sheet_to_json(sheet,{header:1,defval:""});
   if(!data||data.length<2) return {error:"课表为空或格式不正确"};
 
-  // 清空现有占用数据
+  // Clear existing
   OCCUPIED={};
   TEACHERS.forEach(function(t){OCCUPIED[t.id]={};});
 
-  // 尝试自动检测格式
-  var header=data[0].map(function(c){return String(c).trim();});
+  // Try specific timetable layout first
+  if(data.length>=35 && data[0].length>=28){
+    return parseTimetableSpecific(data);
+  }
 
-  // 格式C: 有明确列名
+  // Fallback: generic format detection
+  var header=data[0].map(function(c){return String(c).trim();});
   var teacherCol=-1,dayCol=-1,timeCol=-1;
   header.forEach(function(h,i){
     var hl=h.toLowerCase();
@@ -129,32 +199,99 @@ function parseExcelSchedule(workbook){
     if(hl.indexOf('星期')>-1||hl.indexOf('周')>-1||hl.indexOf('day')>-1) dayCol=i;
     if(hl.indexOf('时间')>-1||hl.indexOf('节次')>-1||hl.indexOf('time')>-1) timeCol=i;
   });
-
   if(teacherCol>-1 && dayCol>-1 && timeCol>-1){
     return parseFormatC(data,teacherCol,dayCol,timeCol);
   }
-
-  // 格式A: 检测表头是否含有 周一/周二... 或 Mon/Tue...
   var dayPattern=/周[一二三四五六日]|星期[一二三四五六日天]|mon|tue|wed|thu|fri|sat|sun/i;
-  var dayColMap={};
-  var hasDayCols=false;
+  var dayColMap={};var hasDayCols=false;
   header.forEach(function(h,i){
-    if(i===0) return; // 跳过第一列(通常是时间)
-    var m=h.match(dayPattern);
-    if(m){
-      var dayNum=parseDayName(m[0]);
-      if(dayNum>0){dayColMap[i]=dayNum;hasDayCols=true;}
-    }
+    if(i===0) return;
+    var dm=h.match(dayPattern);
+    if(dm){var dn=parseDayName(dm[0]);if(dn>0){dayColMap[i]=dn;hasDayCols=true;}}
   });
-
-  if(hasDayCols){
-    return parseFormatA(data,dayColMap);
-  }
-
-  // 格式B: 第一列是老师名
+  if(hasDayCols) return parseFormatA(data,dayColMap);
   return parseFormatB(data);
 }
 
+// ══════════ 专用课表解析 (Timetable_2025_2026_Fall 格式) ══════════
+function parseTimetableSpecific(data){
+  var matchCount=0;
+  var layout=TIMETABLE_LAYOUT;
+
+  layout.days.forEach(function(dayInfo){
+    var timeIdx=0; // index into TIMETABLE_TIMES
+    for(var r=dayInfo.rowStart;r<=dayInfo.rowEnd&&r<data.length;r++){
+      // Get time from known slots
+      var timeRange=null;
+      if(timeIdx<TIMETABLE_TIMES.length){
+        var tstr=TIMETABLE_TIMES[timeIdx];
+        if(tstr){
+          var tp=tstr.match(/(\d{2}):(\d{2})-(\d{2}):(\d{2})/);
+          if(tp){
+            var sMin=parseInt(tp[1])*60+parseInt(tp[2]);
+            var eMin=parseInt(tp[3])*60+parseInt(tp[4]);
+            timeRange={startMin:sMin,endMin:eMin};
+          }
+        }
+        timeIdx++;
+      }
+      if(!timeRange) continue; // skip lunch/dinner/invalid rows
+
+      // Check if this time range falls within our scheduling window
+      // We record ALL occupied slots regardless, for accurate conflict detection
+
+      // Scan the 8 class columns
+      for(var offset=0;offset<8;offset++){
+        var col=dayInfo.colStart+offset;
+        if(col>=data[r].length) continue;
+        var cellVal=String(data[r][col]||'').trim();
+        if(!cellVal||cellVal==='-'||cellVal==='/'||cellVal.toLowerCase()==='lunch'||cellVal.toLowerCase()==='dinner') continue;
+
+        var group=layout.colGroupMap[offset]||"other";
+
+        // Match teacher names in cell
+        for(var ti=0;ti<TEACHERS.length;ti++){
+          var t=TEACHERS[ti];
+          var names=[t.name].concat(t.aliases||[]);
+          var found=false;
+          for(var ni=0;ni<names.length;ni++){
+            if(names[ni]&&cellVal.indexOf(names[ni])>-1){found=true;break;}
+          }
+          if(!found) continue;
+
+          if(!OCCUPIED[t.id]) OCCUPIED[t.id]={};
+          if(!OCCUPIED[t.id][dayInfo.day]) OCCUPIED[t.id][dayInfo.day]=[];
+
+          // Convert time range to slot indices
+          var sSlot=minuteToSlot(timeRange.startMin);
+          var eSlot=minuteToSlot(timeRange.endMin-1); // endMin is exclusive
+          if(sSlot<0) sSlot=0;
+          var maxSlot=slotCount()-1;
+          if(eSlot>maxSlot) eSlot=maxSlot;
+
+          for(var ss=sSlot;ss<=eSlot;ss++){
+            // Check if this slot already exists
+            var exists=false;
+            for(var oi=0;oi<OCCUPIED[t.id][dayInfo.day].length;oi++){
+              if(OCCUPIED[t.id][dayInfo.day][oi].slot===ss){exists=true;break;}
+            }
+            if(!exists){
+              OCCUPIED[t.id][dayInfo.day].push({slot:ss,group:group,subject:cellVal});
+              matchCount++;
+            }
+          }
+        }
+      }
+    }
+  });
+
+  if(matchCount>0){
+    return {success:true,format:"SPECIFIC",msg:"综合课表解析成功 (专用格式), 匹配到 "+matchCount+" 个占用时段"};
+  }
+  return {error:"未在课表中匹配到任何老师。请确认老师名单与课表中的名字一致。"};
+}
+
+// ══════════ 通用课表解析 (保留兼容) ══════════
 function parseDayName(s){
   s=s.replace(/星期/,'周');
   var map={'周一':1,'周二':2,'周三':3,'周四':4,'周五':5,'周六':6,'周日':7,'周天':7};
@@ -164,14 +301,10 @@ function parseDayName(s){
   return emap[sl]||0;
 }
 
-// 格式A: 行=时段, 列=星期
 function parseFormatA(data,dayColMap){
-  var timeSlots=[];
-  // 第一列通常是时间段
   for(var r=1;r<data.length;r++){
     var timeCell=String(data[r][0]||'').trim();
     if(!timeCell) continue;
-    // 尝试解析时间 "08:00-09:30" 或 "第1节" 等
     var timeRange=parseTimeRange(timeCell,r-1);
     if(!timeRange) continue;
     var cols=Object.keys(dayColMap);
@@ -180,14 +313,12 @@ function parseFormatA(data,dayColMap){
       var day=dayColMap[colIdx];
       var cellVal=String(data[r][colIdx]||'').trim();
       if(!cellVal) continue;
-      // 在单元格中查找老师名
-      matchTeacherInCell(cellVal,day,timeRange.startSlot,timeRange.endSlot);
+      matchTeacherInCell(cellVal,day,timeRange.startSlot,timeRange.endSlot,"other",cellVal);
     }
   }
   return {success:true,format:"A",msg:"按周课表格式解析成功"};
 }
 
-// 格式B: 行=老师
 function parseFormatB(data){
   for(var r=0;r<data.length;r++){
     var name=String(data[r][0]||'').trim();
@@ -196,14 +327,16 @@ function parseFormatB(data){
     for(var c=1;c<data[r].length;c++){
       var cellVal=String(data[r][c]||'').trim();
       if(!cellVal||cellVal==='-'||cellVal==='/'||cellVal==='无') continue;
-      // 列头可能是 "周一1-2节" 等
       var colHeader=String(data[0][c]||'').trim();
       var parsed=parseDayTimeHeader(colHeader,c-1);
       if(parsed){
         if(!OCCUPIED[teacher.id][parsed.day]) OCCUPIED[teacher.id][parsed.day]=[];
         for(var s=parsed.startSlot;s<=parsed.endSlot;s++){
-          if(OCCUPIED[teacher.id][parsed.day].indexOf(s)<0)
-            OCCUPIED[teacher.id][parsed.day].push(s);
+          var exists=false;
+          for(var oi=0;oi<OCCUPIED[teacher.id][parsed.day].length;oi++){
+            if(OCCUPIED[teacher.id][parsed.day][oi].slot===s){exists=true;break;}
+          }
+          if(!exists) OCCUPIED[teacher.id][parsed.day].push({slot:s,group:"other",subject:cellVal});
         }
       }
     }
@@ -211,7 +344,6 @@ function parseFormatB(data){
   return {success:true,format:"B",msg:"按老师行格式解析成功"};
 }
 
-// 格式C: 明确列
 function parseFormatC(data,tCol,dCol,tmCol){
   for(var r=1;r<data.length;r++){
     var name=String(data[r][tCol]||'').trim();
@@ -225,33 +357,29 @@ function parseFormatC(data,tCol,dCol,tmCol){
     if(!timeRange) continue;
     if(!OCCUPIED[teacher.id][day]) OCCUPIED[teacher.id][day]=[];
     for(var s=timeRange.startSlot;s<=timeRange.endSlot;s++){
-      if(OCCUPIED[teacher.id][day].indexOf(s)<0)
-        OCCUPIED[teacher.id][day].push(s);
+      var exists=false;
+      for(var oi=0;oi<OCCUPIED[teacher.id][day].length;oi++){
+        if(OCCUPIED[teacher.id][day][oi].slot===s){exists=true;break;}
+      }
+      if(!exists) OCCUPIED[teacher.id][day].push({slot:s,group:"other",subject:""});
     }
   }
   return {success:true,format:"C",msg:"按列名格式解析成功"};
 }
 
 function parseTimeRange(str,fallbackRow){
-  // "08:00-09:30" or "8:00~10:00"
   var m=str.match(/(\d{1,2})[:\uff1a](\d{2})\s*[-~\u2013\u2014]\s*(\d{1,2})[:\uff1a](\d{2})/);
   if(m){
     return {startSlot:timeToSlot(m[1]+':'+m[2]),endSlot:timeToSlot(m[3]+':'+m[4])-1};
   }
-  // "第1节" or "1-2节" - map to approximate times
   var m2=str.match(/第?(\d+)\s*[-~]?\s*(\d+)?\s*节/);
   if(m2){
     var s=parseInt(m2[1]),e=parseInt(m2[2]||m2[1]);
-    // Standard: period 1=8:00, each period ~50min + 10min break
-    var startMin=(s-1)*60+SCH_CONFIG.startHour*60;
+    var startMin=(s-1)*60+Math.floor(SCH_CONFIG.startMin/60)*60;
     var endMin=startMin+(e-s+1)*60;
-    return {startSlot:Math.floor((startMin-SCH_CONFIG.startHour*60)/SCH_CONFIG.slotMin),
-            endSlot:Math.floor((endMin-SCH_CONFIG.startHour*60)/SCH_CONFIG.slotMin)-1};
+    return {startSlot:minuteToSlot(startMin),endSlot:minuteToSlot(endMin)-1};
   }
-  // Fallback: use row number as slot index
-  if(fallbackRow>=0){
-    return {startSlot:fallbackRow*2,endSlot:fallbackRow*2+1};
-  }
+  if(fallbackRow>=0) return {startSlot:fallbackRow*2,endSlot:fallbackRow*2+1};
   return null;
 }
 
@@ -260,7 +388,6 @@ function parseDayTimeHeader(str,fallbackCol){
   var day=dayMatch?parseDayName(dayMatch[0]):Math.floor(fallbackCol/8)+1;
   var timeRange=parseTimeRange(str,-1);
   if(timeRange) return {day:day,startSlot:timeRange.startSlot,endSlot:timeRange.endSlot};
-  // "周一1-2节" 格式
   var periodMatch=str.match(/(\d+)\s*[-~]?\s*(\d+)?\s*节/);
   if(periodMatch){
     var s=parseInt(periodMatch[1]),e=parseInt(periodMatch[2]||periodMatch[1]);
@@ -272,55 +399,86 @@ function parseDayTimeHeader(str,fallbackCol){
 function findTeacherByName(name){
   if(!name) return null;
   for(var i=0;i<TEACHERS.length;i++){
-    if(name.indexOf(TEACHERS[i].name)>-1||TEACHERS[i].name.indexOf(name)>-1) return TEACHERS[i];
+    var t=TEACHERS[i];
+    if(name.indexOf(t.name)>-1||t.name.indexOf(name)>-1) return t;
+    var aliases=t.aliases||[];
+    for(var a=0;a<aliases.length;a++){
+      if(aliases[a]&&(name.indexOf(aliases[a])>-1||aliases[a].indexOf(name)>-1)) return t;
+    }
   }
   return null;
 }
 
-function matchTeacherInCell(cellVal,day,startSlot,endSlot){
+function matchTeacherInCell(cellVal,day,startSlot,endSlot,group,subject){
   for(var i=0;i<TEACHERS.length;i++){
     var t=TEACHERS[i];
-    if(cellVal.indexOf(t.name)>-1){
-      if(!OCCUPIED[t.id][day]) OCCUPIED[t.id][day]=[];
-      for(var s=startSlot;s<=endSlot;s++){
-        if(OCCUPIED[t.id][day].indexOf(s)<0) OCCUPIED[t.id][day].push(s);
+    var names=[t.name].concat(t.aliases||[]);
+    var found=false;
+    for(var ni=0;ni<names.length;ni++){
+      if(names[ni]&&cellVal.indexOf(names[ni])>-1){found=true;break;}
+    }
+    if(!found) continue;
+    if(!OCCUPIED[t.id]) OCCUPIED[t.id]={};
+    if(!OCCUPIED[t.id][day]) OCCUPIED[t.id][day]=[];
+    for(var s=startSlot;s<=endSlot;s++){
+      var exists=false;
+      for(var oi=0;oi<OCCUPIED[t.id][day].length;oi++){
+        if(OCCUPIED[t.id][day][oi].slot===s){exists=true;break;}
       }
+      if(!exists) OCCUPIED[t.id][day].push({slot:s,group:group||"other",subject:subject||""});
     }
   }
 }
 
-// ══════════ 空闲时段计算 ══════════
-function getTeacherFreeSlots(teacherId,day){
+// ══════════ 空闲时段计算 (v2: 感知重叠规则) ══════════
+// examType: "ielts" or "toefl" — determines which occupied slots can be overlapped
+function getTeacherFreeSlots(teacherId,day,examType){
   var total=slotCount();
   var free=[];
-  var occ=OCCUPIED[teacherId]&&OCCUPIED[teacherId][day]?OCCUPIED[teacherId][day]:[];
-  var blk=TEACHER_BLOCKED[teacherId]&&TEACHER_BLOCKED[teacherId][day]?TEACHER_BLOCKED[teacherId][day]:[];
+  var occArr=(OCCUPIED[teacherId]&&OCCUPIED[teacherId][day])||[];
+  var blk=(TEACHER_BLOCKED[teacherId]&&TEACHER_BLOCKED[teacherId][day])||[];
+  var overlapGroups=examType?OVERLAP_RULES[examType]:[];
+
   for(var s=0;s<total;s++){
-    if(occ.indexOf(s)<0&&blk.indexOf(s)<0) free.push(s);
+    // Check blocked
+    if(blk.indexOf(s)>-1) continue;
+    // Check occupied (with overlap rule)
+    var blocked=false;
+    for(var oi=0;oi<occArr.length;oi++){
+      if(occArr[oi].slot===s){
+        // If this occupied slot's group is in the overlap list, it's OK (not blocked)
+        if(overlapGroups&&overlapGroups.indexOf(occArr[oi].group)>-1){
+          // Overlap allowed — this teacher teaches the intensive's target group
+          continue;
+        }
+        blocked=true;
+        break;
+      }
+    }
+    if(!blocked) free.push(s);
   }
   return free;
 }
 
-// 找连续空闲块 (用于排课)
-function findFreeBlocks(teacherId,day,neededSlots){
-  var free=getTeacherFreeSlots(teacherId,day);
+// Legacy compat: getTeacherFreeSlots without examType (blocks all occupied)
+function getTeacherFreeSlotsAll(teacherId,day){
+  return getTeacherFreeSlots(teacherId,day,null);
+}
+
+function findFreeBlocks(teacherId,day,neededSlots,examType){
+  var free=getTeacherFreeSlots(teacherId,day,examType);
   var blocks=[];
   var brk=breakSlots();
-  // 检查已排课的TOEFL+IELTS占用
   var scheduled=getTeacherScheduledSlots(teacherId,day);
   var available=free.filter(function(s){return scheduled.indexOf(s)<0;});
-  // 找连续段
   for(var i=0;i<available.length;i++){
     var start=available[i];
     var len=1;
     while(i+len<available.length&&available[i+len]===start+len) len++;
     if(len>=neededSlots){
-      // 检查前后是否有足够休息
       var prevBusy=isSlotBusy(teacherId,day,start-1,scheduled);
       var okStart=prevBusy?start+brk:start;
-      if(okStart+neededSlots<=start+len){
-        blocks.push(okStart);
-      }
+      if(okStart+neededSlots<=start+len) blocks.push(okStart);
     }
     i+=len-1;
   }
@@ -329,8 +487,11 @@ function findFreeBlocks(teacherId,day,neededSlots){
 
 function isSlotBusy(teacherId,day,slot,scheduled){
   if(slot<0) return false;
-  var occ=OCCUPIED[teacherId]&&OCCUPIED[teacherId][day]?OCCUPIED[teacherId][day]:[];
-  return occ.indexOf(slot)>-1||scheduled.indexOf(slot)>-1;
+  var occArr=(OCCUPIED[teacherId]&&OCCUPIED[teacherId][day])||[];
+  for(var i=0;i<occArr.length;i++){
+    if(occArr[i].slot===slot) return true;
+  }
+  return scheduled.indexOf(slot)>-1;
 }
 
 function getTeacherScheduledSlots(teacherId,day){
@@ -345,70 +506,52 @@ function getTeacherScheduledSlots(teacherId,day){
   return slots;
 }
 
-// 计算老师某天已排集训课时数
 function getTeacherDailyLoad(teacherId,day,scheduleArr){
   var count=0;
   scheduleArr.forEach(function(e){
     if(e.teacherId===teacherId&&e.day===day) count+=(e.endSlot-e.startSlot+1);
   });
-  return count*SCH_CONFIG.slotMin/60; // 小时
+  return count*SCH_CONFIG.slotMin/60;
 }
 
-// ══════════ 自动排课算法 ══════════
-/*
- * 核心逻辑:
- * 1. 读取 TEACHER_ASSIGNMENTS: 每门课 → 每位老师各自的课次数(手动输入)
- * 2. 按"该老师的空闲时段最少"优先排(约束最紧的先排)
- * 3. 同一老师的课尽量分散到不同天
- * 4. 不超过老师每日上限, 课间有breakMin休息
- */
+// ══════════ 自动排课算法 (v2: 重叠感知) ══════════
 function autoSchedule(examType){
   var courses=INTENSIVE_COURSES[examType];
   var schedule=[];
-
-  // 收集所有需要排的 [课程, 老师, 课次] 任务
   var tasks=[];
   for(var ci=0;ci<courses.length;ci++){
     var course=courses[ci];
     var assignments=TEACHER_ASSIGNMENTS[course.id]||[];
-    if(!assignments.length){
-      // 无分配, 跳过(不算错误, 可能该科目本轮不排)
-      continue;
-    }
+    if(!assignments.length) continue;
     for(var ai=0;ai<assignments.length;ai++){
       var a=assignments[ai];
       if(!a.sessions||a.sessions<=0) continue;
       var teacher=TEACHERS.find(function(t){return t.id===a.teacherId;});
       if(!teacher) continue;
       tasks.push({
-        courseId:course.id,
-        teacherId:a.teacherId,
-        sessions:a.sessions,
-        duration:a.duration||course.duration,
+        courseId:course.id,teacherId:a.teacherId,
+        sessions:a.sessions,duration:a.duration||course.duration,
         teacherObj:teacher
       });
     }
   }
 
-  // 按空闲时段最少的老师优先(约束最紧先排)
+  // Sort by constraint tightness (fewest free slots first)
   tasks.sort(function(a,b){
     var aFree=0,bFree=0;
     SCH_CONFIG.workdays.forEach(function(d){
-      aFree+=getTeacherFreeSlots(a.teacherId,d).length;
-      bFree+=getTeacherFreeSlots(b.teacherId,d).length;
+      aFree+=getTeacherFreeSlots(a.teacherId,d,examType).length;
+      bFree+=getTeacherFreeSlots(b.teacherId,d,examType).length;
     });
     return aFree-bFree;
   });
 
-  // 逐个任务排课
   for(var ti=0;ti<tasks.length;ti++){
     var task=tasks[ti];
     var needed=durationToSlots(task.duration);
     var sessionsLeft=task.sessions;
     var usedDays=[];
-
     for(var attempt=0;attempt<SCH_CONFIG.workdays.length*3&&sessionsLeft>0;attempt++){
-      // 优先未使用的天
       var dayOrder=SCH_CONFIG.workdays.slice().sort(function(a,b){
         var aUsed=usedDays.indexOf(a)>-1?1:0;
         var bUsed=usedDays.indexOf(b)>-1?1:0;
@@ -416,20 +559,12 @@ function autoSchedule(examType){
         return getTeacherDailyLoad(task.teacherId,a,schedule)-getTeacherDailyLoad(task.teacherId,b,schedule);
       });
       var day=dayOrder[attempt%dayOrder.length];
-      // 检查每日上限
       var load=getTeacherDailyLoad(task.teacherId,day,schedule);
       if(load+task.duration/60>task.teacherObj.maxDaily) continue;
-      // 找空闲块
-      var blocks=findFreeBlocksForSchedule(task.teacherId,day,needed,schedule);
+      var blocks=findFreeBlocksForSchedule(task.teacherId,day,needed,schedule,examType);
       if(blocks.length>0){
         var pick=blocks[Math.floor(blocks.length/3)];
-        schedule.push({
-          courseId:task.courseId,
-          teacherId:task.teacherId,
-          day:day,
-          startSlot:pick,
-          endSlot:pick+needed-1
-        });
+        schedule.push({courseId:task.courseId,teacherId:task.teacherId,day:day,startSlot:pick,endSlot:pick+needed-1});
         usedDays.push(day);
         sessionsLeft--;
       }
@@ -442,15 +577,12 @@ function autoSchedule(examType){
   return schedule;
 }
 
-// findFreeBlocks that considers a specific in-progress schedule array
-function findFreeBlocksForSchedule(teacherId,day,neededSlots,scheduleArr){
-  var free=getTeacherFreeSlots(teacherId,day);
+function findFreeBlocksForSchedule(teacherId,day,neededSlots,scheduleArr,examType){
+  var free=getTeacherFreeSlots(teacherId,day,examType);
   var brk=breakSlots();
-  // 已排课占用
   var scheduled=[];
   scheduleArr.forEach(function(e){
-    if(e.teacherId===teacherId&&e.day===day){
-      // 包含课间
+    if(e.teacherId===teacherId&&e.day===day&&!e.error){
       for(var s=Math.max(0,e.startSlot-brk);s<=e.endSlot+brk;s++) scheduled.push(s);
     }
   });
@@ -473,35 +605,37 @@ function getEligibleTeachers(courseId){
 // ══════════ 执行排课 ══════════
 function runAutoScheduleToefl(){
   TOEFL_SCHEDULE=autoSchedule('toefl').filter(function(e){return !e.error;});
-  saveToeflSchedule();
-  return TOEFL_SCHEDULE;
+  saveToeflSchedule(); return TOEFL_SCHEDULE;
 }
 function runAutoScheduleIelts(){
   IELTS_SCHEDULE=autoSchedule('ielts').filter(function(e){return !e.error;});
-  saveIeltsSchedule();
-  return IELTS_SCHEDULE;
+  saveIeltsSchedule(); return IELTS_SCHEDULE;
 }
 
-// ══════════ 冲突检测 ══════════
-function detectConflicts(scheduleArr){
+// ══════════ 冲突检测 (v2: 感知重叠) ══════════
+function detectConflicts(scheduleArr,examType){
   var conflicts=[];
   for(var i=0;i<scheduleArr.length;i++){
     if(scheduleArr[i].error) continue;
     var a=scheduleArr[i];
-    // 检查与综合课表冲突
-    var occ=OCCUPIED[a.teacherId]&&OCCUPIED[a.teacherId][a.day]?OCCUPIED[a.teacherId][a.day]:[];
+    var overlapGroups=examType?OVERLAP_RULES[examType]:[];
+    var occArr=(OCCUPIED[a.teacherId]&&OCCUPIED[a.teacherId][a.day])||[];
     for(var s=a.startSlot;s<=a.endSlot;s++){
-      if(occ.indexOf(s)>-1){
-        conflicts.push({type:'occupied',entry:a,slot:s,msg:getTeacherName(a.teacherId)+'在'+SCH_CONFIG.dayLabels[a.day]+' '+slotToTime(s)+'有综合课'});
+      for(var oi=0;oi<occArr.length;oi++){
+        if(occArr[oi].slot===s){
+          if(overlapGroups&&overlapGroups.indexOf(occArr[oi].group)>-1) continue; // overlap OK
+          conflicts.push({type:'occupied',entry:a,slot:s,
+            msg:getTeacherName(a.teacherId)+'在'+SCH_CONFIG.dayLabels[a.day]+' '+slotToTime(s)+'有综合课 ('+occArr[oi].subject+')'});
+        }
       }
     }
-    // 检查与同排课表内其他课冲突
     for(var j=i+1;j<scheduleArr.length;j++){
       if(scheduleArr[j].error) continue;
       var b=scheduleArr[j];
       if(a.teacherId===b.teacherId&&a.day===b.day){
         if(a.startSlot<=b.endSlot&&b.startSlot<=a.endSlot){
-          conflicts.push({type:'overlap',entryA:a,entryB:b,msg:getTeacherName(a.teacherId)+'在'+SCH_CONFIG.dayLabels[a.day]+'有课程时间重叠'});
+          conflicts.push({type:'overlap',entryA:a,entryB:b,
+            msg:getTeacherName(a.teacherId)+'在'+SCH_CONFIG.dayLabels[a.day]+'有课程时间重叠'});
         }
       }
     }
@@ -533,8 +667,10 @@ function loadTeachers(){
   var d=localStorage.getItem('prism_teachers');
   if(d){try{TEACHERS=JSON.parse(d);}catch(e){TEACHERS=TEACHERS_DEFAULT.slice();}}
   else{TEACHERS=TEACHERS_DEFAULT.slice();}
+  // Ensure aliases field exists
+  TEACHERS.forEach(function(t){if(!t.aliases) t.aliases=[];});
 }
-function addTeacher(t){TEACHERS.push(t);saveTeachers();}
+function addTeacher(t){if(!t.aliases) t.aliases=[];TEACHERS.push(t);saveTeachers();}
 function removeTeacher(id){TEACHERS=TEACHERS.filter(function(t){return t.id!==id;});saveTeachers();}
 function updateTeacher(id,data){
   for(var i=0;i<TEACHERS.length;i++){if(TEACHERS[i].id===id){Object.assign(TEACHERS[i],data);break;}}
@@ -562,7 +698,18 @@ function loadIeltsSchedule(){
 function saveSchConfig(){localStorage.setItem('prism_sch_config',JSON.stringify(SCH_CONFIG));}
 function loadSchConfig(){
   var d=localStorage.getItem('prism_sch_config');
-  if(d){try{var c=JSON.parse(d);Object.assign(SCH_CONFIG,c);}catch(e){}}
+  if(d){
+    try{
+      var c=JSON.parse(d);
+      // Migrate from old startHour/endHour format
+      if(c.startHour!==undefined&&c.startMin===undefined){
+        c.startMin=c.startHour*60;
+        c.endMin=c.endHour*60;
+        delete c.startHour;delete c.endHour;
+      }
+      Object.assign(SCH_CONFIG,c);
+    }catch(e){}
+  }
 }
 function saveAssignments(){localStorage.setItem('prism_assignments',JSON.stringify(TEACHER_ASSIGNMENTS));}
 function loadAssignments(){
@@ -573,31 +720,40 @@ function loadAllSchedulerData(){
   loadTeachers();loadOccupied();loadToeflSchedule();loadIeltsSchedule();loadSchConfig();loadAssignments();
 }
 
+// ══════════ 周末日期映射 ══════════
+// 当排课日期落在周六, 用户选择参考哪天的课表
+var WEEKEND_DAY_MAP = {}; // {"2026-03-21": 3} = that Saturday uses Wednesday's timetable
+function saveWeekendMap(){localStorage.setItem('prism_weekend_map',JSON.stringify(WEEKEND_DAY_MAP));}
+function loadWeekendMap(){
+  var d=localStorage.getItem('prism_weekend_map');
+  if(d){try{WEEKEND_DAY_MAP=JSON.parse(d);}catch(e){}}
+}
+function getEffectiveDay(dateStr){
+  // If this date has a weekend mapping, use that weekday's OCCUPIED data
+  if(WEEKEND_DAY_MAP[dateStr]) return WEEKEND_DAY_MAP[dateStr];
+  var d=new Date(dateStr);
+  return d.getDay()||7; // 0=Sun→7, 1=Mon...6=Sat
+}
+
 // ══════════ iCal (.ics) 导出 ══════════
 function generateICS(scheduleArr,title){
   var lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Prism//Scheduler//CN','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
   var termStart=new Date(SCH_CONFIG.termStart);
-  // 找到学期开始后的第一个周一
   var firstMonday=new Date(termStart);
   while(firstMonday.getDay()!==1) firstMonday.setDate(firstMonday.getDate()+1);
-
   var termEnd=new Date(SCH_CONFIG.termEnd);
   var weekCount=Math.ceil((termEnd-firstMonday)/(7*24*60*60*1000));
-
   scheduleArr.forEach(function(entry){
     if(entry.error) return;
     var course=getCourseObj(entry.courseId);
     var teacher=getTeacherName(entry.teacherId);
-    // 计算第一次上课的日期
     var firstDate=new Date(firstMonday);
     firstDate.setDate(firstDate.getDate()+(entry.day-1));
-
     var startTime=slotToTime(entry.startSlot).replace(':','')+'00';
     var endTime=slotToTime(entry.endSlot+1).replace(':','')+'00';
     var dateStr=firstDate.getFullYear()+
       ((firstDate.getMonth()+1)<10?'0':'')+(firstDate.getMonth()+1)+
       (firstDate.getDate()<10?'0':'')+firstDate.getDate();
-
     lines.push('BEGIN:VEVENT');
     lines.push('DTSTART:'+dateStr+'T'+startTime);
     lines.push('DTEND:'+dateStr+'T'+endTime);
@@ -606,7 +762,6 @@ function generateICS(scheduleArr,title){
     lines.push('DESCRIPTION:'+title+' | 老师: '+teacher);
     lines.push('END:VEVENT');
   });
-
   lines.push('END:VCALENDAR');
   return lines.join('\r\n');
 }
