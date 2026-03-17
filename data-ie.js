@@ -1,4 +1,5 @@
-// data-ie.js - Ireland Universities (8)
+// data-ie.js - Ireland Universities - Undergraduate Programs Only
+// v4.0 - All programs are bachelor's level
 (function(){
 var D = [
 // ============ TOP TIER ============
@@ -6,151 +7,177 @@ var D = [
  ll:{std:{ielts:{t:6.5,r:6,w:6,s:6,l:6},toefl:{t:90,r:20,w:20,s:20,l:20}},
      high:{ielts:{t:7.0,r:6.5,w:6.5,s:6.5,l:6.5},toefl:{t:100,r:22,w:22,s:22,l:22}}},
  pol:{nt:"pending",mb:false,v:"2y"},
- p:[
-  {c:"ug",l:"std",g:"Points 500+"},{c:"cs_ms",l:"std",g:"2:1"},
-  {c:"mba",l:"high",g:"2:1",note:"Trinity Business School"},
-  {c:"bus_ms",l:"std",g:"2:1"},{c:"eng_ms",l:"std",g:"2:1"},
-  {c:"edu_ms",l:"std",g:"2:1"},{c:"law_llm",l:"high",g:"2:1",note:"IELTS 7.0 required for law"},
-  {c:"med",l:"high",g:"Points 600+",note:"HPAT required; IELTS 7.0"}
-],
- fee:{ug:"EUR 10,000-25,000",pg:"EUR 12,000-35,000",currency:"EUR"},
+ fee:{ug:"EUR 20,000-35,000",currency:"EUR"},
  living:"EUR 12,000-15,000/yr",
  the:81,
  visa:{psw:"1-2yr",note:"Stay Back visa: 1yr for L8, 2yr for L9/L10"},
- ddl:{fall:"Jan-Jun varies by programme",spring:null},
- schol:["Government of Ireland Postgraduate Scholarship","Trinity College Postgraduate Research Studentships","Provost's PhD Project Awards"],
- materials:["Transcripts","CV","Personal statement","2 references","English proficiency"]
-},
+ ddl:{fall:"Feb 1 via CAO; direct non-EU Jan-Jun"},
+ schol:["Trinity Global Scholarship","Entrance Exhibition Award","Faculty-specific bursaries"],
+ materials:["CAO (Irish) / direct application","Transcripts","PS","English proficiency"],
+ p:[
+  {c:"cs",l:"std",g:"IB 36+ / A-Level A*AA / Points 500+",note:"Computer Science BSc; IB or A-Level accepted"},
+  {c:"eng",l:"std",g:"IB 34+ / AAA / Points 480+",note:"Engineering with Management"},
+  {c:"math",l:"std",g:"IB 36+ / A*AA / Points 500+"},
+  {c:"phys",l:"std",g:"IB 34+ / AAA / Points 480+"},
+  {c:"chem",l:"std",g:"IB 34+ / AAA / Points 480+"},
+  {c:"bio",l:"std",g:"IB 34+ / AAA / Points 480+"},
+  {c:"med",l:"high",g:"IB 39+ / A*A*A / Points 600+",note:"HPAT required; IELTS 7.0"},
+  {c:"dent",l:"high",g:"IB 38+ / A*AA / Points 570+",note:"Dental Science"},
+  {c:"law",l:"high",g:"IB 36+ / AAA / Points 540+",note:"Law LLB"},
+  {c:"econ",l:"std",g:"IB 36+ / A*AA / Points 520+"},
+  {c:"bus",l:"std",g:"IB 34+ / AAA / Points 480+",note:"Trinity Business School"},
+  {c:"psych",l:"std",g:"IB 34+ / AAA / Points 480+"},
+  {c:"hist",l:"std",g:"IB 34+ / AAA / Points 460+"},
+  {c:"ling",l:"std",g:"IB 34+ / AAA / Points 460+",note:"Linguistics / Modern Languages"},
+  {c:"edu",l:"std",g:"IB 30+ / AAB / Points 400+"}
+]},
 
 {id:"ucd",n:"都柏林大学",e:"University College Dublin",c:"Dublin",r:126,cat:"top",
  ll:{std:{ielts:{t:6.5,r:6,w:6,s:6,l:6},toefl:{t:90,r:20,w:20,s:20,l:20}},
      high:{ielts:{t:7.0,r:6.5,w:6.5,s:6.5,l:6.5},toefl:{t:100,r:22,w:22,s:22,l:22}}},
  pol:{nt:"pending",mb:false,v:"2y"},
- p:[
-  {c:"ug",l:"std",g:"Points 400+"},{c:"cs_ms",l:"std",g:"2:1"},
-  {c:"mba",l:"high",g:"2:1",note:"Smurfit Graduate Business School"},
-  {c:"bus_ms",l:"high",g:"2:1",note:"Smurfit School"},
-  {c:"eng_ms",l:"std",g:"2:1"},{c:"edu_ms",l:"std",g:"2:1"},
-  {c:"law_llm",l:"high",g:"2:1"},{c:"med",l:"high",g:"Points 570+",note:"HPAT required"}
-],
- fee:{ug:"EUR 10,000-24,000",pg:"EUR 12,000-30,000",currency:"EUR"},
+ fee:{ug:"EUR 18,000-30,000",currency:"EUR"},
  living:"EUR 12,000-15,000/yr",
  the:143,
- visa:{psw:"1-2yr",note:"Stay Back visa: 1yr for L8, 2yr for L9/L10"},
- ddl:{fall:"Feb-Jul varies by programme",spring:null},
- schol:["Government of Ireland Postgraduate Scholarship","UCD Global Excellence Scholarship","Ad Astra Academy Scholarship"],
- materials:["Transcripts","CV","Personal statement","2 references","English proficiency"]
-},
+ visa:{psw:"1-2yr",note:"Stay Back visa"},
+ ddl:{fall:"Feb 1 via CAO; direct non-EU Jan-Jul"},
+ schol:["UCD Global Excellence Scholarship","Ad Astra Academy Scholarship","UCD Foundation Scholarship"],
+ materials:["CAO / direct application","Transcripts","PS","English proficiency"],
+ p:[
+  {c:"cs",l:"std",g:"IB 34+ / AAA / Points 480+"},
+  {c:"eng",l:"std",g:"IB 34+ / AAA / Points 480+",note:"Engineering BSc"},
+  {c:"math",l:"std",g:"IB 34+ / AAA / Points 480+"},
+  {c:"bio",l:"std",g:"IB 33+ / AAA / Points 460+"},
+  {c:"med",l:"high",g:"IB 39+ / A*A*A / Points 570+",note:"HPAT required"},
+  {c:"vet",l:"high",g:"IB 36+ / AAA / Points 540+",note:"Veterinary Medicine"},
+  {c:"law",l:"high",g:"IB 36+ / AAA / Points 500+",note:"BCL"},
+  {c:"econ",l:"std",g:"IB 34+ / AAA / Points 480+"},
+  {c:"bus",l:"std",g:"IB 34+ / AAA / Points 480+",note:"Smurfit UG BCom"},
+  {c:"psych",l:"std",g:"IB 33+ / AAA / Points 460+"},
+  {c:"arch",l:"std",g:"IB 33+ / AAA / Points 440+",note:"Architecture BSc; portfolio"},
+  {c:"edu",l:"std",g:"IB 30+ / AAB / Points 400+"}
+]},
 
 // ============ MID TIER ============
 {id:"nuig",n:"戈尔韦大学",e:"University of Galway",c:"Galway",r:256,cat:"mid",
  ll:{std:{ielts:{t:6.5,r:6,w:6,s:6,l:6},toefl:{t:88,r:20,w:20,s:20,l:20}},
      high:{ielts:{t:7.0,r:6.5,w:6.5,s:6.5,l:6.5},toefl:{t:95,r:22,w:22,s:22,l:22}}},
  pol:{nt:"pending",mb:false,v:"2y"},
- p:[
-  {c:"ug",l:"std",g:"Points 350+"},{c:"cs_ms",l:"std",g:"2:1"},
-  {c:"bus_ms",l:"std",g:"2:1",note:"J.E. Cairnes School of Business"},
-  {c:"eng_ms",l:"std",g:"2:1"},{c:"edu_ms",l:"std",g:"2:1"},
-  {c:"law_llm",l:"high",g:"2:1"},{c:"med",l:"high",g:"Points 520+",note:"HPAT required"}
-],
- fee:{ug:"EUR 10,000-22,000",pg:"EUR 12,000-25,000",currency:"EUR"},
+ fee:{ug:"EUR 15,000-25,000",currency:"EUR"},
  living:"EUR 10,000-12,000/yr",
  the:251,
- visa:{psw:"1-2yr",note:"Stay Back visa: 1yr for L8, 2yr for L9/L10"},
- ddl:{fall:"Mar-Jun varies by programme",spring:null},
- schol:["Government of Ireland Postgraduate Scholarship","University of Galway Hardiman Scholarships","College of Science & Engineering Scholarships"],
- materials:["Transcripts","CV","Personal statement","2 references","English proficiency"]
-},
+ visa:{psw:"1-2yr",note:"Stay Back visa"},
+ ddl:{fall:"Feb 1 via CAO; direct non-EU Mar-Jun"},
+ schol:["Hardiman Scholarships","International Scholarships","Faculty awards"],
+ materials:["CAO / direct application","Transcripts","PS","English proficiency"],
+ p:[
+  {c:"cs",l:"std",g:"IB 30+ / AAB / Points 400+"},
+  {c:"eng",l:"std",g:"IB 30+ / AAB / Points 400+"},
+  {c:"math",l:"std",g:"IB 30+ / AAB / Points 400+"},
+  {c:"bio",l:"std",g:"IB 30+ / AAB / Points 400+"},
+  {c:"med",l:"high",g:"IB 36+ / A*AA / Points 520+",note:"HPAT required"},
+  {c:"law",l:"high",g:"IB 33+ / AAA / Points 460+"},
+  {c:"bus",l:"std",g:"IB 30+ / AAB / Points 380+",note:"Cairnes School of Business"},
+  {c:"econ",l:"std",g:"IB 30+ / AAB / Points 380+"},
+  {c:"psych",l:"std",g:"IB 30+ / AAB / Points 400+"},
+  {c:"edu",l:"std",g:"IB 28+ / ABB / Points 360+"}
+]},
 
 {id:"ucc",n:"科克大学",e:"University College Cork",c:"Cork",r:292,cat:"mid",
  ll:{std:{ielts:{t:6.5,r:6,w:6,s:6,l:6},toefl:{t:88,r:20,w:20,s:20,l:20}},
      high:{ielts:{t:7.0,r:6.5,w:6.5,s:6.5,l:6.5},toefl:{t:95,r:22,w:22,s:22,l:22}}},
  pol:{nt:"pending",mb:false,v:"2y"},
- p:[
-  {c:"ug",l:"std",g:"Points 350+"},{c:"cs_ms",l:"std",g:"2:1"},
-  {c:"bus_ms",l:"std",g:"2:1",note:"Cork University Business School"},
-  {c:"eng_ms",l:"std",g:"2:1"},{c:"edu_ms",l:"std",g:"2:1"},
-  {c:"law_llm",l:"high",g:"2:1"},{c:"med",l:"high",g:"Points 520+",note:"HPAT required"}
-],
- fee:{ug:"EUR 10,000-22,000",pg:"EUR 12,000-25,000",currency:"EUR"},
+ fee:{ug:"EUR 15,000-25,000",currency:"EUR"},
  living:"EUR 10,000-12,000/yr",
  the:301,
- visa:{psw:"1-2yr",note:"Stay Back visa: 1yr for L8, 2yr for L9/L10"},
- ddl:{fall:"Mar-Jun varies by programme",spring:null},
- schol:["Government of Ireland Postgraduate Scholarship","UCC Postgraduate Scholarships","Quercus Scholarship Programme"],
- materials:["Transcripts","CV","Personal statement","2 references","English proficiency"]
-},
+ visa:{psw:"1-2yr",note:"Stay Back visa"},
+ ddl:{fall:"Feb 1 via CAO; direct Mar-Jun"},
+ schol:["Quercus Scholarship Programme","UCC International Scholarship","Department awards"],
+ materials:["CAO / direct application","Transcripts","PS","English proficiency"],
+ p:[
+  {c:"cs",l:"std",g:"IB 30+ / AAB / Points 400+"},
+  {c:"eng",l:"std",g:"IB 30+ / AAB / Points 400+"},
+  {c:"bio",l:"std",g:"IB 30+ / AAB / Points 400+"},
+  {c:"chem",l:"std",g:"IB 30+ / AAB / Points 380+"},
+  {c:"med",l:"high",g:"IB 36+ / A*AA / Points 520+",note:"HPAT required"},
+  {c:"pharm",l:"std",g:"IB 33+ / AAA / Points 480+"},
+  {c:"law",l:"high",g:"IB 33+ / AAA / Points 460+"},
+  {c:"bus",l:"std",g:"IB 30+ / AAB / Points 380+",note:"Cork University Business School"},
+  {c:"econ",l:"std",g:"IB 30+ / AAB / Points 380+"},
+  {c:"psych",l:"std",g:"IB 30+ / AAB / Points 400+"},
+  {c:"edu",l:"std",g:"IB 28+ / ABB / Points 360+"}
+]},
 
 // ============ OTHER ============
 {id:"dcu",n:"都柏林城市大学",e:"Dublin City University",c:"Dublin",r:421,cat:"other",
  ll:{std:{ielts:{t:6.5,r:6,w:6,s:6,l:6},toefl:{t:86,r:20,w:20,s:20,l:20}}},
  pol:{nt:"pending",mb:false,v:"2y"},
- p:[
-  {c:"ug",l:"std",g:"Points 300+"},{c:"cs_ms",l:"std",g:"2:1"},
-  {c:"bus_ms",l:"std",g:"2:1",note:"DCU Business School"},
-  {c:"eng_ms",l:"std",g:"2:1"},{c:"edu_ms",l:"std",g:"2:1",note:"Institute of Education"},
-  {c:"law_llm",l:"std",g:"2:1"}
-],
- fee:{ug:"EUR 10,000-18,000",pg:"EUR 12,000-20,000",currency:"EUR"},
+ fee:{ug:"EUR 13,000-20,000",currency:"EUR"},
  living:"EUR 12,000-15,000/yr",
  the:501,
- visa:{psw:"1-2yr",note:"Stay Back visa: 1yr for L8, 2yr for L9/L10"},
- ddl:{fall:"Mar-Jun varies by programme",spring:null},
- schol:["Government of Ireland Postgraduate Scholarship","DCU Postgraduate Research Scholarships"],
- materials:["Transcripts","CV","Personal statement","2 references","English proficiency"]
-},
+ visa:{psw:"1-2yr",note:"Stay Back visa"},
+ ddl:{fall:"Feb 1 via CAO; direct Mar-Jun"},
+ schol:["DCU International Scholarship","DCU Sports Scholarship"],
+ materials:["CAO / direct application","Transcripts","English proficiency"],
+ p:[
+  {c:"cs",l:"std",g:"IB 28+ / ABB / Points 350+"},{c:"eng",l:"std",g:"IB 28+ / ABB / Points 350+"},
+  {c:"bus",l:"std",g:"IB 28+ / ABB / Points 340+",note:"DCU Business School"},
+  {c:"media",l:"std",g:"IB 28+ / ABB / Points 340+",note:"Communications / Journalism"},
+  {c:"edu",l:"std",g:"IB 28+ / ABB / Points 340+",note:"Institute of Education"},
+  {c:"psych",l:"std",g:"IB 28+ / ABB / Points 360+"}
+]},
 
 {id:"ul",n:"利默里克大学",e:"University of Limerick",c:"Limerick",r:426,cat:"other",
  ll:{std:{ielts:{t:6.5,r:6,w:6,s:6,l:6},toefl:{t:86,r:20,w:20,s:20,l:20}}},
  pol:{nt:"pending",mb:false,v:"2y"},
- p:[
-  {c:"ug",l:"std",g:"Points 300+"},{c:"cs_ms",l:"std",g:"2:1"},
-  {c:"bus_ms",l:"std",g:"2:1",note:"Kemmy Business School"},
-  {c:"eng_ms",l:"std",g:"2:1"},{c:"edu_ms",l:"std",g:"2:1"},
-  {c:"law_llm",l:"std",g:"2:1"}
-],
- fee:{ug:"EUR 10,000-18,000",pg:"EUR 12,000-20,000",currency:"EUR"},
+ fee:{ug:"EUR 13,000-20,000",currency:"EUR"},
  living:"EUR 10,000-12,000/yr",
  the:501,
- visa:{psw:"1-2yr",note:"Stay Back visa: 1yr for L8, 2yr for L9/L10"},
- ddl:{fall:"Mar-Jun varies by programme",spring:null},
- schol:["Government of Ireland Postgraduate Scholarship","UL Postgraduate Research Scholarships","Kemmy Business School Scholarships"],
- materials:["Transcripts","CV","Personal statement","2 references","English proficiency"]
-},
+ visa:{psw:"1-2yr",note:"Stay Back visa"},
+ ddl:{fall:"Feb 1 via CAO; direct Mar-Jun"},
+ schol:["UL International Scholarship","Kemmy Business School Awards"],
+ materials:["CAO / direct application","Transcripts","English proficiency"],
+ p:[
+  {c:"cs",l:"std",g:"IB 28+ / ABB / Points 340+"},{c:"eng",l:"std",g:"IB 28+ / ABB / Points 340+"},
+  {c:"bus",l:"std",g:"IB 28+ / ABB / Points 340+",note:"Kemmy Business School"},
+  {c:"law",l:"std",g:"IB 30+ / AAB / Points 380+"},
+  {c:"edu",l:"std",g:"IB 28+ / ABB / Points 340+"},
+  {c:"psych",l:"std",g:"IB 28+ / ABB / Points 340+"},
+  {c:"nurs",l:"std",g:"IB 28+ / ABB / Points 340+",note:"Nursing BSc"}
+]},
 
 {id:"maynooth",n:"梅努斯大学",e:"Maynooth University",c:"Maynooth",r:801,cat:"other",
  ll:{std:{ielts:{t:6.5,r:6,w:6,s:6,l:6},toefl:{t:85,r:20,w:20,s:20,l:20}}},
  pol:{nt:"pending",mb:false,v:"2y"},
- p:[
-  {c:"ug",l:"std",g:"Points 300+"},{c:"cs_ms",l:"std",g:"2:1"},
-  {c:"bus_ms",l:"std",g:"2:1"},{c:"edu_ms",l:"std",g:"2:1"},
-  {c:"law_llm",l:"std",g:"2:1"}
-],
- fee:{ug:"EUR 10,000-16,000",pg:"EUR 12,000-18,000",currency:"EUR"},
+ fee:{ug:"EUR 13,000-18,000",currency:"EUR"},
  living:"EUR 10,000-12,000/yr",
  the:601,
- visa:{psw:"1-2yr",note:"Stay Back visa: 1yr for L8, 2yr for L9/L10"},
- ddl:{fall:"Mar-Jun varies by programme",spring:null},
- schol:["Government of Ireland Postgraduate Scholarship","Maynooth University John & Pat Hume Doctoral Awards"],
- materials:["Transcripts","CV","Personal statement","2 references","English proficiency"]
-},
+ visa:{psw:"1-2yr",note:"Stay Back visa"},
+ ddl:{fall:"Feb 1 via CAO; direct Mar-Jun"},
+ schol:["Maynooth International Scholarship","John & Pat Hume Scholarship"],
+ materials:["CAO / direct application","Transcripts","English proficiency"],
+ p:[
+  {c:"cs",l:"std",g:"IB 26+ / ABB / Points 320+"},{c:"math",l:"std",g:"IB 26+ / ABB / Points 320+"},
+  {c:"bio",l:"std",g:"IB 26+ / ABB / Points 320+"},{c:"bus",l:"std",g:"IB 26+ / ABB / Points 320+"},
+  {c:"law",l:"std",g:"IB 28+ / ABB / Points 340+"},{c:"edu",l:"std",g:"IB 26+ / ABB / Points 310+"},
+  {c:"psych",l:"std",g:"IB 26+ / ABB / Points 320+"}
+]},
 
 {id:"tudublin",n:"都柏林理工大学",e:"Technological University Dublin",c:"Dublin",r:801,cat:"other",
  ll:{std:{ielts:{t:6.0,r:6,w:6,s:6,l:6},toefl:{t:80,r:18,w:18,s:18,l:18}}},
  pol:{nt:"pending",mb:false,v:"2y"},
- p:[
-  {c:"ug",l:"std",g:"Points 250+"},{c:"cs_ms",l:"std",g:"2:2"},
-  {c:"bus_ms",l:"std",g:"2:2"},{c:"eng_ms",l:"std",g:"2:2"},
-  {c:"edu_ms",l:"std",g:"2:2"}
-],
- fee:{ug:"EUR 10,000-15,000",pg:"EUR 12,000-18,000",currency:"EUR"},
+ fee:{ug:"EUR 12,000-16,000",currency:"EUR"},
  living:"EUR 12,000-15,000/yr",
  the:801,
- visa:{psw:"1-2yr",note:"Stay Back visa: 1yr for L8, 2yr for L9/L10"},
- ddl:{fall:"Mar-Jun varies by programme",spring:null},
- schol:["Government of Ireland Postgraduate Scholarship","TU Dublin Postgraduate Scholarships"],
- materials:["Transcripts","CV","Personal statement","2 references","English proficiency"]
-}
+ visa:{psw:"1-2yr",note:"Stay Back visa"},
+ ddl:{fall:"Feb 1 via CAO; direct Mar-Jun"},
+ schol:["TU Dublin Postgraduate Scholarships","Academic Excellence Award"],
+ materials:["CAO / direct application","Transcripts","English proficiency"],
+ p:[
+  {c:"cs",l:"std",g:"IB 24+ / BBB / Points 280+"},{c:"eng",l:"std",g:"IB 24+ / BBB / Points 280+"},
+  {c:"bus",l:"std",g:"IB 24+ / BBB / Points 270+"},{c:"art",l:"std",g:"IB 24+ / Portfolio"},
+  {c:"media",l:"std",g:"IB 24+ / BBB / Points 280+"},{c:"edu",l:"std",g:"IB 24+ / BBB / Points 280+"}
+]}
 ];
 COMPASS_DATA.ie = D;
 })();

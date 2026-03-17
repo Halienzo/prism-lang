@@ -1,62 +1,67 @@
 /*
  * compass-data.js - 棱镜 Prism 核心数据结构 & 专业分类
- * v3.1 - Dual TOEFL scale (0-120 + 1-6) + ETS official conversion engine
+ * v4.0 - 全本科版 (Undergraduate Only) + Dual TOEFL scale (0-120 + 1-6)
  *
  * Data format:
  *   Each university: {id, n(name), e(english), c(city), r(QS rank), cat,
- *     ll(langLevels): {key: {ielts:{t,r,w,s,l}, toefl:{t,r,w,s,l}, toefl6:{t,r,w,s,l}(optional official)}},
+ *     ll(langLevels): {key: {ielts:{t,r,w,s,l}, toefl:{t,r,w,s,l}, toefl6:{t,r,w,s,l}(optional)}},
  *     pol(policies): {nt(newToefl status 5-state), mb(myBest), v(validity), note},
- *     p(programs): [{c(category), l(langLevel key), g(gpa), o(override), note}]
+ *     fee(fees): {ug(tuition), currency},
+ *     living(living cost), visa, ddl(deadlines), schol(scholarships), materials,
+ *     p(programs): [{c(category), l(langLevel key), g(entry grades), o(override), note}]
  *   }
+ *   g(grades): A-Level / IB / SAT / 高考 entry requirements
  *   Sub-scores: t=total, r=reading, w=writing, s=speaking, l=listening
  *   null = not published / check official site
  *   pol.nt values: "published"|"accepted"|"suspended"|"old_only"|"pending"
  */
 
-// ══════════ Program Categories ══════════
+// ══════════ Undergraduate Program Categories ══════════
 var PC = {
-  ug:{n:"本科通用",e:"General Undergraduate",f:"全校"},
-  cs_ms:{n:"计算机科学硕士",e:"Computer Science MS",f:"计算机/工程学院"},
-  cs_phd:{n:"计算机科学博士",e:"Computer Science PhD",f:"计算机/工程学院"},
-  ee_ms:{n:"电子电气工程硕士",e:"Electrical Engineering MS",f:"工程学院"},
-  me_ms:{n:"机械工程硕士",e:"Mechanical Engineering MS",f:"工程学院"},
-  ce_ms:{n:"土木工程硕士",e:"Civil Engineering MS",f:"工程学院"},
-  eng_ms:{n:"工程硕士(通用)",e:"Engineering MS",f:"工程学院"},
-  mba:{n:"MBA工商管理",e:"MBA",f:"商学院"},
-  fin_ms:{n:"金融硕士",e:"Finance MS",f:"商学院"},
-  acct_ms:{n:"会计硕士",e:"Accounting MS",f:"商学院"},
-  econ_ms:{n:"经济学硕士",e:"Economics MS",f:"社科/经济学院"},
-  econ_phd:{n:"经济学博士",e:"Economics PhD",f:"社科/经济学院"},
-  bus_ms:{n:"商科硕士(通用)",e:"Business MS",f:"商学院"},
-  law_llm:{n:"法学硕士LLM",e:"Law LLM",f:"法学院"},
-  law_jd:{n:"法学博士JD",e:"Law JD",f:"法学院"},
-  med:{n:"医学",e:"Medicine",f:"医学院"},
-  nurs:{n:"护理硕士",e:"Nursing MS",f:"护理学院"},
-  edu_ms:{n:"教育学硕士",e:"Education MS",f:"教育学院"},
-  tesol:{n:"TESOL硕士",e:"TESOL MA",f:"教育/语言学院"},
-  psych_ms:{n:"心理学硕士",e:"Psychology MS",f:"心理学院"},
-  psych_phd:{n:"心理学博士",e:"Psychology PhD",f:"心理学院"},
-  bio_ms:{n:"生物科学硕士",e:"Biological Sciences MS",f:"理学院"},
-  chem_ms:{n:"化学硕士",e:"Chemistry MS",f:"理学院"},
-  chem_phd:{n:"化学博士",e:"Chemistry PhD",f:"理学院"},
-  phys_ms:{n:"物理学硕士",e:"Physics MS",f:"理学院"},
-  math_ms:{n:"数学硕士",e:"Mathematics MS",f:"理学院"},
-  stat_ms:{n:"统计学硕士",e:"Statistics MS",f:"理学院"},
-  ds_ms:{n:"数据科学硕士",e:"Data Science MS",f:"计算机/信息学院"},
-  ai_ms:{n:"人工智能硕士",e:"Artificial Intelligence MS",f:"计算机/工程学院"},
-  arch_ms:{n:"建筑学硕士",e:"Architecture MArch",f:"建筑学院"},
-  media_ms:{n:"传媒硕士",e:"Media/Communications MA",f:"传媒学院"},
-  ir_ms:{n:"国际关系硕士",e:"International Relations MA",f:"社科/政治学院"},
-  pub_ms:{n:"公共政策硕士",e:"Public Policy MPP",f:"公共政策学院"},
-  ph_ms:{n:"公共卫生硕士",e:"Public Health MPH",f:"公共卫生学院"},
-  sw_ms:{n:"社会工作硕士",e:"Social Work MSW",f:"社会工作学院"},
-  art_ms:{n:"艺术设计硕士",e:"Art/Design MFA",f:"艺术学院"},
-  ling_ms:{n:"语言学硕士",e:"Linguistics MA",f:"人文学院"},
-  hist_ms:{n:"历史学硕士",e:"History MA",f:"人文学院"},
-  env_ms:{n:"环境科学硕士",e:"Environmental Science MS",f:"环境学院"},
-  dent:{n:"牙医",e:"Dentistry",f:"牙医学院"},
-  pharm:{n:"药学",e:"Pharmacy",f:"药学院"},
-  vet:{n:"兽医",e:"Veterinary",f:"兽医学院"}
+  // ── 工程与技术 ──
+  cs:{n:"计算机科学",e:"Computer Science BSc",f:"计算机/工程学院"},
+  ee:{n:"电子电气工程",e:"Electrical Engineering BEng",f:"工程学院"},
+  me:{n:"机械工程",e:"Mechanical Engineering BEng",f:"工程学院"},
+  ce:{n:"土木工程",e:"Civil Engineering BEng",f:"工程学院"},
+  eng:{n:"工程(通用)",e:"Engineering BEng",f:"工程学院"},
+  ds:{n:"数据科学",e:"Data Science BSc",f:"计算机/信息学院"},
+  ai:{n:"人工智能",e:"Artificial Intelligence BSc",f:"计算机/工程学院"},
+  // ── 商科 ──
+  bus:{n:"商科/工商管理",e:"Business/Commerce BBA",f:"商学院"},
+  fin:{n:"金融",e:"Finance BBA/BSc",f:"商学院"},
+  acct:{n:"会计",e:"Accounting BAcc",f:"商学院"},
+  econ:{n:"经济学",e:"Economics BA/BSc",f:"经济学院"},
+  // ── 自然科学 ──
+  math:{n:"数学",e:"Mathematics BSc",f:"理学院"},
+  stat:{n:"统计学",e:"Statistics BSc",f:"理学院"},
+  phys:{n:"物理",e:"Physics BSc",f:"理学院"},
+  chem:{n:"化学",e:"Chemistry BSc",f:"理学院"},
+  bio:{n:"生物科学",e:"Biological Sciences BSc",f:"理学院"},
+  env:{n:"环境科学",e:"Environmental Science BSc",f:"环境学院"},
+  // ── 医学与健康 ──
+  med:{n:"医学",e:"Medicine MBBS/MD",f:"医学院"},
+  dent:{n:"牙医",e:"Dentistry BDS",f:"牙医学院"},
+  nurs:{n:"护理",e:"Nursing BSN",f:"护理学院"},
+  pharm:{n:"药学",e:"Pharmacy BPharm",f:"药学院"},
+  vet:{n:"兽医",e:"Veterinary BVSc",f:"兽医学院"},
+  ph:{n:"公共卫生",e:"Public Health BSc",f:"公共卫生学院"},
+  // ── 社会科学 ──
+  law:{n:"法学",e:"Law LLB",f:"法学院"},
+  psych:{n:"心理学",e:"Psychology BA/BSc",f:"心理学院"},
+  edu:{n:"教育",e:"Education BEd",f:"教育学院"},
+  ir:{n:"国际关系",e:"International Relations BA",f:"社科/政治学院"},
+  pub:{n:"公共政策",e:"Public Policy BA",f:"公共政策学院"},
+  sw:{n:"社会工作",e:"Social Work BSW",f:"社会工作学院"},
+  soc:{n:"社会学",e:"Sociology BA",f:"社科学院"},
+  // ── 人文与艺术 ──
+  media:{n:"传媒/新闻",e:"Media/Journalism BA",f:"传媒学院"},
+  arch:{n:"建筑",e:"Architecture BA/BSc",f:"建筑学院"},
+  art:{n:"艺术设计",e:"Art/Design BFA",f:"艺术学院"},
+  ling:{n:"语言学/英语",e:"Linguistics/English BA",f:"人文学院"},
+  hist:{n:"历史",e:"History BA",f:"人文学院"},
+  phil:{n:"哲学",e:"Philosophy BA",f:"人文学院"},
+  // ── 特殊 ──
+  found:{n:"预科/Foundation",e:"Foundation Year",f:"预科学院"}
 };
 
 // ══════════ Global data container ══════════
@@ -277,11 +282,9 @@ function filterPrograms(opts) {
     if (opts.region && opts.region !== 'all' && item.region !== opts.region) continue;
     if (opts.uniId && item.uni.id !== opts.uniId) continue;
     if (opts.degree) {
-      var isUG = item.prog.c === 'ug';
-      var isPhD = item.prog.c.indexOf('phd') > -1;
-      if (opts.degree === 'bachelor' && !isUG) continue;
-      if (opts.degree === 'master' && (isUG || isPhD)) continue;
-      if (opts.degree === 'phd' && !isPhD) continue;
+      var isFound = item.prog.c === 'found';
+      if (opts.degree === 'bachelor' && isFound) continue;
+      if (opts.degree === 'foundation' && !isFound) continue;
     }
     if (opts.progCat && item.prog.c !== opts.progCat) continue;
     if (opts.search) {

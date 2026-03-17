@@ -1,82 +1,85 @@
-// data-mo.js - Macau Universities (4)
+// data-mo.js - Macau Universities - Undergraduate Programs Only
+// v4.0 - All programs are bachelor's level
 COMPASS_DATA.mo = [
-// ============ MACAU ============
 {id:"um",n:"澳门大学",e:"University of Macau",c:"Macau",r:245,cat:"public",
- ll:{std:{ielts:{t:6.0,r:5.5,w:5.5,s:5.5,l:5.5},toefl:{t:80,r:19,w:19,s:19,l:19}},
-     high:{ielts:{t:6.5,r:6,w:6,s:6,l:6},toefl:{t:90,r:20,w:20,s:20,l:20}}},
+ ll:{std:{ielts:{t:6.0,r:5.5,w:5.5,s:5.5,l:5.5},toefl:{t:79,r:19,w:19,s:19,l:19}}},
  pol:{nt:"pending",mb:false,v:"2y"},
- p:[
-  {c:"ug",l:"std",g:"Strong senior secondary"},
-  {c:"cs_ms",l:"std",g:"Bachelor degree"},
-  {c:"mba",l:"high",g:"Bachelor degree + 3yr work exp",note:"Faculty of Business Administration"},
-  {c:"edu_ms",l:"std",g:"Bachelor degree",note:"Faculty of Education"},
-  {c:"bus_ms",l:"std",g:"Bachelor degree"},
-  {c:"fin_ms",l:"high",g:"Bachelor degree"},
-  {c:"media_ms",l:"std",g:"Bachelor degree",note:"Communication program"}
-],
- fee:{ug:"MOP 32,000-86,000",pg:"MOP 50,000-200,000",currency:"MOP"},
+ fee:{ug:"MOP 86,400/yr",currency:"MOP"},
  living:"MOP 60,000-80,000/yr",
  the:null,
  visa:{psw:"0",note:"No post-study work visa; need employer sponsor"},
- ddl:{fall:"Jan-Mar",spring:"Sep-Nov"},
- schol:"UM Macao Postgraduate Scholarship; UM Macao PhD Scholarship; merit-based fee waiver available",
- materials:"Transcripts, personal statement, 2 recommendation letters, CV, English proficiency test score"
-},
+ ddl:{fall:"Jan-Mar (mainland); May-Jun (others)"},
+ schol:["UM Macao Scholarship (full/half tuition)","UM Academic Excellence Award"],
+ materials:["Transcripts","Personal statement","English proficiency test score","Interview (some)"],
+ p:[
+  {c:"cs",l:"std",g:"高考一本线上 / IB 28+ / A-Level BBB",note:"FST Computer Science BSc"},
+  {c:"ee",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"Electrical & Computer Engineering"},
+  {c:"ce",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"Civil Engineering"},
+  {c:"math",l:"std",g:"高考一本线上 / IB 28+ / BBB"},
+  {c:"bio",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"Biomedical Sciences"},
+  {c:"bus",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"Faculty of Business Administration"},
+  {c:"fin",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"BBA Finance"},
+  {c:"acct",l:"std",g:"高考一本线上 / IB 28+ / BBB"},
+  {c:"law",l:"std",g:"高考一本线上 / IB 30+ / AAB",note:"Faculty of Law - Portuguese & Chinese law"},
+  {c:"edu",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"Faculty of Education"},
+  {c:"media",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"Communication BA"},
+  {c:"psych",l:"std",g:"高考一本线上 / IB 28+ / BBB"}
+]},
 
 {id:"must",n:"澳门科技大学",e:"Macau University of Science and Technology",c:"Macau",r:520,cat:"private",
- ll:{std:{ielts:{t:6.0,r:5.5,w:5.5,s:5.5,l:5.5},toefl:{t:80,r:19,w:19,s:19,l:19}}},
+ ll:{std:{ielts:{t:6.0,r:5.5,w:5.5,s:5.5,l:5.5},toefl:{t:79,r:19,w:19,s:19,l:19}}},
  pol:{nt:"pending",mb:false,v:"2y"},
- p:[
-  {c:"ug",l:"std",g:"Senior secondary diploma"},
-  {c:"cs_ms",l:"std",g:"Bachelor degree"},
-  {c:"mba",l:"std",g:"Bachelor degree + work exp",note:"School of Business"},
-  {c:"edu_ms",l:"std",g:"Bachelor degree"},
-  {c:"bus_ms",l:"std",g:"Bachelor degree"},
-  {c:"fin_ms",l:"std",g:"Bachelor degree"},
-  {c:"media_ms",l:"std",g:"Bachelor degree"}
-],
- fee:{ug:"MOP 32,000-86,000",pg:"MOP 50,000-200,000",currency:"MOP"},
+ fee:{ug:"MOP 80,000-120,000/yr",currency:"MOP"},
  living:"MOP 60,000-80,000/yr",
  the:null,
  visa:{psw:"0",note:"No post-study work visa; need employer sponsor"},
- ddl:{fall:"Jan-Mar",spring:"Sep-Nov"},
- schol:"MUST Scholarship for Outstanding Students; merit-based tuition reduction available",
- materials:"Transcripts, personal statement, 2 recommendation letters, CV, English proficiency test score"
-},
+ ddl:{fall:"Jan-Mar (mainland); year-round others"},
+ schol:["MUST Scholarship for Outstanding Students","Merit-based tuition reduction available"],
+ materials:["Transcripts","Personal statement","English proficiency test score"],
+ p:[
+  {c:"cs",l:"std",g:"高考二本线上 / IB 26+ / BCC",note:"Faculty of Information Technology"},
+  {c:"bus",l:"std",g:"高考二本线上 / IB 26+ / BCC",note:"School of Business"},
+  {c:"fin",l:"std",g:"高考二本线上 / IB 26+ / BCC"},
+  {c:"med",l:"std",g:"高考一本线上 / IB 30+ / AAB",note:"Faculty of Medicine - MBBS"},
+  {c:"pharm",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"Faculty of Pharmacy"},
+  {c:"media",l:"std",g:"高考二本线上 / IB 26+ / BCC",note:"School of Communication"},
+  {c:"art",l:"std",g:"高考二本线上 / Portfolio",note:"School of Art"},
+  {c:"law",l:"std",g:"高考二本线上 / IB 28+ / BBB"}
+]},
 
 {id:"cityu_mo",n:"澳门城市大学",e:"City University of Macau",c:"Macau",r:null,cat:"private",
- ll:{std:{ielts:{t:6.0,r:5.5,w:5.5,s:5.5,l:5.5},toefl:{t:80,r:19,w:19,s:19,l:19}}},
+ ll:{std:{ielts:{t:5.5,r:5,w:5,s:5,l:5},toefl:{t:72,r:17,w:17,s:17,l:17}}},
  pol:{nt:"pending",mb:false,v:"2y"},
- p:[
-  {c:"ug",l:"std",g:"Senior secondary diploma"},
-  {c:"mba",l:"std",g:"Bachelor degree + work exp"},
-  {c:"edu_ms",l:"std",g:"Bachelor degree"},
-  {c:"bus_ms",l:"std",g:"Bachelor degree"}
-],
- fee:{ug:"MOP 32,000-86,000",pg:"MOP 50,000-200,000",currency:"MOP"},
+ fee:{ug:"MOP 50,000-70,000/yr",currency:"MOP"},
  living:"MOP 60,000-80,000/yr",
  the:null,
  visa:{psw:"0",note:"No post-study work visa; need employer sponsor"},
- ddl:{fall:"Jan-Mar",spring:"Sep-Nov"},
- schol:"City U Scholarship for mainland and international students",
- materials:"Transcripts, personal statement, recommendation letters, CV, English proficiency test score"
-},
+ ddl:{fall:"Jan-Jul"},
+ schol:["City U Scholarship for mainland and international students"],
+ materials:["Transcripts","Personal statement","English proficiency test score"],
+ p:[
+  {c:"bus",l:"std",g:"高考二本线上 / IB 24+ / CCC"},
+  {c:"fin",l:"std",g:"高考二本线上 / IB 24+ / CCC"},
+  {c:"edu",l:"std",g:"高考二本线上 / IB 24+ / CCC"},
+  {c:"art",l:"std",g:"高考二本线上 / Portfolio",note:"Design programmes"},
+  {c:"media",l:"std",g:"高考二本线上 / IB 24+ / CCC"}
+]},
 
 {id:"mpu",n:"澳门理工大学",e:"Macao Polytechnic University",c:"Macau",r:null,cat:"public",
- ll:{std:{ielts:{t:6.0,r:5.5,w:5.5,s:5.5,l:5.5},toefl:{t:80,r:19,w:19,s:19,l:19}}},
+ ll:{std:{ielts:{t:5.5,r:5,w:5,s:5,l:5},toefl:{t:72,r:17,w:17,s:17,l:17}}},
  pol:{nt:"pending",mb:false,v:"2y"},
- p:[
-  {c:"ug",l:"std",g:"Senior secondary diploma"},
-  {c:"edu_ms",l:"std",g:"Bachelor degree"},
-  {c:"bus_ms",l:"std",g:"Bachelor degree"},
-  {c:"media_ms",l:"std",g:"Bachelor degree",note:"Arts and communication programs"}
-],
- fee:{ug:"MOP 32,000-86,000",pg:"MOP 50,000-200,000",currency:"MOP"},
+ fee:{ug:"MOP 32,000-50,000/yr",currency:"MOP"},
  living:"MOP 60,000-80,000/yr",
  the:null,
  visa:{psw:"0",note:"No post-study work visa; need employer sponsor"},
- ddl:{fall:"Jan-Mar",spring:"Sep-Nov"},
- schol:"MPU Scholarship for outstanding students; government-funded tuition subsidy",
- materials:"Transcripts, personal statement, recommendation letters, CV, English proficiency test score"
-}
+ ddl:{fall:"Jan-May"},
+ schol:["MPU Scholarship; government-funded tuition subsidy"],
+ materials:["Transcripts","Personal statement","English proficiency test score"],
+ p:[
+  {c:"cs",l:"std",g:"高考二本线上 / IB 24+ / CCC",note:"Computing programme"},
+  {c:"bus",l:"std",g:"高考二本线上 / IB 24+ / CCC"},
+  {c:"edu",l:"std",g:"高考二本线上 / IB 24+ / CCC"},
+  {c:"media",l:"std",g:"高考二本线上 / IB 24+ / CCC",note:"Arts and communication"},
+  {c:"art",l:"std",g:"高考二本线上 / Portfolio",note:"Visual arts & design"}
+]}
 ];

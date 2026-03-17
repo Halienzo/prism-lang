@@ -489,10 +489,10 @@ body.dark .mobile-tab-bar{background:var(--card);border-top-color:var(--border)}
 <div class="card">
 <div class="card-title">筛选条件</div>
 <div class="filter-bar">
-<select id="sRegion" onchange="updateUniSelect();runSearch()"><option value="all">全部地区</option><option value="usa">美国</option><option value="uk">英国</option><option value="aus">澳大利亚</option><option value="nz">新西兰</option><option value="sea">东南亚</option></select>
+<select id="sRegion" onchange="updateUniSelect();runSearch()"><option value="all">全部地区</option><option value="usa">美国</option><option value="uk">英国</option><option value="aus">澳大利亚</option><option value="nz">新西兰</option><option value="hk">中国香港</option><option value="mo">中国澳门</option><option value="ca">加拿大</option><option value="ie">爱尔兰</option><option value="sea">东南亚</option></select>
 <select id="sUni" onchange="runSearch()"><option value="">全部大学</option></select>
 <select id="sProg" onchange="runSearch()"><option value="">全部专业</option></select>
-<select id="sDegree" onchange="runSearch()"><option value="">全部学位</option><option value="bachelor">本科</option><option value="master">硕士</option><option value="phd">博士</option></select>
+<select id="sDegree" onchange="runSearch()"><option value="">全部专业</option><option value="bachelor">本科专业</option><option value="foundation">预科/Foundation</option></select>
 <input type="text" id="sSearch" placeholder="搜索大学或专业..." oninput="runSearch()">
 </div>
 <div class="score-input-grid">
@@ -618,7 +618,7 @@ body.dark .mobile-tab-bar{background:var(--card);border-top-color:var(--border)}
 <div><label>本科院校</label><input type="text" id="pfSchool" placeholder="如: 北京大学"></div>
 <div><label>GPA / 均分</label><input type="number" id="pfGpa" step="0.01" placeholder="如: 3.5 或 85"></div>
 <div><label>GPA制度</label><select id="pfGpaScale"><option value="4">4.0制</option><option value="100">百分制</option><option value="5">5.0制</option></select></div>
-<div><label>学历层次</label><select id="pfDegree"><option value="bachelor">申请本科</option><option value="master">申请硕士</option><option value="phd">申请博士</option></select></div>
+<div><label>学历层次</label><select id="pfDegree"><option value="bachelor">申请本科</option><option value="foundation">预科/Foundation</option></select></div>
 </div>
 </div>
 <div class="card">
@@ -1215,7 +1215,7 @@ function renderSearchResults(){
     }
     // Meta tags
     html+='<div class="meta">';
-    if(item.prog.g) html+='<span class="tag">GPA: '+item.prog.g+'</span>';
+    if(item.prog.g) html+='<span class="tag">入学要求: '+item.prog.g+'</span>';
     var pol=item.uni.pol||{};
     var ntKey=resolveNtState(pol.nt);var ntObj=NT_STATES[ntKey];
     html+='<span class="nt-badge nt-'+ntKey+'">'+ntObj.icon+' '+ntObj.n+'</span> ';
@@ -1227,7 +1227,7 @@ function renderSearchResults(){
     html+='<div class="prog-detail" id="pd'+idx+'"><div class="detail-grid">';
     html+='<dt>大学英文名</dt><dd>'+item.uni.e+'</dd>';
     html+='<dt>语言等级</dt><dd>'+item.prog.l+(item.uni.ll[item.prog.l]&&item.uni.ll[item.prog.l].label?' ('+item.uni.ll[item.prog.l].label+')':'')+'</dd>';
-    html+='<dt>GPA要求</dt><dd>'+(item.prog.g||'-')+'</dd>';
+    html+='<dt>入学成绩要求</dt><dd>'+(item.prog.g||'-')+'</dd>';
     html+='<dt>新版TOEFL政策</dt><dd><span class="nt-badge nt-'+ntKey+'">'+ntObj.icon+' '+ntObj.n+'</span></dd>';
     html+='<dt>MyBest Scores</dt><dd>'+(pol.mb?'接受':'不接受/未确认')+'</dd>';
     html+='<dt>成绩有效期</dt><dd>'+(pol.v||'2年')+'</dd>';
@@ -1281,7 +1281,7 @@ function runMatcher(){
     html+='</tbody></table>';
     var mPol=item.uni.pol||{};var mNtKey=resolveNtState(mPol.nt);var mNtObj=NT_STATES[mNtKey];
     html+='<span class="nt-badge nt-'+mNtKey+'">'+mNtObj.icon+' '+mNtObj.n+'</span> ';
-    if(item.prog.g) html+='<span class="tag">GPA: '+item.prog.g+'</span>';
+    if(item.prog.g) html+='<span class="tag">入学要求: '+item.prog.g+'</span>';
     if(item.prog.note) html+='<span class="tag">'+noteCn(item.prog.note)+'</span>';
     html+='</div>';
   });
