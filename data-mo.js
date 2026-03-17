@@ -12,17 +12,17 @@ COMPASS_DATA.mo = [
  schol:["UM Macao Scholarship (full/half tuition)","UM Academic Excellence Award"],
  materials:["Transcripts","Personal statement","English proficiency test score","Interview (some)"],
  p:[
-  {c:"cs",l:"std",g:"高考一本线上 / IB 28+ / A-Level BBB",note:"FST Computer Science BSc"},
-  {c:"ee",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"Electrical & Computer Engineering"},
-  {c:"ce",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"Civil Engineering"},
+  {c:"cs",l:"std",g:"高考一本线上 / IB 28+ / A-Level BBB",note:"科技学院计算机科学理学士 / FST Computer Science BSc"},
+  {c:"ee",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"电机及电脑工程 / Electrical & Computer Engineering"},
+  {c:"ce",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"土木工程 / Civil Engineering"},
   {c:"math",l:"std",g:"高考一本线上 / IB 28+ / BBB"},
-  {c:"bio",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"Biomedical Sciences"},
-  {c:"bus",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"Faculty of Business Administration"},
-  {c:"fin",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"BBA Finance"},
+  {c:"bio",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"生物医学 / Biomedical Sciences"},
+  {c:"bus",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"工商管理学院 / Faculty of Business Administration"},
+  {c:"fin",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"工商管理学士 / BBA Finance"},
   {c:"acct",l:"std",g:"高考一本线上 / IB 28+ / BBB"},
-  {c:"law",l:"std",g:"高考一本线上 / IB 30+ / AAB",note:"Faculty of Law - Portuguese & Chinese law"},
-  {c:"edu",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"Faculty of Education"},
-  {c:"media",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"Communication BA"},
+  {c:"law",l:"std",g:"高考一本线上 / IB 30+ / AAB",note:"法学院-葡萄牙法与中国法 / Faculty of Law - Portuguese & Chinese law"},
+  {c:"edu",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"教育学院 / Faculty of Education"},
+  {c:"media",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"传播学文学士 / Communication BA"},
   {c:"psych",l:"std",g:"高考一本线上 / IB 28+ / BBB"}
 ]},
 
@@ -37,13 +37,13 @@ COMPASS_DATA.mo = [
  schol:["MUST Scholarship for Outstanding Students","Merit-based tuition reduction available"],
  materials:["Transcripts","Personal statement","English proficiency test score"],
  p:[
-  {c:"cs",l:"std",g:"高考二本线上 / IB 26+ / BCC",note:"Faculty of Information Technology"},
-  {c:"bus",l:"std",g:"高考二本线上 / IB 26+ / BCC",note:"School of Business"},
+  {c:"cs",l:"std",g:"高考二本线上 / IB 26+ / BCC",note:"资讯科技学院 / Faculty of Information Technology"},
+  {c:"bus",l:"std",g:"高考二本线上 / IB 26+ / BCC",note:"商学院 / School of Business"},
   {c:"fin",l:"std",g:"高考二本线上 / IB 26+ / BCC"},
-  {c:"med",l:"std",g:"高考一本线上 / IB 30+ / AAB",note:"Faculty of Medicine - MBBS"},
-  {c:"pharm",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"Faculty of Pharmacy"},
-  {c:"media",l:"std",g:"高考二本线上 / IB 26+ / BCC",note:"School of Communication"},
-  {c:"art",l:"std",g:"高考二本线上 / Portfolio",note:"School of Art"},
+  {c:"med",l:"std",g:"高考一本线上 / IB 30+ / AAB",note:"医学院 / Faculty of Medicine - MBBS"},
+  {c:"pharm",l:"std",g:"高考一本线上 / IB 28+ / BBB",note:"药学院 / Faculty of Pharmacy"},
+  {c:"media",l:"std",g:"高考二本线上 / IB 26+ / BCC",note:"人文艺术学院传播学 / School of Communication"},
+  {c:"art",l:"std",g:"高考二本线上 / Portfolio",note:"人文艺术学院艺术学 / School of Art"},
   {c:"law",l:"std",g:"高考二本线上 / IB 28+ / BBB"}
 ]},
 
@@ -61,7 +61,7 @@ COMPASS_DATA.mo = [
   {c:"bus",l:"std",g:"高考二本线上 / IB 24+ / CCC"},
   {c:"fin",l:"std",g:"高考二本线上 / IB 24+ / CCC"},
   {c:"edu",l:"std",g:"高考二本线上 / IB 24+ / CCC"},
-  {c:"art",l:"std",g:"高考二本线上 / Portfolio",note:"Design programmes"},
+  {c:"art",l:"std",g:"高考二本线上 / Portfolio",note:"设计类课程 / Design programmes"},
   {c:"media",l:"std",g:"高考二本线上 / IB 24+ / CCC"}
 ]},
 
@@ -76,10 +76,10 @@ COMPASS_DATA.mo = [
  schol:["MPU Scholarship; government-funded tuition subsidy"],
  materials:["Transcripts","Personal statement","English proficiency test score"],
  p:[
-  {c:"cs",l:"std",g:"高考二本线上 / IB 24+ / CCC",note:"Computing programme"},
+  {c:"cs",l:"std",g:"高考二本线上 / IB 24+ / CCC",note:"计算机课程 / Computing programme"},
   {c:"bus",l:"std",g:"高考二本线上 / IB 24+ / CCC"},
   {c:"edu",l:"std",g:"高考二本线上 / IB 24+ / CCC"},
-  {c:"media",l:"std",g:"高考二本线上 / IB 24+ / CCC",note:"Arts and communication"},
-  {c:"art",l:"std",g:"高考二本线上 / Portfolio",note:"Visual arts & design"}
+  {c:"media",l:"std",g:"高考二本线上 / IB 24+ / CCC",note:"艺术与传播 / Arts and communication"},
+  {c:"art",l:"std",g:"高考二本线上 / Portfolio",note:"视觉艺术与设计 / Visual arts & design"}
 ]}
 ];

@@ -16,22 +16,22 @@ COMPASS_DATA.hk = [
  ],
  materials:["Online application","PS","CV","Transcript","Predicted grades","Interview"],
  p:[
-  {c:"cs",l:"std",g:"IB 38+ / A*AA / SAT 1480+",note:"Faculty of Engineering"},
-  {c:"eng",l:"std",g:"IB 36+ / A*AA",note:"BEng various disciplines"},
+  {c:"cs",l:"std",g:"IB 38+ / A*AA / SAT 1480+",note:"工程学院 / Faculty of Engineering"},
+  {c:"eng",l:"std",g:"IB 36+ / A*AA",note:"多种工程学士 / BEng various disciplines"},
   {c:"math",l:"std",g:"IB 36+ / AAA"},
   {c:"phys",l:"std",g:"IB 36+ / AAA"},
   {c:"chem",l:"std",g:"IB 36+ / AAA"},
   {c:"bio",l:"std",g:"IB 36+ / AAA"},
-  {c:"med",l:"high",g:"IB 42+ / A*A*A",note:"MBBS 6-yr; interview required"},
-  {c:"dent",l:"high",g:"IB 40+ / A*AA",note:"BDS 6-yr"},
-  {c:"law",l:"high",g:"IB 40+ / A*AA",note:"LLB; IELTS 7.0 required"},
-  {c:"econ",l:"std",g:"IB 36+ / A*AA",note:"BA(Econ&Fin) / BBA"},
-  {c:"bus",l:"std",g:"IB 36+ / AAA",note:"HKU Business School"},
-  {c:"fin",l:"std",g:"IB 36+ / A*AA",note:"BBA(Acc&Fin)"},
-  {c:"arch",l:"std",g:"IB 33+ / AAA",note:"BA Architecture"},
-  {c:"psych",l:"std",g:"IB 33+ / AAA",note:"BSocSc Psychology"},
-  {c:"media",l:"high",g:"IB 33+ / AAA",note:"BA Journalism; IELTS 7.0"},
-  {c:"edu",l:"std",g:"IB 33+ / AAA",note:"BEd"}
+  {c:"med",l:"high",g:"IB 42+ / A*A*A",note:"医学学士6年制；需面试 / MBBS 6-yr; interview required"},
+  {c:"dent",l:"high",g:"IB 40+ / A*AA",note:"牙医学士6年制 / BDS 6-yr"},
+  {c:"law",l:"high",g:"IB 40+ / A*AA",note:"法学士; IELTS 7.0 required / LLB; IELTS 7.0 required"},
+  {c:"econ",l:"std",g:"IB 36+ / A*AA",note:"经济与金融文学士/工商管理学士 / BA(Econ&Fin) / BBA"},
+  {c:"bus",l:"std",g:"IB 36+ / AAA",note:"港大商学院 / HKU Business School"},
+  {c:"fin",l:"std",g:"IB 36+ / A*AA",note:"会计与金融工商管理学士 / BBA(Acc&Fin)"},
+  {c:"arch",l:"std",g:"IB 33+ / AAA",note:"建筑学文学士 / BA Architecture"},
+  {c:"psych",l:"std",g:"IB 33+ / AAA",note:"社会科学学士心理学 / BSocSc Psychology"},
+  {c:"media",l:"high",g:"IB 33+ / AAA",note:"新闻学文学士；需IELTS 7.0 / BA Journalism; IELTS 7.0"},
+  {c:"edu",l:"std",g:"IB 33+ / AAA",note:"教育学士 / BEd"}
 ]},
 
 {id:"cuhk",n:"香港中文大学",e:"Chinese University of Hong Kong",c:"Hong Kong",r:32,cat:"top3",the:41,
@@ -48,19 +48,19 @@ COMPASS_DATA.hk = [
  ],
  materials:["Online application","PS","Transcript","Predicted grades","Interview"],
  p:[
-  {c:"cs",l:"std",g:"IB 35+ / AAA / SAT 1440+",note:"Computer Science BSc"},
-  {c:"eng",l:"std",g:"IB 33+ / AAA",note:"BEng various"},
+  {c:"cs",l:"std",g:"IB 35+ / AAA / SAT 1440+",note:"计算机科学理学士 / Computer Science BSc"},
+  {c:"eng",l:"std",g:"IB 33+ / AAA",note:"多种工程学士 / BEng various"},
   {c:"math",l:"std",g:"IB 33+ / AAA"},
   {c:"phys",l:"std",g:"IB 33+ / AAA"},
   {c:"chem",l:"std",g:"IB 33+ / AAA"},
   {c:"bio",l:"std",g:"IB 33+ / AAA"},
-  {c:"med",l:"high",g:"IB 40+ / A*A*A",note:"MBChB 6-yr; interview"},
+  {c:"med",l:"high",g:"IB 40+ / A*A*A",note:"内外全科医学士6年制；需面试 / MBChB 6-yr; interview"},
   {c:"law",l:"high",g:"IB 38+ / A*AA"},
   {c:"econ",l:"std",g:"IB 33+ / AAA"},
-  {c:"bus",l:"std",g:"IB 33+ / AAA",note:"CUHK Business School"},
-  {c:"fin",l:"std",g:"IB 33+ / AAA",note:"BBA Finance"},
+  {c:"bus",l:"std",g:"IB 33+ / AAA",note:"中大商学院 / CUHK Business School"},
+  {c:"fin",l:"std",g:"IB 33+ / AAA",note:"工商管理学士 / BBA Finance"},
   {c:"psych",l:"std",g:"IB 33+ / AAA"},
-  {c:"media",l:"std",g:"IB 33+ / AAA",note:"School of Journalism"},
+  {c:"media",l:"std",g:"IB 33+ / AAA",note:"新闻与传播学院 / School of Journalism"},
   {c:"edu",l:"std",g:"IB 30+ / AAB"}
 ]},
 
@@ -78,19 +78,19 @@ COMPASS_DATA.hk = [
  ],
  materials:["Online application","PS","Transcript","Predicted grades","Interview"],
  p:[
-  {c:"cs",l:"std",g:"IB 36+ / A*AA / SAT 1480+",note:"BSc Computer Science; strong programme"},
-  {c:"ee",l:"std",g:"IB 34+ / AAA",note:"BEng Electronic Engineering"},
-  {c:"me",l:"std",g:"IB 34+ / AAA",note:"BEng Mechanical Engineering"},
-  {c:"ds",l:"std",g:"IB 36+ / A*AA",note:"BSc Data Science & Technology"},
-  {c:"ai",l:"std",g:"IB 36+ / A*AA",note:"BEng AI; new programme"},
+  {c:"cs",l:"std",g:"IB 36+ / A*AA / SAT 1480+",note:"计算机科学理学士；强势学科 / BSc Computer Science; strong programme"},
+  {c:"ee",l:"std",g:"IB 34+ / AAA",note:"电子工程学士 / BEng Electronic Engineering"},
+  {c:"me",l:"std",g:"IB 34+ / AAA",note:"机械工程学士 / BEng Mechanical Engineering"},
+  {c:"ds",l:"std",g:"IB 36+ / A*AA",note:"数据科学与技术理学士 / BSc Data Science & Technology"},
+  {c:"ai",l:"std",g:"IB 36+ / A*AA",note:"人工智能工程学士；新课程 / BEng AI; new programme"},
   {c:"math",l:"std",g:"IB 34+ / AAA"},
   {c:"phys",l:"std",g:"IB 34+ / AAA"},
   {c:"chem",l:"std",g:"IB 33+ / AAA"},
-  {c:"bio",l:"std",g:"IB 33+ / AAA",note:"Biotech specialism"},
+  {c:"bio",l:"std",g:"IB 33+ / AAA",note:"生物技术方向 / Biotech specialism"},
   {c:"econ",l:"std",g:"IB 34+ / AAA"},
-  {c:"bus",l:"std",g:"IB 34+ / AAA",note:"HKUST Business School"},
-  {c:"fin",l:"std",g:"IB 34+ / AAA",note:"BBA Finance"},
-  {c:"env",l:"std",g:"IB 33+ / AAA",note:"Environmental Science"}
+  {c:"bus",l:"std",g:"IB 34+ / AAA",note:"科大商学院 / HKUST Business School"},
+  {c:"fin",l:"std",g:"IB 34+ / AAA",note:"工商管理学士 / BBA Finance"},
+  {c:"env",l:"std",g:"IB 33+ / AAA",note:"环境科学 / Environmental Science"}
 ]},
 
 // ============ TOP 100 ============
@@ -107,16 +107,16 @@ COMPASS_DATA.hk = [
  ],
  materials:["Online application","PS","Transcript","Predicted grades"],
  p:[
-  {c:"cs",l:"std",g:"IB 30+ / ABB",note:"Computing BSc"},
-  {c:"ee",l:"std",g:"IB 30+ / ABB",note:"Electronic & Information Engineering"},
+  {c:"cs",l:"std",g:"IB 30+ / ABB",note:"计算学理学士 / Computing BSc"},
+  {c:"ee",l:"std",g:"IB 30+ / ABB",note:"电子及资讯工程 / Electronic & Information Engineering"},
   {c:"me",l:"std",g:"IB 30+ / ABB"},
-  {c:"ce",l:"std",g:"IB 30+ / ABB",note:"Civil Engineering"},
-  {c:"ds",l:"std",g:"IB 30+ / ABB",note:"Data Science"},
-  {c:"bus",l:"std",g:"IB 30+ / ABB",note:"Faculty of Business"},
-  {c:"fin",l:"std",g:"IB 30+ / ABB",note:"BBA Accounting & Finance"},
-  {c:"arch",l:"std",g:"IB 30+ / ABB",note:"School of Design - top ranked"},
-  {c:"nurs",l:"std",g:"IB 28+ / ABB",note:"Nursing BSc"},
-  {c:"bio",l:"std",g:"IB 30+ / ABB",note:"Applied Biology & Biotech"}
+  {c:"ce",l:"std",g:"IB 30+ / ABB",note:"土木工程 / Civil Engineering"},
+  {c:"ds",l:"std",g:"IB 30+ / ABB",note:"数据科学 / Data Science"},
+  {c:"bus",l:"std",g:"IB 30+ / ABB",note:"商学院 / Faculty of Business"},
+  {c:"fin",l:"std",g:"IB 30+ / ABB",note:"工商管理学士 / BBA Accounting & Finance"},
+  {c:"arch",l:"std",g:"IB 30+ / ABB",note:"设计学院-顶尖排名 / School of Design - top ranked"},
+  {c:"nurs",l:"std",g:"IB 28+ / ABB",note:"护理学理学士 / Nursing BSc"},
+  {c:"bio",l:"std",g:"IB 30+ / ABB",note:"应用生物及生物科技 / Applied Biology & Biotech"}
 ]},
 
 {id:"cityu",n:"香港城市大学",e:"City University of Hong Kong",c:"Hong Kong",r:63,cat:"top100",the:75,
@@ -132,16 +132,16 @@ COMPASS_DATA.hk = [
  ],
  materials:["Online application","PS","Transcript","Predicted grades"],
  p:[
-  {c:"cs",l:"std",g:"IB 31+ / ABB",note:"BEng Computer Science"},
+  {c:"cs",l:"std",g:"IB 31+ / ABB",note:"计算机科学工程学士 / BEng Computer Science"},
   {c:"ee",l:"std",g:"IB 31+ / ABB"},
-  {c:"ds",l:"std",g:"IB 31+ / ABB",note:"Data Science BEng"},
+  {c:"ds",l:"std",g:"IB 31+ / ABB",note:"数据科学工程学士 / Data Science BEng"},
   {c:"math",l:"std",g:"IB 30+ / ABB"},
-  {c:"bio",l:"std",g:"IB 30+ / ABB",note:"Biomedical Sciences"},
-  {c:"vet",l:"std",g:"IB 33+ / AAA",note:"Jockey Club College of Veterinary Medicine"},
-  {c:"law",l:"std",g:"IB 33+ / AAA",note:"School of Law"},
-  {c:"bus",l:"std",g:"IB 31+ / ABB",note:"College of Business"},
+  {c:"bio",l:"std",g:"IB 30+ / ABB",note:"生物医学科学 / Biomedical Sciences"},
+  {c:"vet",l:"std",g:"IB 33+ / AAA",note:"赛马会动物医学及生命科学院 / Jockey Club College of Veterinary Medicine"},
+  {c:"law",l:"std",g:"IB 33+ / AAA",note:"法律学院 / School of Law"},
+  {c:"bus",l:"std",g:"IB 31+ / ABB",note:"商学院 / College of Business"},
   {c:"fin",l:"std",g:"IB 31+ / ABB"},
-  {c:"media",l:"std",g:"IB 30+ / ABB",note:"Media & Communication"}
+  {c:"media",l:"std",g:"IB 30+ / ABB",note:"媒体与传播 / Media & Communication"}
 ]},
 
 // ============ OTHER ============
@@ -157,11 +157,11 @@ COMPASS_DATA.hk = [
  ],
  materials:["Online application","PS","Transcript"],
  p:[
-  {c:"cs",l:"std",g:"IB 28+ / BBB",note:"Computer Science BSc"},
-  {c:"bus",l:"std",g:"IB 28+ / BBB",note:"BBA"},
+  {c:"cs",l:"std",g:"IB 28+ / BBB",note:"计算机科学理学士 / Computer Science BSc"},
+  {c:"bus",l:"std",g:"IB 28+ / BBB",note:"工商管理学士 / BBA"},
   {c:"fin",l:"std",g:"IB 28+ / BBB"},
-  {c:"media",l:"std",g:"IB 28+ / BBB",note:"School of Communication - top ranked in Asia"},
-  {c:"art",l:"std",g:"IB 26+ / BCC+Portfolio",note:"Academy of Visual Arts"},
+  {c:"media",l:"std",g:"IB 28+ / BBB",note:"传播学院-亚洲顶尖 / School of Communication - top ranked in Asia"},
+  {c:"art",l:"std",g:"IB 26+ / BCC+Portfolio",note:"视觉艺术院 / Academy of Visual Arts"},
   {c:"bio",l:"std",g:"IB 28+ / BBB"},
   {c:"psych",l:"std",g:"IB 28+ / BBB"},
   {c:"edu",l:"std",g:"IB 28+ / BBB"}
@@ -179,11 +179,11 @@ COMPASS_DATA.hk = [
  ],
  materials:["Online application","PS","Transcript","Interview"],
  p:[
-  {c:"edu",l:"std",g:"IB 26+ / BCC",note:"BEd flagship - top education university in Asia"},
-  {c:"psych",l:"std",g:"IB 26+ / BCC",note:"Educational Psychology"},
-  {c:"ling",l:"std",g:"IB 26+ / BCC",note:"Language education specialisms"},
-  {c:"soc",l:"std",g:"IB 26+ / BCC",note:"Social Sciences"},
-  {c:"cs",l:"std",g:"IB 26+ / BCC",note:"AI & Educational Technology"}
+  {c:"edu",l:"std",g:"IB 26+ / BCC",note:"教育学士旗舰专业-亚洲顶尖教育大学 / BEd flagship - top education university in Asia"},
+  {c:"psych",l:"std",g:"IB 26+ / BCC",note:"教育心理学 / Educational Psychology"},
+  {c:"ling",l:"std",g:"IB 26+ / BCC",note:"语言教育专业方向 / Language education specialisms"},
+  {c:"soc",l:"std",g:"IB 26+ / BCC",note:"社会科学 / Social Sciences"},
+  {c:"cs",l:"std",g:"IB 26+ / BCC",note:"人工智能与教育科技 / AI & Educational Technology"}
 ]},
 
 {id:"lingnan",n:"岭南大学",e:"Lingnan University",c:"Hong Kong",r:705,cat:"other",the:325,
@@ -198,11 +198,11 @@ COMPASS_DATA.hk = [
  ],
  materials:["Online application","PS","Transcript"],
  p:[
-  {c:"bus",l:"std",g:"IB 26+ / BCC",note:"Liberal arts focused university"},
+  {c:"bus",l:"std",g:"IB 26+ / BCC",note:"博雅教育型大学 / Liberal arts focused university"},
   {c:"fin",l:"std",g:"IB 26+ / BCC"},
   {c:"econ",l:"std",g:"IB 26+ / BCC"},
   {c:"media",l:"std",g:"IB 26+ / BCC"},
-  {c:"psych",l:"std",g:"IB 26+ / BCC",note:"Applied Psychology"},
-  {c:"soc",l:"std",g:"IB 26+ / BCC",note:"Sociology / Social Sciences"}
+  {c:"psych",l:"std",g:"IB 26+ / BCC",note:"应用心理学 / Applied Psychology"},
+  {c:"soc",l:"std",g:"IB 26+ / BCC",note:"社会学/社会科学 / Sociology / Social Sciences"}
 ]}
 ];

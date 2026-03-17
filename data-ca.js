@@ -14,20 +14,20 @@ var D = [
  schol:["Lester B. Pearson Scholarship (full ride)","President's Scholars of Excellence","UofT Scholars Program"],
  materials:["OUAC application","Transcripts","Supplementary application","English proficiency"],
  p:[
-  {c:"cs",l:"def",g:"mid-to-high 90s",note:"Arts & Science or Engineering stream; highly competitive"},
-  {c:"eng",l:"def",g:"mid-to-high 90s",note:"Faculty of Applied Science & Engineering"},
-  {c:"ee",l:"def",g:"low-to-mid 90s",note:"Electrical & Computer Engineering"},
+  {c:"cs",l:"def",g:"mid-to-high 90s",note:"文理学院或工程方向；竞争激烈 / Arts & Science or Engineering stream; highly competitive"},
+  {c:"eng",l:"def",g:"mid-to-high 90s",note:"应用科学与工程学院 / Faculty of Applied Science & Engineering"},
+  {c:"ee",l:"def",g:"low-to-mid 90s",note:"电气与计算机工程 / Electrical & Computer Engineering"},
   {c:"math",l:"def",g:"low-to-mid 90s"},
   {c:"phys",l:"def",g:"low-to-mid 90s"},
   {c:"chem",l:"def",g:"mid-to-high 80s"},
-  {c:"bio",l:"def",g:"mid-to-high 80s",note:"Life Sciences"},
-  {c:"econ",l:"def",g:"low-to-mid 90s",note:"Economics / Commerce"},
-  {c:"bus",l:"def",g:"low-to-mid 90s",note:"Rotman Commerce"},
-  {c:"law",l:"def",g:"mid-to-high 80s",note:"No direct UG law; pre-law tracks available"},
+  {c:"bio",l:"def",g:"mid-to-high 80s",note:"生命科学 / Life Sciences"},
+  {c:"econ",l:"def",g:"low-to-mid 90s",note:"经济学/商学 / Economics / Commerce"},
+  {c:"bus",l:"def",g:"low-to-mid 90s",note:"Rotman商学院 / Rotman Commerce"},
+  {c:"law",l:"def",g:"mid-to-high 80s",note:"无直接本科法律；有法律预科方向 / No direct UG law; pre-law tracks available"},
   {c:"psych",l:"def",g:"mid-to-high 80s"},
-  {c:"med",l:"def",g:"low-to-mid 90s",note:"Life Science pre-med track; MD is post-grad"},
-  {c:"arch",l:"def",g:"mid-to-high 80s",note:"Daniels Faculty; portfolio"},
-  {c:"ds",l:"def",g:"low-to-mid 90s",note:"Data Science specialist"}
+  {c:"med",l:"def",g:"low-to-mid 90s",note:"医学预科；MD为研究生 / pre-med; MD is post-grad"},
+  {c:"arch",l:"def",g:"mid-to-high 80s",note:"丹尼尔斯学院；需作品集 / Daniels Faculty; portfolio"},
+  {c:"ds",l:"def",g:"low-to-mid 90s",note:"数据科学专业方向 / Data Science specialist"}
 ]},
 
 {id:"ubc",n:"英属哥伦比亚大学",e:"University of British Columbia",c:"Vancouver, BC",r:34,cat:"u15",
@@ -41,18 +41,18 @@ var D = [
  schol:["International Major Entrance Scholarship (up to full tuition)","Outstanding International Student Award","Karen McKellin International Leader of Tomorrow"],
  materials:["UBC application","Transcripts","Personal profile","English proficiency"],
  p:[
-  {c:"cs",l:"def",g:"mid-to-high 90s",note:"BSc Computer Science; highly competitive"},
-  {c:"eng",l:"def",g:"mid-to-high 90s",note:"Applied Science BASc"},
+  {c:"cs",l:"def",g:"mid-to-high 90s",note:"计算机科学理学士；竞争激烈 / BSc Computer Science; highly competitive"},
+  {c:"eng",l:"def",g:"mid-to-high 90s",note:"应用科学学士 / Applied Science BASc"},
   {c:"math",l:"def",g:"low-to-mid 90s"},
   {c:"phys",l:"def",g:"low-to-mid 90s"},
   {c:"chem",l:"def",g:"mid-to-high 80s"},
   {c:"bio",l:"def",g:"mid-to-high 80s"},
-  {c:"econ",l:"def",g:"mid-to-high 80s",note:"Vancouver School of Economics"},
-  {c:"bus",l:"def",g:"low-to-mid 90s",note:"Sauder School of Business BCom"},
+  {c:"econ",l:"def",g:"mid-to-high 80s",note:"温哥华经济学院 / Vancouver School of Economics"},
+  {c:"bus",l:"def",g:"low-to-mid 90s",note:"Sauder School of Business 商学士 / BCom"},
   {c:"psych",l:"def",g:"mid-to-high 80s"},
-  {c:"media",l:"def",g:"mid-to-high 80s",note:"Journalism / Media Studies"},
-  {c:"env",l:"def",g:"mid-to-high 80s",note:"Land & Food Systems / Environmental Sc."},
-  {c:"arch",l:"def",g:"mid-to-high 80s",note:"SALA; portfolio may be required"}
+  {c:"media",l:"def",g:"mid-to-high 80s",note:"新闻学/媒体研究 / Journalism / Media Studies"},
+  {c:"env",l:"def",g:"mid-to-high 80s",note:"土地与食品系统/环境科学 / Land & Food Systems / Environmental Sc."},
+  {c:"arch",l:"def",g:"mid-to-high 80s",note:"建筑与景观学院；可能需要作品集 / SALA; portfolio may be required"}
 ]},
 
 {id:"mcgill",n:"麦吉尔大学",e:"McGill University",c:"Montreal, QC",r:29,cat:"u15",
@@ -67,18 +67,18 @@ var D = [
  schol:["Entrance Scholarships (up to CAD 12,000)","One Planet Scholarship","Faculty-specific awards"],
  materials:["McGill application","Transcripts","English proficiency"],
  p:[
-  {c:"cs",l:"def",g:"low-to-mid 90s",note:"School of Computer Science BSc"},
-  {c:"eng",l:"def",g:"low-to-mid 90s",note:"Faculty of Engineering BEng"},
+  {c:"cs",l:"def",g:"low-to-mid 90s",note:"计算机科学学院理学士 / School of Computer Science BSc"},
+  {c:"eng",l:"def",g:"low-to-mid 90s",note:"工程学院 / Faculty of Engineering BEng"},
   {c:"math",l:"def",g:"low-to-mid 90s"},
   {c:"phys",l:"def",g:"low-to-mid 90s"},
   {c:"chem",l:"def",g:"mid-to-high 80s"},
   {c:"bio",l:"def",g:"mid-to-high 80s"},
   {c:"econ",l:"def",g:"mid-to-high 80s"},
-  {c:"bus",l:"high",g:"low-to-mid 90s",note:"Desautels BCom; IELTS 7.0"},
-  {c:"law",l:"high",g:"low-to-mid 90s",note:"Pre-law; BCL/LLB is post-grad"},
+  {c:"bus",l:"high",g:"low-to-mid 90s",note:"Desautels 商学士 / BCom; IELTS 7.0"},
+  {c:"law",l:"high",g:"low-to-mid 90s",note:"法律预科；民法/法学士为研究生学位 / Pre-law; BCL/LLB is post-grad"},
   {c:"psych",l:"def",g:"mid-to-high 80s"},
-  {c:"med",l:"def",g:"low-to-mid 90s",note:"Pre-med pathway; MDCM post-grad"},
-  {c:"arch",l:"def",g:"mid-to-high 80s",note:"School of Architecture BSc(Arch)"}
+  {c:"med",l:"def",g:"low-to-mid 90s",note:"医学预科通道；MDCM为研究生学位 / Pre-med pathway; MDCM post-grad"},
+  {c:"arch",l:"def",g:"mid-to-high 80s",note:"建筑学院理学士 / School of Architecture BSc(Arch)"}
 ]},
 
 {id:"waterloo",n:"滑铁卢大学",e:"University of Waterloo",c:"Waterloo, ON",r:112,cat:"u15",
@@ -92,17 +92,17 @@ var D = [
  schol:["President's Scholarship of Distinction (CAD 10,000)","International Experience Award","Faculty-specific entrance awards"],
  materials:["OUAC application","AIF (Admission Information Form)","Transcripts","English proficiency","Euclid/CCC contest (optional)"],
  p:[
-  {c:"cs",l:"def",g:"low-to-mid 90s",note:"Cheriton School of CS; co-op available; extremely competitive"},
-  {c:"eng",l:"def",g:"low-to-mid 90s",note:"Software/Computer/Electrical Engineering; co-op"},
+  {c:"cs",l:"def",g:"low-to-mid 90s",note:"Cheriton计算机学院；可选带薪实习；竞争极激烈 / Cheriton School of CS; co-op available; extremely competitive"},
+  {c:"eng",l:"def",g:"low-to-mid 90s",note:"软件/计算机/电气工程；带薪实习 / Software/Computer/Electrical Engineering; co-op"},
   {c:"ee",l:"def",g:"low-to-mid 90s"},
   {c:"me",l:"def",g:"low-to-mid 90s"},
-  {c:"math",l:"def",g:"low-to-mid 90s",note:"Faculty of Mathematics; co-op"},
-  {c:"stat",l:"def",g:"low-to-mid 90s",note:"Actuarial Science / Statistics"},
+  {c:"math",l:"def",g:"low-to-mid 90s",note:"数学学院；带薪实习 / Faculty of Mathematics; co-op"},
+  {c:"stat",l:"def",g:"low-to-mid 90s",note:"精算与统计 / Actuarial Science / Statistics"},
   {c:"phys",l:"def",g:"mid-to-high 80s"},
-  {c:"bus",l:"def",g:"mid-to-high 80s",note:"AFM / FARM; math-heavy business"},
-  {c:"acct",l:"def",g:"mid-to-high 80s",note:"School of Accounting & Finance"},
-  {c:"ds",l:"def",g:"low-to-mid 90s",note:"Data Science within Math faculty"},
-  {c:"env",l:"def",g:"mid-to-high 80s",note:"Faculty of Environment"}
+  {c:"bus",l:"def",g:"mid-to-high 80s",note:"会计与金融管理；数学导向商科 / AFM / FARM; math-heavy business"},
+  {c:"acct",l:"def",g:"mid-to-high 80s",note:"会计与金融学院 / School of Accounting & Finance"},
+  {c:"ds",l:"def",g:"low-to-mid 90s",note:"数学学院数据科学方向 / Data Science within Math faculty"},
+  {c:"env",l:"def",g:"mid-to-high 80s",note:"环境学院 / Faculty of Environment"}
 ]},
 
 {id:"ualberta",n:"阿尔伯塔大学",e:"University of Alberta",c:"Edmonton, AB",r:96,cat:"u15",
@@ -116,18 +116,18 @@ var D = [
  schol:["International Student Scholarship","President's Award of Distinction","Faculty-specific awards"],
  materials:["Alberta application","Transcripts","English proficiency"],
  p:[
-  {c:"cs",l:"def",g:"mid-to-high 80s",note:"Computing Science BSc"},
-  {c:"eng",l:"def",g:"mid-to-high 80s",note:"Faculty of Engineering BEng"},
+  {c:"cs",l:"def",g:"mid-to-high 80s",note:"计算科学理学士 / Computing Science BSc"},
+  {c:"eng",l:"def",g:"mid-to-high 80s",note:"工程学院 / Faculty of Engineering BEng"},
   {c:"math",l:"def",g:"mid-to-high 80s"},
   {c:"phys",l:"def",g:"mid-to-high 80s"},
   {c:"chem",l:"def",g:"mid-to-high 80s"},
   {c:"bio",l:"def",g:"mid-to-high 80s"},
   {c:"econ",l:"def",g:"mid-to-high 80s"},
-  {c:"bus",l:"def",g:"mid-to-high 80s",note:"Alberta School of Business BCom"},
-  {c:"edu",l:"def",g:"mid-to-high 80s",note:"Faculty of Education BEd"},
+  {c:"bus",l:"def",g:"mid-to-high 80s",note:"Alberta School of Business 商学士 / BCom"},
+  {c:"edu",l:"def",g:"mid-to-high 80s",note:"教育学院 教育学士 / Faculty of Education BEd"},
   {c:"psych",l:"def",g:"mid-to-high 80s"},
   {c:"env",l:"def",g:"mid-to-high 80s"},
-  {c:"nurs",l:"def",g:"mid-to-high 80s",note:"BScN Nursing"}
+  {c:"nurs",l:"def",g:"mid-to-high 80s",note:"护理理学士 / BScN Nursing"}
 ]},
 
 {id:"mcmaster",n:"麦克马斯特大学",e:"McMaster University",c:"Hamilton, ON",r:152,cat:"u15",
@@ -141,17 +141,17 @@ var D = [
  schol:["Provost's Award","McMaster International Excellence Award","Faculty awards"],
  materials:["OUAC application","Supplementary application","Transcripts","English proficiency"],
  p:[
-  {c:"cs",l:"def",g:"mid-to-high 80s",note:"Computing & Software BASc"},
-  {c:"eng",l:"def",g:"low-to-mid 90s",note:"Engineering I (common first year)"},
+  {c:"cs",l:"def",g:"mid-to-high 80s",note:"计算与软件应用科学学士 / Computing & Software BASc"},
+  {c:"eng",l:"def",g:"low-to-mid 90s",note:"工程一年级（通识基础年） / Engineering I (common first year)"},
   {c:"math",l:"def",g:"mid-to-high 80s"},
   {c:"phys",l:"def",g:"mid-to-high 80s"},
   {c:"chem",l:"def",g:"mid-to-high 80s"},
-  {c:"bio",l:"def",g:"mid-to-high 80s",note:"Life Sciences - Health Sciences stream"},
-  {c:"bus",l:"def",g:"mid-to-high 80s",note:"DeGroote School BCom"},
+  {c:"bio",l:"def",g:"mid-to-high 80s",note:"生命科学-健康科学方向 / Life Sciences - Health Sciences stream"},
+  {c:"bus",l:"def",g:"mid-to-high 80s",note:"DeGroote School 商学士 / BCom"},
   {c:"econ",l:"def",g:"mid-to-high 80s"},
   {c:"psych",l:"def",g:"mid-to-high 80s"},
-  {c:"nurs",l:"def",g:"low-to-mid 90s",note:"BScN"},
-  {c:"med",l:"def",g:"low-to-mid 90s",note:"Health Sciences BHSc; pre-med; CARS test"}
+  {c:"nurs",l:"def",g:"low-to-mid 90s",note:"护理理学士 / BScN"},
+  {c:"med",l:"def",g:"low-to-mid 90s",note:"健康科学学士；医学预科；需CARS测试 / Health Sciences BHSc; pre-med; CARS test"}
 ]},
 
 // ============ U15 MID TIER ============
@@ -167,15 +167,15 @@ var D = [
  materials:["OUAC application","Transcripts","English proficiency"],
  p:[
   {c:"cs",l:"def",g:"mid-to-high 80s"},
-  {c:"eng",l:"def",g:"mid-to-high 80s",note:"Faculty of Engineering BESc"},
+  {c:"eng",l:"def",g:"mid-to-high 80s",note:"工程学院 / Faculty of Engineering BESc"},
   {c:"math",l:"def",g:"mid-to-high 80s"},
-  {c:"bio",l:"def",g:"mid-to-high 80s",note:"Medical Sciences popular pre-med"},
-  {c:"bus",l:"def",g:"low-to-mid 90s",note:"Ivey AEO / HBA; very competitive"},
+  {c:"bio",l:"def",g:"mid-to-high 80s",note:"医学科学-热门医学预科 / Medical Sciences popular pre-med"},
+  {c:"bus",l:"def",g:"low-to-mid 90s",note:"Ivey商学院AEO/HBA；竞争激烈 / Ivey AEO / HBA; very competitive"},
   {c:"econ",l:"def",g:"mid-to-high 80s"},
   {c:"psych",l:"def",g:"mid-to-high 80s"},
-  {c:"media",l:"def",g:"mid-to-high 80s",note:"Media, Information & Technoculture"},
-  {c:"nurs",l:"def",g:"mid-to-high 80s",note:"BScN"},
-  {c:"med",l:"def",g:"low-to-mid 90s",note:"Medical Sciences pre-med track"}
+  {c:"media",l:"def",g:"mid-to-high 80s",note:"媒体、信息与科技文化 / Media, Information & Technoculture"},
+  {c:"nurs",l:"def",g:"mid-to-high 80s",note:"护理理学士 / BScN"},
+  {c:"med",l:"def",g:"low-to-mid 90s",note:"医学科学预科通道 / Medical Sciences pre-med track"}
 ]},
 
 {id:"queens",n:"女王大学",e:"Queen's University",c:"Kingston, ON",r:176,cat:"u15",
@@ -189,15 +189,15 @@ var D = [
  schol:["Queen's International Scholarship","Chancellor's Scholarship","Principal's Scholarship"],
  materials:["OUAC application","Personal Statement of Experience","Transcripts","English proficiency"],
  p:[
-  {c:"cs",l:"def",g:"mid-to-high 80s",note:"School of Computing BSc"},
-  {c:"eng",l:"def",g:"mid-to-high 80s",note:"Smith Engineering BASc"},
+  {c:"cs",l:"def",g:"mid-to-high 80s",note:"计算学院理学士 / School of Computing BSc"},
+  {c:"eng",l:"def",g:"mid-to-high 80s",note:"史密斯工程应用科学学士 / Smith Engineering BASc"},
   {c:"math",l:"def",g:"mid-to-high 80s"},
   {c:"phys",l:"def",g:"mid-to-high 80s"},
-  {c:"bio",l:"def",g:"mid-to-high 80s",note:"Life Sciences"},
-  {c:"bus",l:"def",g:"low-to-mid 90s",note:"Smith School BCom; highly competitive"},
+  {c:"bio",l:"def",g:"mid-to-high 80s",note:"生命科学 / Life Sciences"},
+  {c:"bus",l:"def",g:"low-to-mid 90s",note:"Smith School 商学士 / BCom; 竞争激烈 / highly competitive"},
   {c:"econ",l:"def",g:"mid-to-high 80s"},
   {c:"psych",l:"def",g:"mid-to-high 80s"},
-  {c:"nurs",l:"def",g:"mid-to-high 80s",note:"BNSc"}
+  {c:"nurs",l:"def",g:"mid-to-high 80s",note:"护理理学士 / BNSc"}
 ]},
 
 {id:"uottawa",n:"渥太华大学",e:"University of Ottawa",c:"Ottawa, ON",r:203,cat:"u15",
@@ -211,16 +211,16 @@ var D = [
  schol:["International Admission Scholarship","Merit Scholarship","Chancellor's Scholarship"],
  materials:["Application","Transcripts","English proficiency"],
  p:[
-  {c:"cs",l:"def",g:"mid-to-high 80s",note:"School of EECS; bilingual campus"},
-  {c:"eng",l:"def",g:"mid-to-high 80s",note:"Faculty of Engineering"},
+  {c:"cs",l:"def",g:"mid-to-high 80s",note:"电气工程与计算机科学学院；双语校园 / School of EECS; bilingual campus"},
+  {c:"eng",l:"def",g:"mid-to-high 80s",note:"工程学院 / Faculty of Engineering"},
   {c:"math",l:"def",g:"mid-to-high 80s"},
   {c:"bio",l:"def",g:"mid-to-high 80s"},
-  {c:"bus",l:"def",g:"mid-to-high 80s",note:"Telfer School BCom"},
+  {c:"bus",l:"def",g:"mid-to-high 80s",note:"Telfer School 商学士 / BCom"},
   {c:"econ",l:"def",g:"mid-to-high 80s"},
-  {c:"law",l:"def",g:"mid-to-high 80s",note:"Pre-law; Civil & Common Law Faculty (post-grad)"},
+  {c:"law",l:"def",g:"mid-to-high 80s",note:"法律预科；民法与普通法学院（研究生） / Pre-law; Civil & Common Law Faculty (post-grad)"},
   {c:"psych",l:"def",g:"mid-to-high 80s"},
-  {c:"edu",l:"def",g:"mid-to-high 80s",note:"Faculty of Education"},
-  {c:"nurs",l:"def",g:"mid-to-high 80s",note:"BScN"}
+  {c:"edu",l:"def",g:"mid-to-high 80s",note:"教育学院 / Faculty of Education"},
+  {c:"nurs",l:"def",g:"mid-to-high 80s",note:"护理理学士 / BScN"}
 ]},
 
 {id:"dalhousie",n:"达尔豪斯大学",e:"Dalhousie University",c:"Halifax, NS",r:298,cat:"u15",
@@ -234,15 +234,15 @@ var D = [
  schol:["Entrance Scholarships (up to CAD 40,000)","International Impact Scholarship","Faculty awards"],
  materials:["Dalhousie application","Transcripts","English proficiency"],
  p:[
-  {c:"cs",l:"def",g:"mid-to-high 80s",note:"Faculty of Computer Science"},
+  {c:"cs",l:"def",g:"mid-to-high 80s",note:"计算机科学学院 / Faculty of Computer Science"},
   {c:"eng",l:"def",g:"mid-to-high 80s"},
   {c:"math",l:"def",g:"mid-to-high 80s"},
-  {c:"bio",l:"def",g:"mid-to-high 80s",note:"Ocean Sciences strong"},
-  {c:"bus",l:"def",g:"mid-to-high 80s",note:"Rowe School BCom"},
+  {c:"bio",l:"def",g:"mid-to-high 80s",note:"海洋科学实力强 / Ocean Sciences strong"},
+  {c:"bus",l:"def",g:"mid-to-high 80s",note:"Rowe School 商学士 / BCom"},
   {c:"econ",l:"def",g:"mid-to-high 80s"},
   {c:"psych",l:"def",g:"mid-to-high 80s"},
-  {c:"env",l:"def",g:"mid-to-high 80s",note:"Marine & Environmental"},
-  {c:"nurs",l:"def",g:"mid-to-high 80s",note:"BScN"}
+  {c:"env",l:"def",g:"mid-to-high 80s",note:"海洋与环境 / Marine & Environmental"},
+  {c:"nurs",l:"def",g:"mid-to-high 80s",note:"护理理学士 / BScN"}
 ]},
 
 {id:"ucalgary",n:"卡尔加里大学",e:"University of Calgary",c:"Calgary, AB",r:175,cat:"u15",
@@ -257,14 +257,14 @@ var D = [
  materials:["Calgary application","Transcripts","English proficiency"],
  p:[
   {c:"cs",l:"def",g:"mid-to-high 80s"},
-  {c:"eng",l:"def",g:"mid-to-high 80s",note:"Schulich School of Engineering"},
+  {c:"eng",l:"def",g:"mid-to-high 80s",note:"舒立赫工程学院 / Schulich School of Engineering"},
   {c:"math",l:"def",g:"mid-to-high 80s"},
   {c:"bio",l:"def",g:"mid-to-high 80s"},
-  {c:"bus",l:"def",g:"mid-to-high 80s",note:"Haskayne BCom"},
+  {c:"bus",l:"def",g:"mid-to-high 80s",note:"Haskayne 商学士 / BCom"},
   {c:"econ",l:"def",g:"mid-to-high 80s"},
   {c:"psych",l:"def",g:"mid-to-high 80s"},
-  {c:"edu",l:"def",g:"mid-to-high 80s",note:"Werklund School BEd"},
-  {c:"nurs",l:"def",g:"mid-to-high 80s",note:"BN"},
+  {c:"edu",l:"def",g:"mid-to-high 80s",note:"Werklund School 教育学士 / BEd"},
+  {c:"nurs",l:"def",g:"mid-to-high 80s",note:"护理学士 / BN"},
   {c:"env",l:"def",g:"mid-to-high 80s"}
 ]},
 
@@ -279,15 +279,15 @@ var D = [
  schol:["Bursaries for international students","Faculty excellence scholarships"],
  materials:["UdeM application","Transcripts","French & English proficiency"],
  p:[
-  {c:"cs",l:"def",g:"R-score 28+",note:"DIRO; most programs in French; Mila AI lab affiliated"},
-  {c:"eng",l:"def",g:"R-score 28+",note:"Polytechnique Montreal affiliated"},
+  {c:"cs",l:"def",g:"R-score 28+",note:"计算机系；大部分法语授课；Mila AI实验室附属 / DIRO; most programs in French; Mila AI lab affiliated"},
+  {c:"eng",l:"def",g:"R-score 28+",note:"蒙特利尔工程学院附属 / Polytechnique Montreal affiliated"},
   {c:"math",l:"def",g:"R-score 28+"},
   {c:"bio",l:"def",g:"R-score 26+"},
   {c:"econ",l:"def",g:"R-score 26+"},
-  {c:"bus",l:"def",g:"R-score 28+",note:"HEC Montreal (affiliated); some English options"},
-  {c:"law",l:"def",g:"R-score 30+",note:"Faculty of Law; French required"},
+  {c:"bus",l:"def",g:"R-score 28+",note:"蒙特利尔高等商学院（附属）；部分英语选项 / HEC Montreal (affiliated); some English options"},
+  {c:"law",l:"def",g:"R-score 30+",note:"法学院；需法语 / Faculty of Law; French required"},
   {c:"psych",l:"def",g:"R-score 26+"},
-  {c:"med",l:"def",g:"R-score 34+",note:"French required; MD post-grad"},
+  {c:"med",l:"def",g:"R-score 34+",note:"需法语；MD为研究生学位 / French required; MD post-grad"},
   {c:"edu",l:"def",g:"R-score 26+"}
 ]},
 
@@ -303,15 +303,15 @@ var D = [
  schol:["SFU Open Scholarship","International Transfer Student Scholarship","Provost Entrance Award"],
  materials:["SFU application","Transcripts","English proficiency"],
  p:[
-  {c:"cs",l:"def",g:"mid-to-high 80s",note:"School of Computing Science BSc"},
-  {c:"eng",l:"def",g:"mid-to-high 80s",note:"Mechatronic Systems / Engineering Science"},
+  {c:"cs",l:"def",g:"mid-to-high 80s",note:"计算科学学院理学士 / School of Computing Science BSc"},
+  {c:"eng",l:"def",g:"mid-to-high 80s",note:"机电系统/工程科学 / Mechatronic Systems / Engineering Science"},
   {c:"math",l:"def",g:"mid-to-high 80s"},
   {c:"bio",l:"def",g:"mid-to-high 80s"},
-  {c:"bus",l:"def",g:"mid-to-high 80s",note:"Beedie BBA"},
+  {c:"bus",l:"def",g:"mid-to-high 80s",note:"Beedie 工商管理学士 / BBA"},
   {c:"econ",l:"def",g:"mid-to-high 80s"},
   {c:"psych",l:"def",g:"mid-to-high 80s"},
-  {c:"media",l:"def",g:"mid-to-high 80s",note:"School of Communication"},
-  {c:"ds",l:"def",g:"mid-to-high 80s",note:"Data Science minor/stream"}
+  {c:"media",l:"def",g:"mid-to-high 80s",note:"传播学院 / School of Communication"},
+  {c:"ds",l:"def",g:"mid-to-high 80s",note:"数据科学辅修/方向 / Data Science minor/stream"}
 ]},
 
 {id:"uvic",n:"维多利亚大学",e:"University of Victoria",c:"Victoria, BC",r:322,cat:"other",
@@ -325,14 +325,14 @@ var D = [
  schol:["UVic International Entrance Scholarship","Faculty-specific awards"],
  materials:["UVic application","Transcripts","English proficiency"],
  p:[
-  {c:"cs",l:"def",g:"mid-to-high 80s",note:"Co-op available"},
-  {c:"eng",l:"def",g:"mid-to-high 80s",note:"Software/Computer/Electrical/Mechanical"},
+  {c:"cs",l:"def",g:"mid-to-high 80s",note:"带薪实习可选 / Co-op available"},
+  {c:"eng",l:"def",g:"mid-to-high 80s",note:"软件/计算机/电气/机械工程 / Software/Computer/Electrical/Mechanical"},
   {c:"math",l:"def",g:"mid-to-high 80s"},
   {c:"bio",l:"def",g:"mid-to-high 80s"},
-  {c:"bus",l:"def",g:"mid-to-high 80s",note:"Gustavson BCom"},
+  {c:"bus",l:"def",g:"mid-to-high 80s",note:"Gustavson 商学士 / BCom"},
   {c:"econ",l:"def",g:"mid-to-high 80s"},
   {c:"psych",l:"def",g:"mid-to-high 80s"},
-  {c:"env",l:"def",g:"mid-to-high 80s",note:"Environmental Studies"}
+  {c:"env",l:"def",g:"mid-to-high 80s",note:"环境研究 / Environmental Studies"}
 ]},
 
 {id:"york_ca",n:"约克大学(加拿大)",e:"York University",c:"Toronto, ON",r:353,cat:"other",
@@ -346,16 +346,16 @@ var D = [
  schol:["International Entrance Scholarship of Distinction","Global Leader of Tomorrow Award"],
  materials:["OUAC application","Transcripts","English proficiency","Supplementary (Schulich)"],
  p:[
-  {c:"cs",l:"def",g:"mid-to-high 80s",note:"Lassonde School BSc"},
-  {c:"eng",l:"def",g:"mid-to-high 80s",note:"Lassonde BEng"},
+  {c:"cs",l:"def",g:"mid-to-high 80s",note:"拉松德学院理学士 / Lassonde School BSc"},
+  {c:"eng",l:"def",g:"mid-to-high 80s",note:"拉松德工程学士 / Lassonde BEng"},
   {c:"math",l:"def",g:"mid-to-high 80s"},
   {c:"bio",l:"def",g:"mid-to-high 80s"},
-  {c:"bus",l:"def",g:"low-to-mid 90s",note:"Schulich BBA; globally ranked"},
+  {c:"bus",l:"def",g:"low-to-mid 90s",note:"Schulich 工商管理学士 / BBA; globally ranked"},
   {c:"econ",l:"def",g:"mid-to-high 80s"},
   {c:"psych",l:"def",g:"mid-to-high 80s"},
-  {c:"law",l:"def",g:"mid-to-high 80s",note:"Pre-law; Osgoode Hall is post-grad"},
-  {c:"edu",l:"def",g:"mid-to-high 80s",note:"BEd concurrent"},
-  {c:"media",l:"def",g:"mid-to-high 80s",note:"Film / Communication Studies"}
+  {c:"law",l:"def",g:"mid-to-high 80s",note:"法律预科；奥斯古德堂为研究生学位 / Pre-law; Osgoode Hall is post-grad"},
+  {c:"edu",l:"def",g:"mid-to-high 80s",note:"教育学士 / BEd concurrent"},
+  {c:"media",l:"def",g:"mid-to-high 80s",note:"电影/传播研究 / Film / Communication Studies"}
 ]}
 ];
 COMPASS_DATA.ca = D;

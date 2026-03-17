@@ -1,4 +1,4 @@
-const CACHE_NAME = 'prism-v7';
+const CACHE_NAME = 'prism-v8';
 const ASSETS = [
   'compass.html',
   'manifest.json',
